@@ -192,6 +192,16 @@
   }
 
   /* When printing any dedicated document sheet, isolate it completely */
+  .pos-terminal-content,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .pos-terminal-content,
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .module-background-content {
+    display: none !important;
+  }
+
   body:has(#printable-invoice, #printable-receipt, .printable-sheet) > #root > *:not(:has(#printable-invoice, #printable-receipt, .printable-sheet)) {
     display: none !important;
   }

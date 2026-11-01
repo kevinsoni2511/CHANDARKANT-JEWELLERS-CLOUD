@@ -218,6 +218,51 @@ export const PosBillingView: React.FC = () => {
     }
   };
 
+  const formatInvoiceDate = (dateStr?: string) => {
+    if (!dateStr) return new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  const numberToIndianWords = (amount: number): string => {
+    if (!amount || isNaN(amount)) return 'INR Zero Rupees Only';
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    const convertSection = (n: number): string => {
+      if (n === 0) return '';
+      if (n < 20) return ones[n] + ' ';
+      if (n < 100) return tens[Math.floor(n / 10)] + ' ' + (n % 10 !== 0 ? ones[n % 10] + ' ' : '');
+      return ones[Math.floor(n / 100)] + ' Hundred ' + (n % 100 !== 0 ? convertSection(n % 100) : '');
+    };
+
+    const integerPart = Math.floor(amount);
+    const paisaPart = Math.round((amount - integerPart) * 100);
+
+    if (integerPart === 0) {
+      return `INR ${paisaPart} Paisa Only`;
+    }
+
+    const crores = Math.floor(integerPart / 10000000);
+    const lakhs = Math.floor((integerPart % 10000000) / 100000);
+    const thousands = Math.floor((integerPart % 100000) / 1000);
+    const hundreds = integerPart % 1000;
+
+    let result = '';
+    if (crores > 0) result += convertSection(crores) + 'Crore ';
+    if (lakhs > 0) result += convertSection(lakhs) + 'Lakh ';
+    if (thousands > 0) result += convertSection(thousands) + 'Thousand ';
+    if (hundreds > 0) result += convertSection(hundreds);
+
+    let paisaStr = '';
+    if (paisaPart > 0) {
+      paisaStr = ' and ' + convertSection(paisaPart) + 'Paisa';
+    }
+
+    return ('INR ' + result.trim() + ' Rupees' + paisaStr + ' Only').replace(/\s+/g, ' ');
+  };
+
   const handlePrintInvoice = (format: 'a4' | 'thermal', lang = 'en') => {
     if (!completedInvoice) return;
     const token = localStorage.getItem('cjc_token') || '';
@@ -237,22 +282,24 @@ export const PosBillingView: React.FC = () => {
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      {/* Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
-              Point of Sale & Billing Terminal
-            </h2>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-mono font-bold uppercase tracking-wider border border-[#C9A34A]/25">
-              POS v2.4
-            </span>
+      {/* Main POS Screen - strictly hidden during print when invoice modal is active to prevent 2-page print */}
+      <div className={`space-y-6 ${completedInvoice ? 'print:hidden' : ''} pos-terminal-content`}>
+        {/* Title */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
+                Point of Sale &amp; Billing Terminal
+              </h2>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-mono font-bold uppercase tracking-wider border border-[#C9A34A]/25">
+                POS v2.4
+              </span>
+            </div>
+            <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-0.5">
+              Rapid barcode tag scanning, old gold exchange offset, and GST compliant tax invoices
+            </p>
           </div>
-          <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-0.5">
-            Rapid barcode tag scanning, old gold exchange offset, and GST compliant tax invoices
-          </p>
         </div>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Cart, Scanner, Items */}
@@ -718,7 +765,7 @@ export const PosBillingView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 gold-gradient text-[#111318] font-bold rounded-xl shadow"
+                  className="px-4 py-2 gold-gradient text-[#111318] font-bold rounded-xl shadow cursor-pointer hover:brightness-105"
                 >
                   Save Customer
                 </button>
@@ -727,21 +774,23 @@ export const PosBillingView: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
 
       {/* Tax Invoice Success / Print Modal */}
       {completedInvoice && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#E3DFD7] dark:border-white/10 pb-3">
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in print:p-0 print:m-0 print:static print:bg-transparent print:backdrop-blur-none">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto print:max-w-none print:w-full print:p-0 print:m-0 print:border-none print:shadow-none print:max-h-none print:overflow-visible">
+            {/* Top Screen Toolbar (hidden in print) */}
+            <div className="no-print flex items-center justify-between border-b border-[#E3DFD7] dark:border-white/10 pb-3">
               <div className="flex items-center gap-2 text-[#35BFA0]">
                 <CheckCircle2 className="w-5 h-5 text-[#35BFA0]" />
                 <h3 className="font-serif font-bold text-base text-[#111318] dark:text-[#F6F5F1]">
-                  Sale Finalized & Ledger Balanced!
+                  Sale Finalized &amp; GST Tax Invoice Generated
                 </h3>
               </div>
               <button
                 onClick={() => setCompletedInvoice(null)}
-                className="p-1 text-[#8E929E] hover:text-[#111318] dark:hover:text-[#F6F5F1]"
+                className="p-1 text-[#8E929E] hover:text-[#111318] dark:hover:text-[#F6F5F1] cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -749,89 +798,115 @@ export const PosBillingView: React.FC = () => {
 
             {/* Printable Luxury Tax Invoice Sheet */}
             <div
-              className="bg-white text-zinc-900 p-2 rounded-2xl shadow-xl border-2 border-[#C9A34A]/50 select-text"
+              className="bg-white text-zinc-900 rounded-xl shadow-md border-2 border-[#C9A34A] select-text relative print:border-none print:shadow-none print:p-0"
               id="printable-invoice"
+              style={{
+                fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+                boxShadow: '0 0 0 3px rgba(201,163,74,0.12)',
+              }}
             >
-              <div className="border border-[#C9A34A]/30 rounded-xl p-5 sm:p-6 space-y-4 bg-white relative overflow-hidden">
+              <div className="border border-[#C9A34A]/40 rounded-lg p-5 sm:p-6 space-y-3 bg-white relative">
                 {/* Subtle Luxury Diamond Watermark Insignia */}
-                <div className="absolute right-4 top-4 opacity-5 pointer-events-none">
-                  <Gem className="w-44 h-44 text-[#C9A34A]" />
+                <div className="absolute right-6 top-8 opacity-[0.03] pointer-events-none print:hidden">
+                  <Gem className="w-56 h-56 text-[#C9A34A]" />
                 </div>
 
                 {/* Regal Letterhead Header Frame */}
-                <div className="text-center pb-4 border-b-2 border-[#C9A34A]/40 relative">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <div className="w-7 h-7 rounded-lg gold-gradient flex items-center justify-center text-[#111318] shadow-sm">
-                      <Gem className="w-4 h-4 text-[#111318]" />
+                <div className="text-center pb-3 border-b-2 border-[#C9A34A]/50 relative">
+                  <div className="flex items-center justify-center gap-2 mb-0.5">
+                    <div className="w-6 h-6 rounded-md gold-gradient flex items-center justify-center text-[#111318] shadow-xs">
+                      <Gem className="w-3.5 h-3.5 text-[#111318]" />
                     </div>
-                    <h2 className="font-serif font-black text-xl sm:text-2xl text-[#111318] tracking-wider">
+                    <h2 className="font-serif font-black text-xl sm:text-2xl text-[#111318] tracking-wider uppercase">
                       CHANDARKANT JEWELLERS PVT LTD
                     </h2>
                   </div>
                   <p className="text-[11px] text-zinc-600 font-medium">
-                    Ghanshyam Nagar, Varachha Main Road, Surat, Gujarat - 395006 | Phone: +91 261 2548900
+                    Flagship Boutique • Ghanshyam Nagar, Varachha Main Road, Surat, Gujarat - 395006 | Tel: +91 261 2548900
                   </p>
-                  <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] text-zinc-500 font-mono mt-1">
+                  <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] text-zinc-600 font-mono mt-1">
                     <span className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200">
                       <strong>GSTIN:</strong> 24AAACC1234M1Z8
                     </span>
                     <span className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200">
                       <strong>PAN:</strong> AAACC1234M
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
+                    <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">
                       BIS Hallmark License: HM/SUR/2026/01
                     </span>
+                    <span className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200">
+                      <strong>State Code:</strong> 24 (Gujarat)
+                    </span>
                   </div>
-                  <div className="inline-block mt-2.5 font-bold px-3 py-1 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50 text-amber-900 border border-amber-300 rounded-md text-[10px] tracking-widest uppercase shadow-2xs">
+                  <div className="inline-block mt-2 font-bold px-3 py-0.5 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50 text-amber-900 border border-amber-300 rounded text-[10px] tracking-widest uppercase">
                     TAX INVOICE (RULE 46 OF CGST RULES, 2017) &bull; ORIGINAL FOR RECIPIENT
                   </div>
                 </div>
 
                 {/* Meta details Grid Frame */}
-                <div className="grid grid-cols-2 gap-4 text-xs bg-[#FAF9F5] p-3 rounded-lg border border-[#E3DFD7]">
+                <div className="grid grid-cols-2 gap-3 text-xs bg-[#FAF9F5] p-3 rounded-md border border-[#E3DFD7]">
                   <div className="space-y-0.5">
-                    <p className="text-[10px] uppercase font-bold text-amber-800 tracking-wider">Billed To (Patron):</p>
+                    <p className="text-[10px] uppercase font-bold text-amber-800 tracking-wider">BILLED TO (BUYER):</p>
                     <p className="font-bold text-sm text-zinc-900">{completedInvoice.customer?.name || 'Walk-in Patron'}</p>
-                    {completedInvoice.customer?.phone && <p className="text-zinc-600"><strong>Mobile:</strong> {completedInvoice.customer.phone}</p>}
-                    {completedInvoice.customer?.pan_number && <p className="text-zinc-600 font-mono"><strong>PAN:</strong> {completedInvoice.customer.pan_number}</p>}
-                    <p className="text-zinc-600"><strong>Place of Supply:</strong> Gujarat (State Code: 24)</p>
+                    <p className="text-zinc-600 text-[11px]">
+                      <strong>Mobile:</strong> {completedInvoice.customer?.phone || 'Over-the-Counter'}
+                    </p>
+                    <p className="text-zinc-600 text-[11px] font-mono">
+                      <strong>PAN:</strong> {completedInvoice.customer?.pan_number || 'Not Submitted (< ₹2 Lakhs)'}
+                    </p>
+                    <p className="text-zinc-600 text-[11px]">
+                      <strong>Place of Supply:</strong> Gujarat (State Code: 24)
+                    </p>
                   </div>
                   <div className="space-y-0.5 text-right font-mono text-[11px]">
-                    <p><span className="text-zinc-500 font-sans">Invoice No:</span> <strong className="text-amber-800 text-xs">{completedInvoice.invoice_number}</strong></p>
-                    <p><span className="text-zinc-500 font-sans">Invoice Date:</span> <span className="text-zinc-800 font-bold">{completedInvoice.invoice_date}</span></p>
-                    <p><span className="text-zinc-500 font-sans">POS Terminal:</span> <span className="text-zinc-800">POS-SRT-01</span></p>
-                    <p><span className="text-zinc-500 font-sans">Reverse Charge:</span> <span className="text-zinc-800">No</span></p>
+                    <p><span className="text-zinc-500 font-sans">Invoice No:</span> <strong className="text-amber-900 text-xs font-bold">{completedInvoice.invoice_number}</strong></p>
+                    <p><span className="text-zinc-500 font-sans">Invoice Date:</span> <strong className="text-zinc-900 font-bold">{formatInvoiceDate(completedInvoice.invoice_date)}</strong></p>
+                    <p><span className="text-zinc-500 font-sans">Counter / POS:</span> <span className="text-zinc-700">POS-SRT-01 (Flagship)</span></p>
+                    <p><span className="text-zinc-500 font-sans">Supply Category:</span> <span className="text-zinc-700">Retail Showroom Sale</span></p>
+                    <p><span className="text-zinc-500 font-sans">Reverse Charge:</span> <span className="text-zinc-700">No</span></p>
                   </div>
                 </div>
 
                 {/* Line Items Table Frame */}
-                <table className="w-full text-left border-collapse border border-zinc-300 text-xs">
+                <table className="w-full text-left border-collapse border border-zinc-300 text-xs my-2">
                   <thead>
-                    <tr className="bg-[#FAF8F5] text-amber-950 font-bold text-[11px]">
-                      <th className="border border-zinc-300 p-2">Item Description & 6-Digit HUID</th>
-                      <th className="border border-zinc-300 p-2 text-right">Gross Wt</th>
-                      <th className="border border-zinc-300 p-2 text-right">Net Wt</th>
-                      <th className="border border-zinc-300 p-2 text-right">Rate/g</th>
-                      <th className="border border-zinc-300 p-2 text-right">Making</th>
-                      <th className="border border-zinc-300 p-2 text-right">Taxable Value</th>
+                    <tr className="bg-[#FAF8F5] text-amber-950 font-bold text-[10.5px]">
+                      <th className="border border-zinc-300 p-2 text-center w-8">#</th>
+                      <th className="border border-zinc-300 p-2">Item Description &amp; 6-Digit HUID</th>
+                      <th className="border border-zinc-300 p-2 text-center w-14">HSN</th>
+                      <th className="border border-zinc-300 p-2 text-center w-18">Purity</th>
+                      <th className="border border-zinc-300 p-2 text-right w-20">Gross Wt</th>
+                      <th className="border border-zinc-300 p-2 text-right w-20">Net Wt</th>
+                      <th className="border border-zinc-300 p-2 text-right w-20">Rate/g</th>
+                      <th className="border border-zinc-300 p-2 text-right w-20">Making</th>
+                      <th className="border border-zinc-300 p-2 text-right w-24">Taxable Value</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {completedInvoice.items?.map((it: any) => (
-                      <tr key={it.id} className="hover:bg-amber-50/20">
+                    {completedInvoice.items?.map((it: any, idx: number) => (
+                      <tr key={it.id || idx} className="hover:bg-amber-50/20">
+                        <td className="border border-zinc-300 p-2 text-center text-zinc-500 font-mono text-[11px]">{idx + 1}</td>
                         <td className="border border-zinc-300 p-2">
-                          <strong className="text-zinc-900">{it.item_name}</strong>
-                          {it.huid && (
-                            <span className="text-[10px] font-mono block text-amber-800 font-semibold mt-0.5">
-                              BIS HUID: {it.huid}
+                          <strong className="text-zinc-900 text-xs">{it.item_name}</strong>
+                          {it.huid ? (
+                            <span className="text-[10px] font-mono block text-amber-800 font-bold mt-0.5">
+                              BIS Laser HUID: {it.huid}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-mono block text-zinc-400 mt-0.5">
+                              BIS Hallmarked
                             </span>
                           )}
                         </td>
-                        <td className="border border-zinc-300 p-2 text-right font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
-                        <td className="border border-zinc-300 p-2 text-right font-mono font-semibold">{Number(it.net_weight).toFixed(3)}g</td>
-                        <td className="border border-zinc-300 p-2 text-right font-mono">₹{Number(it.metal_rate_applied).toFixed(2)}</td>
-                        <td className="border border-zinc-300 p-2 text-right font-mono">₹{Number(it.making_charges).toFixed(2)}</td>
-                        <td className="border border-zinc-300 p-2 text-right font-mono font-bold text-zinc-900">
+                        <td className="border border-zinc-300 p-2 text-center font-mono text-zinc-600 text-[11px]">7113</td>
+                        <td className="border border-zinc-300 p-2 text-center font-mono font-bold text-amber-900 text-[11px]">
+                          {it.purity_karat || '22K'}
+                        </td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono text-[11px]">{Number(it.gross_weight).toFixed(3)}g</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono font-bold text-zinc-900 text-[11px]">{Number(it.net_weight).toFixed(3)}g</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono text-[11px]">₹{Number(it.metal_rate_applied).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono text-[11px]">₹{Number(it.making_charges).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono font-bold text-zinc-900 text-[11px]">
                           ₹{Number(it.item_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
                       </tr>
@@ -841,48 +916,68 @@ export const PosBillingView: React.FC = () => {
 
                 {/* Totals & Tax Breakdown Frame */}
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pt-1">
-                  <div className="text-[10px] text-zinc-600 space-y-1 bg-zinc-50 p-3 rounded-lg border border-zinc-200 w-full sm:max-w-xs">
-                    <p className="font-bold text-zinc-800 uppercase tracking-wide">Statutory Hallmarking Note:</p>
-                    <p>1. Gold purity and fineness verified per IS 1417:2019 standards.</p>
-                    <p>2. Hallmark Unique Identifier (HUID) verifiable on BIS Care Mobile App.</p>
-                    <p>3. 100% buyback guarantee on gold content at prevailing market rates.</p>
+                  <div className="space-y-2 w-full sm:max-w-md">
+                    {/* Amount in words */}
+                    <div className="bg-amber-50/70 border border-amber-200/80 rounded-md p-2.5 text-xs">
+                      <span className="text-[10px] uppercase font-bold text-amber-900 block tracking-wider">
+                        Amount Chargeable in Words:
+                      </span>
+                      <p className="font-serif font-bold text-zinc-900 mt-0.5 leading-snug">
+                        {numberToIndianWords(Number(completedInvoice.grand_total))}
+                      </p>
+                      <p className="text-[10px] text-zinc-600 font-mono mt-1">
+                        Settlement Mode: <strong>{completedInvoice.payment_mode ? completedInvoice.payment_mode.toUpperCase() : 'UPI / QR CODE'}</strong> &bull; Status: Realised in Full
+                      </p>
+                    </div>
+
+                    {/* Statutory Note */}
+                    <div className="text-[9.5px] text-zinc-600 space-y-0.5 bg-zinc-50 p-2.5 rounded-md border border-zinc-200">
+                      <p className="font-bold text-zinc-800 uppercase tracking-wide text-[9.5px]">Statutory Hallmarking &amp; BIS Guarantee:</p>
+                      <p>1. Precious metal purity verified per IS 1417:2019 / IS 2112:2014 standards.</p>
+                      <p>2. Hallmark Unique Identifier (HUID) verifiable on Govt. BIS Care App.</p>
+                      <p>3. 100% buyback guarantee on gold content at prevailing showroom market rates.</p>
+                    </div>
                   </div>
 
-                  <div className="w-full sm:w-72 space-y-1.5 text-xs bg-[#FAF9F5] p-3 rounded-lg border border-[#E3DFD7]">
+                  <div className="w-full sm:w-80 space-y-1.5 text-xs bg-[#FAF9F5] p-3.5 rounded-md border border-[#E3DFD7]">
                     <div className="flex justify-between text-zinc-700">
                       <span>Taxable Value:</span>
-                      <span className="font-mono font-semibold">₹{Number(completedInvoice.taxable_amount).toFixed(2)}</span>
+                      <span className="font-mono font-bold">₹{Number(completedInvoice.taxable_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="flex justify-between text-zinc-600">
-                      <span>CGST (1.50%):</span>
-                      <span className="font-mono">₹{Number(completedInvoice.cgst_amount).toFixed(2)}</span>
+                      <span>Central GST (CGST 1.50%):</span>
+                      <span className="font-mono">₹{Number(completedInvoice.cgst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                     <div className="flex justify-between text-zinc-600">
-                      <span>SGST (1.50%):</span>
-                      <span className="font-mono">₹{Number(completedInvoice.sgst_amount).toFixed(2)}</span>
+                      <span>State GST (SGST 1.50%):</span>
+                      <span className="font-mono">₹{Number(completedInvoice.sgst_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
-                    <div className="flex justify-between border-t-2 border-amber-400 pt-1.5 font-bold text-base text-amber-900">
+                    <div className="flex justify-between border-t-2 border-[#C9A34A] pt-2 font-bold text-base text-[#111318] bg-amber-100/50 -mx-3.5 -mb-3.5 px-3.5 py-2 rounded-b-md">
                       <span>Grand Total:</span>
-                      <span className="font-mono">₹{Number(completedInvoice.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                      <span className="font-mono text-lg text-amber-950">₹{Number(completedInvoice.grand_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Footer Declaration & Stamp Frame */}
-                <div className="pt-4 border-t-2 border-[#C9A34A]/40 flex justify-between items-end text-[10px] text-zinc-600">
+                <div className="pt-3 border-t-2 border-[#C9A34A]/40 flex justify-between items-end text-[10px] text-zinc-600">
                   <div>
                     <p className="font-semibold text-zinc-800">For CHANDARKANT JEWELLERS PVT LTD</p>
-                    <p className="text-zinc-500 mt-0.5">Certified true and correct tax invoice under GST rules.</p>
+                    <p className="text-zinc-500 mt-0.5 text-[9.5px]">
+                      Certified that the particulars given above are true and correct under GST rules.<br/>
+                      All disputes subject to Surat jurisdiction.
+                    </p>
                   </div>
                   <div className="text-center">
                     <div className="w-36 border-b border-zinc-400 mb-1"></div>
-                    <p className="font-semibold text-zinc-700">Authorized Signatory / Cashier</p>
+                    <p className="font-semibold text-zinc-700 text-[10px]">Authorized Signatory / Cashier</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-end gap-2.5 pt-2">
+            {/* Bottom Buttons (Screen only) */}
+            <div className="no-print flex flex-wrap items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => handlePrintInvoice('a4')}
@@ -909,7 +1004,7 @@ export const PosBillingView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setCompletedInvoice(null)}
-                className="px-4 py-2 bg-zinc-200 dark:bg-white/10 hover:bg-zinc-300 dark:hover:bg-white/15 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl"
+                className="px-4 py-2 bg-zinc-200 dark:bg-white/10 hover:bg-zinc-300 dark:hover:bg-white/15 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl cursor-pointer"
               >
                 Done
               </button>

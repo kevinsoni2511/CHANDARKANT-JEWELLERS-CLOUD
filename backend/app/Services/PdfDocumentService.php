@@ -358,7 +358,7 @@ class PdfDocumentService
                                     <div class='huid-pill'>{$l['huid_label']}</div>
                                     <div style='margin-top:4px; font-size:10px; line-height:1.4;'>
                                         <strong>{$l['invoice_no']}</strong> <span style='color:#92400e; font-weight:bold;'>{$invoice->invoice_number}</span><br/>
-                                        <strong>{$l['date']}</strong> {$invoice->invoice_date}<br/>
+                                        <strong>{$l['date']}</strong> " . date('d-M-Y', strtotime($invoice->invoice_date ?? $invoice->created_at)) . "<br/>
                                         <strong>Showroom:</strong> {$branch->name}
                                     </div>
                                 </td>
