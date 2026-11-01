@@ -79,21 +79,22 @@ const ProtectedLayout: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] transition-colors overflow-hidden">
-      {/* Top Navigation */}
-      <Navbar
-        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-        onOpenActivityFeed={() => setIsActivityFeedOpen(true)}
+    <div className="h-screen flex bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] transition-colors overflow-hidden">
+      {/* Full-Height Left Sidebar Frame */}
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
       />
 
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Collapsible Sidebar */}
-        <Sidebar
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={toggleSidebar}
+      {/* Right Application Workspace Frame */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
+        {/* Top Navigation Bar */}
+        <Navbar
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          onOpenActivityFeed={() => setIsActivityFeedOpen(true)}
         />
 
-        {/* Main Content Area */}
+        {/* Scrollable Content Container */}
         <div ref={mainContentRef} className="flex-1 flex flex-col min-w-0 overflow-y-auto scroll-smooth">
           {/* Breadcrumbs Navigation */}
           <Breadcrumbs />

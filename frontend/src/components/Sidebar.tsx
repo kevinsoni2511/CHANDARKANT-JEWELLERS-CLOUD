@@ -14,6 +14,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Bot,
+  Gem,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
