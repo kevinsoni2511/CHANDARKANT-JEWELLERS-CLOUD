@@ -84,8 +84,6 @@ const ProtectedLayout: React.FC = () => {
       <Navbar
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         onOpenActivityFeed={() => setIsActivityFeedOpen(true)}
-        isSidebarCollapsed={isSidebarCollapsed}
-        onToggleSidebar={toggleSidebar}
       />
 
       <div className="flex-1 flex overflow-hidden relative">

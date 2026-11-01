@@ -11,8 +11,6 @@ import {
   PiggyBank,
   Sparkles,
   ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
   PanelLeftClose,
   PanelLeftOpen,
 } from 'lucide-react';
@@ -214,31 +212,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           );
         })}
-      </div>
-
-      {/* Dedicated Collapse / Expand Bar */}
-      <div className="p-2 border-t border-[#E3DFD7] dark:border-white/5 shrink-0">
-        <button
-          onClick={toggleCollapse}
-          title={isCollapsed ? 'Expand sidebar (Ctrl + B)' : 'Collapse sidebar (Ctrl + B)'}
-          className={`w-full flex items-center rounded-xl py-2 text-xs font-semibold text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-all cursor-pointer ${
-            isCollapsed ? 'justify-center px-0' : 'justify-between px-3'
-          }`}
-        >
-          {!isCollapsed ? (
-            <>
-              <span className="flex items-center gap-2">
-                <ChevronLeft className="w-4 h-4 text-[#C9A34A]" />
-                <span>Collapse Sidebar</span>
-              </span>
-              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[#8E929E]">
-                Ctrl+B
-              </kbd>
-            </>
-          ) : (
-            <ChevronRight className="w-4 h-4 text-[#C9A34A]" />
-          )}
-        </button>
       </div>
 
       {/* Footer System Status */}
