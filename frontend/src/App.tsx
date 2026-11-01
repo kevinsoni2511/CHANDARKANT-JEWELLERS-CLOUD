@@ -24,8 +24,19 @@ const ProtectedLayout: React.FC = () => {
   const { user, isLoading } = useAuth();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isActivityFeedOpen, setIsActivityFeedOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('cjc_sidebar_collapsed') === 'true';
+  });
   const location = useLocation();
   const mainContentRef = useRef<HTMLDivElement>(null);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('cjc_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   // Automatically reset scroll position to top whenever navigating between module pages
   useEffect(() => {
@@ -34,12 +45,16 @@ const ProtectedLayout: React.FC = () => {
     }
   }, [location.pathname]);
 
-  // Global Ctrl + K listener
+  // Global Ctrl + K (Search) and Ctrl + B (Sidebar) shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsCommandPaletteOpen((prev) => !prev);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebar();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -64,16 +79,21 @@ const ProtectedLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] transition-colors">
+    <div className="h-screen flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] transition-colors overflow-hidden">
       {/* Top Navigation */}
       <Navbar
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         onOpenActivityFeed={() => setIsActivityFeedOpen(true)}
+        isSidebarCollapsed={isSidebarCollapsed}
+        onToggleSidebar={toggleSidebar}
       />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {/* Collapsible Sidebar */}
-        <Sidebar />
+        <Sidebar
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={toggleSidebar}
+        />
 
         {/* Main Content Area */}
         <div ref={mainContentRef} className="flex-1 flex flex-col min-w-0 overflow-y-auto scroll-smooth">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -18,18 +18,32 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({
+  isCollapsed: controlledCollapsed,
+  onToggleCollapse,
+}) => {
   const { user } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+  const [internalCollapsed, setInternalCollapsed] = useState<boolean>(() => {
     return localStorage.getItem('cjc_sidebar_collapsed') === 'true';
   });
 
+  const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
+
   const toggleCollapse = () => {
-    setIsCollapsed((prev) => {
-      const next = !prev;
-      localStorage.setItem('cjc_sidebar_collapsed', String(next));
-      return next;
-    });
+    if (onToggleCollapse) {
+      onToggleCollapse();
+    } else {
+      setInternalCollapsed((prev) => {
+        const next = !prev;
+        localStorage.setItem('cjc_sidebar_collapsed', String(next));
+        return next;
+      });
+    }
   };
 
   const role = user?.role || 'owner';
@@ -74,37 +88,51 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-r border-[#E3DFD7] dark:border-white/10 transition-all duration-300 select-none min-h-[calc(100vh-4rem)] relative z-20 ${
+      className={`hidden md:flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-r border-[#E3DFD7] dark:border-white/10 transition-all duration-300 select-none h-full shrink-0 relative z-20 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
-      {/* Sidebar Header with Collapse Button */}
-      <div className="p-3 border-b border-[#E3DFD7] dark:border-white/5 flex items-center justify-between">
-        {!isCollapsed && (
-          <div className="flex items-center gap-2 overflow-hidden pl-2">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#C9A34A] font-mono">
-              Role:
-            </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-bold uppercase tracking-wider border border-[#C9A34A]/25 truncate">
-              {roleLabelMap[role] || role}
-            </span>
-          </div>
-        )}
+      {/* Top Header with Role & Collapse Button */}
+      <div className="p-3 border-b border-[#E3DFD7] dark:border-white/5 flex items-center justify-between shrink-0 h-14">
+        {!isCollapsed ? (
+          <>
+            <div className="flex items-center gap-2 overflow-hidden pl-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-[#C9A34A] font-mono">
+                Role:
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-bold uppercase tracking-wider border border-[#C9A34A]/25 truncate">
+                {roleLabelMap[role] || role}
+              </span>
+            </div>
 
-        <button
-          onClick={toggleCollapse}
-          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className={`p-1.5 rounded-lg text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors ${
-            isCollapsed ? 'mx-auto' : ''
-          }`}
-        >
-          {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
-        </button>
+            <button
+              onClick={toggleCollapse}
+              title="Collapse sidebar (Ctrl + B)"
+              className="p-1.5 rounded-lg text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <PanelLeftClose className="w-4 h-4" />
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={toggleCollapse}
+            title="Expand sidebar (Ctrl + B)"
+            className="w-10 h-10 mx-auto flex items-center justify-center rounded-xl text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-colors cursor-pointer"
+          >
+            <PanelLeftOpen className="w-4 h-4 text-[#C9A34A]" />
+          </button>
+        )}
       </div>
 
       {/* Navigation Sections */}
-      <div className="flex-1 py-3 overflow-y-auto space-y-4 px-2.5">
-        {sections.map((section, idx) => {
+      <div
+        className={`flex-1 py-2 overflow-y-auto ${
+          isCollapsed
+            ? 'space-y-1.5 px-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
+            : 'space-y-3.5 px-3'
+        }`}
+      >
+        {sections.map((section) => {
           const visibleItems = section.items.filter(
             (item) => item.roles.includes('*') || item.roles.includes(role)
           );
@@ -128,11 +156,15 @@ export const Sidebar: React.FC = () => {
                     to={item.to}
                     title={isCollapsed ? item.name : undefined}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all group relative ${
+                      `flex items-center rounded-xl text-xs font-medium transition-all group relative ${
+                        isCollapsed
+                          ? 'w-12 h-11 mx-auto justify-center'
+                          : 'gap-3 px-3 py-2.5'
+                      } ${
                         isActive
                           ? 'gold-gradient text-[#111318] font-bold shadow-md shadow-[#C9A34A]/15'
                           : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#111318] dark:hover:text-[#F6F5F1] hover:bg-[#111318]/5 dark:hover:bg-white/5'
-                      } ${isCollapsed ? 'justify-center' : ''}`
+                      }`
                     }
                   >
                     {({ isActive }) => (
@@ -165,8 +197,13 @@ export const Sidebar: React.FC = () => {
 
                         {/* Collapsed Hover Tooltip */}
                         {isCollapsed && (
-                          <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#111318] text-[#F6F5F1] text-xs rounded-lg shadow-xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
-                            {item.name}
+                          <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 flex items-center gap-2">
+                            <span>{item.name}</span>
+                            {item.badge && (
+                              <span className="text-[9px] px-1.5 py-0.5 rounded font-mono font-bold bg-[#8B7CF6]/20 text-[#8B7CF6] border border-[#8B7CF6]/30">
+                                {item.badge}
+                              </span>
+                            )}
                           </div>
                         )}
                       </>
@@ -179,8 +216,33 @@ export const Sidebar: React.FC = () => {
         })}
       </div>
 
+      {/* Dedicated Collapse / Expand Bar */}
+      <div className="p-2 border-t border-[#E3DFD7] dark:border-white/5 shrink-0">
+        <button
+          onClick={toggleCollapse}
+          title={isCollapsed ? 'Expand sidebar (Ctrl + B)' : 'Collapse sidebar (Ctrl + B)'}
+          className={`w-full flex items-center rounded-xl py-2 text-xs font-semibold text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-all cursor-pointer ${
+            isCollapsed ? 'justify-center px-0' : 'justify-between px-3'
+          }`}
+        >
+          {!isCollapsed ? (
+            <>
+              <span className="flex items-center gap-2">
+                <ChevronLeft className="w-4 h-4 text-[#C9A34A]" />
+                <span>Collapse Sidebar</span>
+              </span>
+              <kbd className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 text-[#8E929E]">
+                Ctrl+B
+              </kbd>
+            </>
+          ) : (
+            <ChevronRight className="w-4 h-4 text-[#C9A34A]" />
+          )}
+        </button>
+      </div>
+
       {/* Footer System Status */}
-      <div className="p-3 border-t border-[#E3DFD7] dark:border-white/5 bg-[#111318]/5 dark:bg-white/5">
+      <div className="p-3 border-t border-[#E3DFD7] dark:border-white/5 bg-[#111318]/5 dark:bg-white/5 shrink-0">
         {!isCollapsed ? (
           <div className="space-y-1 text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
             <div className="flex items-center gap-1.5 text-[#35BFA0]">

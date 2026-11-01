@@ -12,6 +12,8 @@ import {
   Moon,
   Sparkles,
   Command,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 import api from '../services/api';
 import { MetalRate } from '../types';
@@ -20,12 +22,16 @@ interface NavbarProps {
   onOpenCommandPalette?: () => void;
   onOpenActivityFeed?: () => void;
   unreadCount?: number;
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenCommandPalette,
   onOpenActivityFeed,
   unreadCount = 2,
+  isSidebarCollapsed,
+  onToggleSidebar,
 }) => {
   const { user, tenant, logout, switchBranch } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -52,7 +58,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="h-16 bg-[#FFFFFF] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-b border-[#E3DFD7] dark:border-white/10 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-40 backdrop-blur-md shadow-sm dark:shadow-lg transition-colors">
       {/* Brand & Ticker */}
-      <div className="flex items-center gap-4 lg:gap-6">
+      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+        {onToggleSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            title={isSidebarCollapsed ? 'Expand sidebar (Ctrl + B)' : 'Collapse sidebar (Ctrl + B)'}
+            className="hidden md:flex p-2 rounded-xl text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            {isSidebarCollapsed ? (
+              <PanelLeftOpen className="w-5 h-5 text-[#C9A34A]" />
+            ) : (
+              <PanelLeftClose className="w-5 h-5" />
+            )}
+          </button>
+        )}
+
         <div className="flex items-center gap-2.5 group cursor-pointer" onClick={() => (window.location.href = '/')}>
           <div className="w-9 h-9 rounded-xl gold-gradient flex items-center justify-center shadow-md text-[#111318] transform group-hover:scale-105 transition-transform duration-200">
             <Gem className="w-5 h-5 text-[#111318]" />
