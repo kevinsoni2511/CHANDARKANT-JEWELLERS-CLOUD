@@ -542,56 +542,173 @@ class PdfDocumentService
         $itemsRows = '';
         foreach ($invoice->items as $it) {
             $itemsRows .= "
-                <div style='display:flex; justify-content:space-between; font-size:10px; margin-bottom:2px;'>
-                    <span>{$it->item_name} ({$it->purity_karat})</span>
-                    <span>₹" . number_format($it->total_amount, 2) . "</span>
+                <div style='display:flex; justify-content:space-between; font-size:10.5px; margin-bottom:2px;'>
+                    <span style='font-weight:600;'>{$it->item_name} ({$it->purity_karat})</span>
+                    <span style='font-weight:700;'>₹" . number_format($it->total_amount, 2) . "</span>
                 </div>
-                <div style='font-size:9px; color:#555; margin-bottom:4px;'>
+                <div style='font-size:9.5px; color:#444; margin-bottom:5px; padding-left:4px;'>
                     Net: " . number_format($it->net_weight, 3) . "g @ ₹" . number_format($it->rate_per_gram, 2) . " | HUID: " . ($it->huid ?? 'N/A') . "
                 </div>
             ";
         }
 
+        $paymentsHtml = '';
+        if ($invoice->payments && count($invoice->payments) > 0) {
+            foreach ($invoice->payments as $pm) {
+                $paymentsHtml .= "<div class='row' style='font-size:10px; color:#444;'><span>Payment (" . strtoupper($pm->payment_mode) . "):</span><span>₹" . number_format($pm->amount, 2) . "</span></div>";
+            }
+        }
+
         return "
         <!DOCTYPE html>
-        <html>
+        <html lang='en'>
         <head>
             <meta charset='utf-8'/>
-            <title>Receipt {$invoice->invoice_number}</title>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+            <title>Thermal Receipt - {$invoice->invoice_number}</title>
             <style>
-                body { font-family: monospace; font-size: 11px; width: 78mm; margin: 0 auto; padding: 6px; }
+                * { box-sizing: border-box; }
+                body { 
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Courier New', monospace; 
+                    font-size: 11px; 
+                    background: #111318; 
+                    margin: 0; 
+                    padding: 0; 
+                    color: #111318;
+                }
+                .screen-toolbar {
+                    position: sticky;
+                    top: 0;
+                    z-index: 100;
+                    background: #181A22;
+                    color: #F6F5F1;
+                    padding: 10px 18px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+                    border-bottom: 1px solid rgba(255,255,255,0.1);
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                }
+                .btn-print {
+                    background: linear-gradient(135deg, #DFBE6F 0%, #C9A34A 100%);
+                    color: #111318;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 7px 16px;
+                    font-weight: 700;
+                    font-size: 11.5px;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .btn-print:hover { opacity: 0.92; }
+                .btn-sec {
+                    background: rgba(255,255,255,0.08);
+                    color: #F6F5F1;
+                    border: 1px solid rgba(255,255,255,0.18);
+                    border-radius: 6px;
+                    padding: 7px 12px;
+                    font-size: 11px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .btn-sec:hover { background: rgba(255,255,255,0.15); }
+
+                .thermal-container {
+                    padding: 24px 10px;
+                    display: flex;
+                    justify-content: center;
+                }
+                .thermal-paper {
+                    width: 78mm;
+                    background: #FFFFFF;
+                    padding: 8mm 6mm;
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+                    border-radius: 4px;
+                    position: relative;
+                    border-top: 3px solid #C9A34A;
+                }
                 .center { text-align: center; }
-                .divider { border-top: 1px dashed #000; margin: 6px 0; }
-                .row { display: flex; justify-content: space-between; }
-                @media print { body { width: 78mm; padding:0; } }
+                .divider { border-top: 1px dashed #444; margin: 7px 0; }
+                .row { display: flex; justify-content: space-between; align-items: baseline; }
+
+                @media print {
+                    .screen-toolbar { display: none !important; }
+                    body { background: #FFFFFF !important; margin: 0 !important; padding: 0 !important; width: 78mm !important; }
+                    .thermal-container { padding: 0 !important; }
+                    .thermal-paper { 
+                        width: 78mm !important; 
+                        box-shadow: none !important; 
+                        border: none !important; 
+                        padding: 3mm 1mm !important; 
+                    }
+                }
             </style>
         </head>
         <body>
-            <div class='center'>
-                <strong style='font-size:13px;'>{$tenant->name}</strong><br/>
-                {$branch->name}<br/>
-                Phone: {$branch->phone}<br/>
-                GSTIN: {$tenant->gstin}
+            <div class='screen-toolbar'>
+                <div style='display:flex; align-items:center; gap:8px;'>
+                    <span style='font-size:14px; font-weight:700; color:#C9A34A;'>CHANDARKANT JEWELLERS</span>
+                    <span style='font-size:11px; color:#A6AAB6;'>• 3\" (80mm) POS Thermal Slip</span>
+                </div>
+                <div style='display:flex; align-items:center; gap:8px;'>
+                    <a href='?format=a4' class='btn-sec'>📄 Switch to A4 Tax Invoice</a>
+                    <button onclick='window.print()' class='btn-print'>🖨️ Print Thermal Slip</button>
+                    <button onclick='window.close()' class='btn-sec' style='padding:7px 10px;'>✕</button>
+                </div>
             </div>
-            <div class='divider'></div>
-            <div class='row'>
-                <span>Bill: {$invoice->invoice_number}</span>
-                <span>Date: {$invoice->invoice_date}</span>
+
+            <div class='thermal-container'>
+                <div class='thermal-paper'>
+                    <div class='center'>
+                        <div style='font-size:10px; font-weight:bold; letter-spacing:1px; color:#555;'>TAX INVOICE / CASH MEMO</div>
+                        <strong style='font-size:15px; font-weight:800; letter-spacing:0.5px;'>{$tenant->name}</strong><br/>
+                        <span style='font-size:10px; color:#333;'>{$branch->name}</span><br/>
+                        <span style='font-size:9.5px; color:#555;'>{$branch->address}, {$branch->city}</span><br/>
+                        <span style='font-size:9.5px;'>Phone: {$branch->phone}</span><br/>
+                        <span style='font-size:9.5px; font-weight:bold;'>GSTIN: {$tenant->gstin}</span>
+                    </div>
+                    <div class='divider'></div>
+                    <div class='row'>
+                        <span><strong>Bill:</strong> {$invoice->invoice_number}</span>
+                        <span>" . date('d/m/Y H:i', strtotime($invoice->created_at ?? $invoice->invoice_date)) . "</span>
+                    </div>
+                    <div class='row'>
+                        <span><strong>Customer:</strong> " . ($invoice->customer ? $invoice->customer->name : 'Valued Patron') . "</span>
+                        <span>" . ($invoice->customer ? $invoice->customer->phone : '') . "</span>
+                    </div>
+                    <div class='divider'></div>
+                    <div style='font-size:9.5px; font-weight:bold; margin-bottom:4px; display:flex; justify-content:space-between;'>
+                        <span>PARTICULARS</span>
+                        <span>AMOUNT</span>
+                    </div>
+                    {$itemsRows}
+                    <div class='divider'></div>
+                    <div class='row'><span>Subtotal:</span><span>₹" . number_format($invoice->subtotal, 2) . "</span></div>
+                    <div class='row'><span>GST 3% (1.5%+1.5%):</span><span>₹" . number_format($invoice->cgst_amount + $invoice->sgst_amount, 2) . "</span></div>
+                    <div class='row' style='font-weight:800; font-size:13px; margin:4px 0; border-top:1px solid #111; border-bottom:1px solid #111; padding:3px 0;'>
+                        <span>TOTAL PAID:</span>
+                        <span>₹" . number_format($invoice->grand_total, 2) . "</span>
+                    </div>
+                    {$paymentsHtml}
+                    <div class='divider'></div>
+                    <div class='center' style='font-size:9.5px; line-height:1.4; color:#333;'>
+                        <strong>BIS Hallmarked 100% Guaranteed</strong><br/>
+                        6-Digit Laser Alphanumeric HUID Traceable<br/>
+                        Thank you for shopping with us!
+                    </div>
+                </div>
             </div>
-            <div class='row'>
-                <span>Customer: " . ($invoice->customer ? $invoice->customer->name : 'Walk-in') . "</span>
-            </div>
-            <div class='divider'></div>
-            {$itemsRows}
-            <div class='divider'></div>
-            <div class='row'><span>Taxable Subtotal:</span><span>₹" . number_format($invoice->subtotal, 2) . "</span></div>
-            <div class='row'><span>GST 3% (1.5%+1.5%):</span><span>₹" . number_format($invoice->cgst_amount + $invoice->sgst_amount, 2) . "</span></div>
-            <div class='row' style='font-weight:bold; font-size:13px;'><span>TOTAL PAID:</span><span>₹" . number_format($invoice->grand_total, 2) . "</span></div>
-            <div class='divider'></div>
-            <div class='center' style='font-size:9px;'>
-                BIS Hallmarked Gold with HUID<br/>
-                Thank You for Visiting Chandarkant Jewellers!
-            </div>
+            <script>
+                if (window.location.search.indexOf('autoprint=1') !== -1) {
+                    setTimeout(function() { window.print(); }, 400);
+                }
+            </script>
         </body>
         </html>
         ";

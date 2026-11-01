@@ -192,46 +192,213 @@ export function DataTable<T extends Record<string, any>>({
 
     printWindow.document.write(`
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
         <head>
           <meta charset="utf-8"/>
-          <title>${title || 'Export'} - Chandarkant Jewellers Cloud</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <title>${title || 'Report'} - Chandarkant Jewellers Cloud</title>
           <style>
-            @page { size: A4 landscape; margin: 10mm; }
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111; margin: 0; padding: 20px; font-size: 12px; }
+            @page { size: A4 landscape; margin: 8mm; }
             * { box-sizing: border-box; }
-            .header-bar { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #C9A34A; padding-bottom: 10px; margin-bottom: 12px; }
-            .brand-name { font-size: 16px; font-weight: 800; color: #111318; font-family: serif; letter-spacing: 0.5px; }
-            .report-title { font-size: 13px; font-weight: 600; color: #C9A34A; margin-top: 2px; }
-            .meta-text { font-size: 10px; color: #6b7280; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+              color: #111318; 
+              margin: 0; 
+              padding: 0; 
+              background: #EAE8E3; 
+              font-size: 11px; 
+            }
+
+            .screen-toolbar {
+              position: sticky;
+              top: 0;
+              z-index: 100;
+              background: #111318;
+              color: #F6F5F1;
+              padding: 10px 18px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            .btn-print {
+              background: linear-gradient(135deg, #DFBE6F 0%, #C9A34A 100%);
+              color: #111318;
+              border: none;
+              border-radius: 6px;
+              padding: 7px 16px;
+              font-weight: 700;
+              font-size: 11.5px;
+              cursor: pointer;
+            }
+            .btn-print:hover { opacity: 0.92; }
+
+            .sheet-canvas {
+              max-width: 280mm;
+              margin: 16px auto;
+              background: #FFFFFF;
+            }
+
+            .report-outer-frame {
+              border: 2px solid #C9A34A;
+              border-radius: 8px;
+              padding: 4px;
+              background: #FFFFFF;
+              box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            }
+
+            .report-inner-frame {
+              border: 1px solid rgba(201, 163, 74, 0.45);
+              border-radius: 6px;
+              padding: 16px 20px;
+              background: #FFFFFF;
+            }
+
+            .header-bar { 
+              display: flex; 
+              justify-content: space-between; 
+              align-items: flex-start; 
+              border-bottom: 2px solid #C9A34A; 
+              padding-bottom: 10px; 
+              margin-bottom: 12px; 
+            }
+            .brand-badge {
+              display: inline-block;
+              background: linear-gradient(135deg, #DFBE6F 0%, #C9A34A 100%);
+              color: #111318;
+              font-weight: 900;
+              font-size: 11px;
+              padding: 2px 7px;
+              border-radius: 4px;
+              margin-right: 6px;
+            }
+            .brand-name { 
+              font-size: 18px; 
+              font-weight: 800; 
+              color: #111318; 
+              font-family: serif; 
+              letter-spacing: 0.5px; 
+            }
+            .report-title { 
+              font-size: 13px; 
+              font-weight: 700; 
+              color: #92400e; 
+              margin-top: 2px; 
+            }
+            .meta-text { 
+              font-size: 10px; 
+              color: #6b7280; 
+              line-height: 1.4;
+            }
+            
+            table { 
+              width: 100%; 
+              border-collapse: collapse; 
+              margin-top: 8px; 
+              border: 1px solid #E5E7EB;
+            }
+            th {
+              background: #FAF9F5;
+              color: #111318;
+              border-bottom: 2px solid #C9A34A;
+              border-top: 1px solid #E3DFD7;
+              border-right: 1px solid #E5E7EB;
+              font-weight: 700;
+              font-size: 10.5px;
+            }
+            td {
+              border-bottom: 1px solid #E5E7EB;
+              border-right: 1px solid #F3F4F6;
+              font-size: 10px;
+            }
             tr { page-break-inside: avoid; break-inside: avoid; }
+
+            .footer-bar {
+              margin-top: 14px;
+              padding-top: 8px;
+              border-top: 1px solid #E3DFD7;
+              display: flex;
+              justify-content: space-between;
+              font-size: 9px;
+              color: #6b7280;
+            }
+
             @media print {
-              body { padding: 0; }
+              body { 
+                padding: 0 !important; 
+                margin: 0 !important;
+                background: #FFFFFF !important; 
+              }
+              .screen-toolbar { 
+                display: none !important; 
+              }
+              .sheet-canvas {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              .report-outer-frame {
+                border: 2px solid #C9A34A !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                page-break-inside: avoid !important;
+              }
             }
           </style>
         </head>
         <body>
-          <div class="header-bar">
-            <div>
-              <div class="brand-name">CHANDARKANT JEWELLERS CLOUD</div>
-              <div class="report-title">${title || 'Data Register'}</div>
-              ${subtitle ? `<div style="font-size: 10px; color: #6b7280; margin-top: 2px;">${subtitle}</div>` : ''}
+          <div class="screen-toolbar">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="color:#C9A34A; font-weight:bold;">&#10022; Chandarkant Jewellers Cloud</span>
+              <span style="color:#71717A;">|</span>
+              <span style="color:#A1A1AA; font-size:11px;">${title || 'Data Register'}</span>
             </div>
-            <div class="meta-text" style="text-align: right;">
-              <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
-              <div><strong>Total Records:</strong> ${sortedData.length}</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button onclick="window.print()" class="btn-print">&#128424; Print / Save PDF</button>
+              <button onclick="window.close()" style="background:#27272A; color:#E4E4E7; border:none; border-radius:6px; padding:7px 12px; font-size:11px; cursor:pointer;">Close</button>
             </div>
           </div>
-          <table>
-            <thead><tr>${headersHtml}</tr></thead>
-            <tbody>${rowsHtml}</tbody>
-          </table>
+
+          <div class="sheet-canvas">
+            <div class="report-outer-frame">
+              <div class="report-inner-frame">
+                <div class="header-bar">
+                  <div>
+                    <div style="display:flex; align-items:center;">
+                      <span class="brand-badge">&#10022;</span>
+                      <span class="brand-name">CHANDARKANT JEWELLERS CLOUD</span>
+                    </div>
+                    <div class="report-title">${title || 'Official Data Register'}</div>
+                    ${subtitle ? `<div style="font-size: 10px; color: #4b5563; margin-top: 2px;">${subtitle}</div>` : ''}
+                    <div style="font-size: 9.5px; color: #6b7280; margin-top: 3px;">
+                      Varachha Main Road, Surat, Gujarat &bull; GSTIN: 24AAACC1234M1Z8 &bull; BIS Hallmark Ready
+                    </div>
+                  </div>
+                  <div class="meta-text" style="text-align: right;">
+                    <div><strong>Generated Date:</strong> ${new Date().toLocaleString()}</div>
+                    <div><strong>Total Records:</strong> ${sortedData.length} active rows</div>
+                    <div><strong>Format:</strong> High-Fidelity A4 Landscape Export</div>
+                  </div>
+                </div>
+
+                <table>
+                  <thead><tr>${headersHtml}</tr></thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+
+                <div class="footer-bar">
+                  <div>Statutory Computer-Generated Enterprise Report &bull; Subject to Surat Jurisdiction</div>
+                  <div>Certified Official Ledger &bull; Page 1 of 1</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <script>
             window.onload = function() {
-              window.focus();
-              window.print();
-              setTimeout(function() { window.close(); }, 500);
+              setTimeout(function() { window.print(); }, 400);
             };
           </script>
         </body>

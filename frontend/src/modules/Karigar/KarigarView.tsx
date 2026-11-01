@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Hammer, Plus, Scale, CheckCircle2, User, X } from 'lucide-react';
+import { Hammer, Plus, Scale, CheckCircle2, User, X, Printer, FileText } from 'lucide-react';
 
 export const KarigarView: React.FC = () => {
   const [karigars, setKarigars] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [activePrintJob, setActivePrintJob] = useState<any>(null);
   const [form, setForm] = useState({
     karigar_id: '',
     item_description: '',
@@ -58,6 +59,9 @@ export const KarigarView: React.FC = () => {
         setShowModal(false);
         fetchJobs();
         fetchKarigars();
+        if (res.data.data) {
+          setActivePrintJob(res.data.data);
+        }
         setForm({
           karigar_id: '',
           item_description: '',
@@ -133,12 +137,13 @@ export const KarigarView: React.FC = () => {
                 <th className="py-2.5 px-4 text-right">Fine Gold (Pure)</th>
                 <th className="py-2.5 px-4 text-right">Labour (₹)</th>
                 <th className="py-2.5 px-4 text-center">Status</th>
+                <th className="py-2.5 px-4 text-center">Print / Slip</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-white/10">
               {jobs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-400">
+                  <td colSpan={8} className="py-8 text-center text-slate-400">
                     No active job cards found. Issue raw metal to create a job card.
                   </td>
                 </tr>
@@ -159,6 +164,15 @@ export const KarigarView: React.FC = () => {
                       }`}>
                         {j.status}
                       </span>
+                    </td>
+                    <td className="py-2.5 px-4 text-center">
+                      <button
+                        onClick={() => setActivePrintJob(j)}
+                        title="Print Artisan Job Card / Memo"
+                        className="px-2.5 py-1 text-[11px] rounded bg-slate-100 hover:bg-[#C9A34A]/20 dark:bg-white/5 dark:hover:bg-[#C9A34A]/20 text-[#C9A34A] border border-[#C9A34A]/30 inline-flex items-center gap-1 transition-all cursor-pointer font-medium"
+                      >
+                        <Printer className="w-3 h-3" /> Memo
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -275,6 +289,162 @@ export const KarigarView: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Artisan Metal Issue Memo / Job Card Print Modal */}
+      {activePrintJob && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-[#181A22] rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden my-8">
+            {/* Screen Toolbar */}
+            <div className="no-print flex items-center justify-between px-6 py-3.5 bg-slate-900 text-white border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#C9A34A]" />
+                <span className="font-semibold text-sm">Artisan Work Order & Metal Issue Memo</span>
+                <span className="text-xs font-mono text-[#C9A34A]">({activePrintJob.job_number})</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-3.5 py-1.5 gold-gradient text-[#111318] font-bold rounded-lg text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" /> Print / Save PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActivePrintJob(null)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Printable Memo Sheet */}
+            <div className="p-6 bg-slate-100 dark:bg-[#111318]/50 overflow-y-auto max-h-[80vh] flex justify-center">
+              <div
+                id="printable-receipt"
+                className="printable-sheet bg-white text-[#111318] p-8 rounded-lg shadow-md w-full max-w-lg border-2 border-[#C9A34A] relative"
+                style={{
+                  boxShadow: '0 0 0 4px rgba(201,163,74,0.15)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+              >
+                <div className="border border-[#C9A34A]/40 p-6 rounded">
+                  {/* Header */}
+                  <div className="text-center pb-4 border-b border-dashed border-[#C9A34A]/60">
+                    <div className="inline-block px-3 py-0.5 mb-1.5 rounded-full bg-[#C9A34A]/10 border border-[#C9A34A]/30 text-[10px] font-bold tracking-widest text-[#C9A34A] uppercase">
+                      Manufacturing Job Card & Metal Issue Voucher
+                    </div>
+                    <h2 className="font-serif font-black text-2xl tracking-wider text-[#111318]">
+                      CHANDARKANT JEWELLERS
+                    </h2>
+                    <p className="text-[11px] text-slate-600 mt-0.5">
+                      Flagship Showroom • Choksi Bazar, Surat, Gujarat - 395003
+                    </p>
+                    <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+                      GSTIN: 24AAACC1234M1Z8 • BIS Lic: HM/SUR/2026/01
+                    </p>
+                  </div>
+
+                  {/* Voucher Meta */}
+                  <div className="grid grid-cols-2 gap-3 py-3 text-xs border-b border-slate-200">
+                    <div>
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Job Card Number</span>
+                      <span className="font-mono font-bold text-slate-900">{activePrintJob.job_number}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Issue Date</span>
+                      <span className="font-medium text-slate-900">
+                        {activePrintJob.issue_date || new Date().toLocaleDateString('en-IN')}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Assigned Karigar / Artisan</span>
+                      <span className="font-bold text-slate-900">{activePrintJob.karigar?.name || 'Artisan Workshop'}</span>
+                      <span className="text-[11px] text-slate-500 block font-mono">{activePrintJob.karigar?.phone || ''}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Artisan Specialization</span>
+                      <span className="font-medium text-slate-700">{activePrintJob.karigar?.specialization || 'Master Artisan'}</span>
+                    </div>
+                  </div>
+
+                  {/* Job Particulars */}
+                  <div className="my-4 p-4 rounded-lg bg-amber-50/60 border border-amber-200/70">
+                    <span className="text-[10px] uppercase tracking-wider text-amber-900/70 font-bold block mb-1">
+                      Jewellery Item Specification
+                    </span>
+                    <div className="text-base font-serif font-bold text-[#111318]">
+                      {activePrintJob.item_description}
+                    </div>
+                  </div>
+
+                  {/* Metal Accounting Table */}
+                  <table className="w-full text-xs border border-slate-200 rounded overflow-hidden my-3">
+                    <thead className="bg-slate-100 font-semibold text-slate-700">
+                      <tr>
+                        <th className="py-2 px-3 text-left">Metal Accounting Parameter</th>
+                        <th className="py-2 px-3 text-right">Value / Metric</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      <tr>
+                        <td className="py-2 px-3 text-slate-700">Raw Gold Issued (Gross)</td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-slate-900">
+                          {Number(activePrintJob.gold_issued_gross).toFixed(3)} g
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 text-slate-700">Issued Metal Touch / Purity</td>
+                        <td className="py-2 px-3 text-right font-mono text-slate-900">
+                          {Number(activePrintJob.gold_issued_purity || 99.9).toFixed(3)}%
+                        </td>
+                      </tr>
+                      <tr className="bg-amber-50/50">
+                        <td className="py-2 px-3 text-amber-900 font-semibold">Fine Gold Equivalent (Pure 99.9)</td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-[#C9A34A]">
+                          {Number(activePrintJob.gold_issued_pure).toFixed(3)} g
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 text-slate-700">Permissible Wastage (घट / Touch Allowance)</td>
+                        <td className="py-2 px-3 text-right font-mono text-slate-900">
+                          {Number(activePrintJob.allowed_wastage || 0).toFixed(3)} g
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 text-slate-700">Agreed Labour Charge (मजदूरी)</td>
+                        <td className="py-2 px-3 text-right font-mono font-bold text-slate-900">
+                          ₹{Number(activePrintJob.labour_charges || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  {/* Declaration & Signatures */}
+                  <div className="mt-5 pt-3 border-t border-dashed border-slate-300 text-[9px] text-slate-500 leading-tight">
+                    <p className="italic">
+                      • Artisan acknowledges receipt of the raw metal stated above in sound condition.
+                      <br />• Final fine gold settlement will be calculated upon return of finished ornament and scrap dust.
+                    </p>
+                    <div className="mt-7 flex justify-between items-end">
+                      <div className="text-center">
+                        <div className="h-7 border-b border-slate-400 w-28"></div>
+                        <span className="text-[9px] text-slate-700 font-medium">Artisan Signature</span>
+                      </div>
+                      <div className="text-center">
+                        <div className="font-serif font-bold text-[10px] text-[#C9A34A] uppercase">For Chandarkant Jewellers</div>
+                        <div className="h-7"></div>
+                        <span className="text-[9px] text-slate-700 font-medium">Workshop In-Charge Stamp</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

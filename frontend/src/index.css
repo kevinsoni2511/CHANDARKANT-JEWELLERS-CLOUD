@@ -191,12 +191,12 @@
     box-shadow: none !important;
   }
 
-  /* When printing an invoice sheet, isolate #printable-invoice completely */
-  body:has(#printable-invoice) > #root > *:not(:has(#printable-invoice)) {
+  /* When printing any dedicated document sheet, isolate it completely */
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) > #root > *:not(:has(#printable-invoice, #printable-receipt, .printable-sheet)) {
     display: none !important;
   }
 
-  body:has(#printable-invoice) .fixed.inset-0 {
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .fixed.inset-0 {
     position: static !important;
     background: transparent !important;
     backdrop-filter: none !important;
@@ -208,7 +208,7 @@
     display: block !important;
   }
 
-  body:has(#printable-invoice) .fixed.inset-0 > div {
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .fixed.inset-0 > div {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
@@ -219,13 +219,15 @@
     overflow: visible !important;
   }
 
-  /* Hide all modal UI chrome around #printable-invoice */
-  body:has(#printable-invoice) .fixed.inset-0 > div > *:not(#printable-invoice) {
+  /* Hide all modal UI chrome around printable sheets */
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .fixed.inset-0 > div > *:not(#printable-invoice, #printable-receipt, .printable-sheet) {
     display: none !important;
   }
 
-  /* Exact A4 Print Frame for #printable-invoice */
-  body:has(#printable-invoice) #printable-invoice {
+  /* Exact A4 Print Frame */
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) #printable-invoice,
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) #printable-receipt,
+  body:has(#printable-invoice, #printable-receipt, .printable-sheet) .printable-sheet {
     width: 100% !important;
     max-width: 194mm !important;
     border: 2px solid #C9A34A !important;

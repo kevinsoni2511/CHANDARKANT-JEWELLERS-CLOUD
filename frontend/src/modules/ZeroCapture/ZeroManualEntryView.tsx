@@ -411,23 +411,45 @@ export const ZeroManualEntryView: React.FC = () => {
               Drop an image of a vendor purchase bill, manual counter memo, or supplier voucher (JPG, PNG, PDF, Excel) for automated entity extraction.
             </p>
 
-            <div className="border-2 border-dashed border-[#C9A34A]/40 rounded-xl p-8 text-center bg-[#ECEAE4]/30 dark:bg-[#111318]/50 hover:bg-[#C9A34A]/5 transition-colors">
+            <div className="border-2 border-dashed border-[#C9A34A]/40 rounded-xl p-6 sm:p-8 text-center bg-[#ECEAE4]/30 dark:bg-[#111318]/50 hover:bg-[#C9A34A]/5 transition-colors">
               <Upload className="w-10 h-10 text-[#C9A34A] mx-auto mb-2" />
               <p className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1]">Select invoice document or drag & drop</p>
-              <p className="text-[10px] text-[#8E929E] mt-1">Supports Jewellery Purchase Invoices, Hallmarking Slips, Karigar Memos</p>
+              <p className="text-[10px] text-[#8E929E] mt-1">Supports Jewellery Purchase Invoices, Hallmarking Slips, Karigar Memos (PDF, JPG, PNG)</p>
+              
               <input
                 type="file"
+                id="invoice-document-input"
                 accept="image/*,.pdf,.xlsx,.csv"
                 onChange={(e) => setScannerFile(e.target.files?.[0] || null)}
                 className="mt-4 text-xs text-[#5A5E6B] dark:text-[#A6AAB6] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:gold-gradient file:text-[#111318] cursor-pointer"
               />
+
+              {scannerFile && (
+                <div className="mt-4 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#C9A34A]/10 border border-[#C9A34A]/30 text-xs">
+                  <FileText className="w-4 h-4 text-[#C9A34A]" />
+                  <span className="font-semibold text-[#111318] dark:text-[#F6F5F1]">{scannerFile.name}</span>
+                  <span className="text-[10px] font-mono text-[#8E929E]">({(scannerFile.size / 1024).toFixed(1)} KB)</span>
+                  <span className="text-[9.5px] uppercase font-bold px-1.5 py-0.2 rounded bg-[#C9A34A] text-[#111318]">
+                    {scannerFile.name.endsWith('.pdf') ? 'PDF Document' : 'Document'}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="mt-4 flex items-center justify-end gap-3">
+              {scannerFile && (
+                <button
+                  type="button"
+                  onClick={() => { setScannerFile(null); setScanResult(null); }}
+                  className="px-3.5 py-2 rounded-xl border border-[#E3DFD7] dark:border-white/10 text-xs font-medium text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5"
+                >
+                  Clear File
+                </button>
+              )}
               <button
                 onClick={handleUploadScan}
-                disabled={loading}
-                className="px-5 py-2.5 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2"
+                disabled={loading || !scannerFile}
+                className="px-5 py-2.5 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-[#111318]" />
                 <span>{loading ? 'Analyzing with AI OCR...' : 'Scan & Extract Data'}</span>
@@ -435,65 +457,127 @@ export const ZeroManualEntryView: React.FC = () => {
             </div>
           </div>
 
-          {/* Extraction Result Preview */}
+          {/* Extraction Result Preview with Luxury PDF / Document Frame */}
           {scanResult && (
-            <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm animate-fade-in space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl p-6 border border-[#E3DFD7] dark:border-white/10 shadow-sm animate-fade-in space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E3DFD7] dark:border-white/10 gap-2">
                 <div>
-                  <h4 className="font-serif font-bold text-gray-900 text-sm">Extracted Invoice Entities</h4>
-                  <p className="text-[11px] text-gray-500">File: {scanResult.original_filename}</p>
+                  <h4 className="font-serif font-bold text-[#111318] dark:text-[#F6F5F1] text-base">
+                    Document Entity Extraction & Verification
+                  </h4>
+                  <p className="text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
+                    Source Document: <strong>{scanResult.original_filename}</strong>
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-gray-600 font-medium">Confidence:</span>
-                  <span className="px-2.5 py-0.5 rounded-full font-bold text-xs bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  <span className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6]">OCR Confidence:</span>
+                  <span className="px-3 py-1 rounded-full font-bold text-xs bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30 font-mono">
                     {scanResult.confidence_score}%
                   </span>
                 </div>
               </div>
 
-              {/* Warnings / Duplicate checks */}
-              {scanResult.validation_warnings?.length > 0 && (
-                <div className="p-3 rounded-lg bg-[#C9A34A]/10 border border-[#C9A34A]/25 text-xs text-[#111318] dark:text-[#F6F5F1] space-y-1">
-                  <p className="font-bold flex items-center gap-1.5 text-[#C9A34A]">
-                    <AlertTriangle className="w-4 h-4 text-[#C9A34A]" /> Smart Validation Alerts:
-                  </p>
-                  {scanResult.validation_warnings.map((w: string, idx: number) => (
-                    <p key={idx} className="text-[11px] pl-5">• {w}</p>
-                  ))}
-                </div>
-              )}
+              {/* Side-by-Side: Original PDF Frame (Left) + Extracted Entities (Right) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* Left: Luxury Scanned PDF Frame Viewport */}
+                <div className="lg:col-span-5 bg-[#FAF9F5] dark:bg-[#111318] border-2 border-[#C9A34A]/40 rounded-xl p-3 shadow-inner relative overflow-hidden">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#E3DFD7] dark:border-white/10 text-[10px] text-[#5A5E6B] dark:text-[#A6AAB6]">
+                    <span className="flex items-center gap-1 font-semibold text-[#C9A34A]">
+                      <FileText className="w-3.5 h-3.5" /> PDF / Bill Viewport
+                    </span>
+                    <span className="font-mono">A4 Scaled (100% DPI)</span>
+                  </div>
 
-              {/* Data Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs bg-gray-50 p-4 rounded-lg">
-                <div>
-                  <span className="text-gray-500 text-[10px] uppercase font-semibold">Customer / Patron</span>
-                  <p className="font-bold text-gray-900">{scanResult.extracted_data?.customer_name}</p>
-                  <p className="text-[10px] text-gray-500">{scanResult.extracted_data?.customer_phone}</p>
-                </div>
-                <div>
-                  <span className="text-gray-500 text-[10px] uppercase font-semibold">Ornament & Purity</span>
-                  <p className="font-bold text-gray-900">{scanResult.extracted_data?.item_name}</p>
-                  <p className="text-[10px] text-gray-600">Purity: {scanResult.extracted_data?.purity_karat}</p>
-                </div>
-                <div>
-                  <span className="text-gray-500 text-[10px] uppercase font-semibold">Weights Breakdown</span>
-                  <p className="font-bold text-gray-900">Gross: {scanResult.extracted_data?.gross_weight}g</p>
-                  <p className="text-[10px] text-gray-600">Net: {scanResult.extracted_data?.net_weight}g (Stone: {scanResult.extracted_data?.stone_weight}g)</p>
-                </div>
-                <div>
-                  <span className="text-gray-500 text-[10px] uppercase font-semibold">Financial Settlement</span>
-                  <p className="font-bold text-[#C9A34A] font-serif text-sm">₹{Number(scanResult.extracted_data?.grand_total).toLocaleString('en-IN')}</p>
-                  <p className="text-[10px] text-[#35BFA0] font-medium">3% GST: ₹{scanResult.extracted_data?.gst_3_percent}</p>
-                </div>
-              </div>
+                  {/* Scanned Sheet Simulation */}
+                  <div className="bg-white text-zinc-900 border border-[#C9A34A]/30 rounded-lg p-4 space-y-3 min-h-[260px] shadow-sm relative">
+                    <div className="flex justify-between items-start border-b border-zinc-200 pb-2">
+                      <div>
+                        <div className="font-serif font-bold text-xs text-zinc-900">VENDOR TAX INVOICE</div>
+                        <div className="text-[9px] text-zinc-500">Document #{scanResult.id || '9012'}</div>
+                      </div>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                        BIS HUID VALIDATED
+                      </span>
+                    </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button
-                  onClick={() => setActiveTab('queue')}
-                  className="px-4 py-2 rounded-lg gold-gradient text-[#111318] text-xs font-bold flex items-center gap-1.5 shadow-md hover:brightness-105 transition-all cursor-pointer"
-                >
-                  Proceed to Approval Queue <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                    <div className="space-y-1.5 text-[10px]">
+                      <div className="flex justify-between border-b border-zinc-100 pb-1">
+                        <span className="text-zinc-500">Patron:</span>
+                        <strong className="text-zinc-800">{scanResult.extracted_data?.customer_name || 'Walk-in'}</strong>
+                      </div>
+                      <div className="flex justify-between border-b border-zinc-100 pb-1">
+                        <span className="text-zinc-500">Ornament:</span>
+                        <span className="font-semibold text-amber-900">{scanResult.extracted_data?.item_name}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-zinc-100 pb-1">
+                        <span className="text-zinc-500">Purity & Karat:</span>
+                        <span className="font-mono font-bold text-amber-800">{scanResult.extracted_data?.purity_karat}</span>
+                      </div>
+                      <div className="flex justify-between border-b border-zinc-100 pb-1">
+                        <span className="text-zinc-500">Gross Wt / Net:</span>
+                        <span className="font-mono">{scanResult.extracted_data?.gross_weight}g / {scanResult.extracted_data?.net_weight}g</span>
+                      </div>
+                      <div className="flex justify-between pt-1 font-bold text-[11px] text-zinc-900">
+                        <span>Invoice Total:</span>
+                        <span className="font-serif text-amber-900">₹{Number(scanResult.extracted_data?.grand_total || 0).toLocaleString('en-IN')}</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-2 border-t border-dashed border-zinc-300 text-[8.5px] text-zinc-400 text-center">
+                      Digitized by Chandarkant Jewellers Optical Engine &bull; GST Rule 46 Compliant
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Detailed Extracted Entities & Verification */}
+                <div className="lg:col-span-7 space-y-4">
+                  {/* Warnings / Duplicate checks */}
+                  {scanResult.validation_warnings?.length > 0 && (
+                    <div className="p-3.5 rounded-xl bg-[#C9A34A]/10 border border-[#C9A34A]/25 text-xs text-[#111318] dark:text-[#F6F5F1] space-y-1">
+                      <p className="font-bold flex items-center gap-1.5 text-[#C9A34A]">
+                        <AlertTriangle className="w-4 h-4 text-[#C9A34A]" /> Smart Validation Alerts:
+                      </p>
+                      {scanResult.validation_warnings.map((w: string, idx: number) => (
+                        <p key={idx} className="text-[11px] pl-5">• {w}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Data Grid */}
+                  <div className="grid grid-cols-2 gap-3.5 text-xs bg-[#ECEAE4]/30 dark:bg-[#111318] p-4 rounded-xl border border-[#E3DFD7] dark:border-white/10">
+                    <div>
+                      <span className="text-[#5A5E6B] dark:text-[#A6AAB6] text-[10px] uppercase font-semibold">Customer / Patron</span>
+                      <p className="font-bold text-[#111318] dark:text-[#F6F5F1] mt-0.5">{scanResult.extracted_data?.customer_name || 'N/A'}</p>
+                      <p className="text-[10px] text-[#5A5E6B] dark:text-[#A6AAB6]">{scanResult.extracted_data?.customer_phone || 'Unlinked Phone'}</p>
+                    </div>
+                    <div>
+                      <span className="text-[#5A5E6B] dark:text-[#A6AAB6] text-[10px] uppercase font-semibold">Ornament & Karat</span>
+                      <p className="font-bold text-[#111318] dark:text-[#F6F5F1] mt-0.5">{scanResult.extracted_data?.item_name}</p>
+                      <p className="text-[10px] font-mono text-[#C9A34A]">Purity: {scanResult.extracted_data?.purity_karat}</p>
+                    </div>
+                    <div>
+                      <span className="text-[#5A5E6B] dark:text-[#A6AAB6] text-[10px] uppercase font-semibold">Weights Breakdown</span>
+                      <p className="font-bold text-[#111318] dark:text-[#F6F5F1] font-mono mt-0.5">Gross: {scanResult.extracted_data?.gross_weight}g</p>
+                      <p className="text-[10px] font-mono text-[#5A5E6B] dark:text-[#A6AAB6]">Net: {scanResult.extracted_data?.net_weight}g (Stone: {scanResult.extracted_data?.stone_weight}g)</p>
+                    </div>
+                    <div>
+                      <span className="text-[#5A5E6B] dark:text-[#A6AAB6] text-[10px] uppercase font-semibold">Financial Settlement</span>
+                      <p className="font-bold text-[#C9A34A] font-serif text-sm mt-0.5">
+                        ₹{Number(scanResult.extracted_data?.grand_total || 0).toLocaleString('en-IN')}
+                      </p>
+                      <p className="text-[10px] text-[#35BFA0] font-medium">3% GST: ₹{scanResult.extracted_data?.gst_3_percent || '0'}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3 pt-2">
+                    <button
+                      onClick={() => setActiveTab('queue')}
+                      className="px-5 py-2.5 rounded-xl gold-gradient text-[#111318] text-xs font-bold flex items-center gap-1.5 shadow-md hover:brightness-105 transition-all cursor-pointer"
+                    >
+                      Proceed to Safety Verification Queue <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           )}

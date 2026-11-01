@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { PiggyBank, Plus, CheckCircle2, User, CreditCard, X, Receipt } from 'lucide-react';
+import { PiggyBank, Plus, CheckCircle2, User, CreditCard, X, Receipt, Printer } from 'lucide-react';
 
 export const SavingSchemesView: React.FC = () => {
   const [schemes, setSchemes] = useState<any[]>([]);
@@ -9,6 +9,7 @@ export const SavingSchemesView: React.FC = () => {
   const [activeEnrollment, setActiveEnrollment] = useState<any>(null);
   const [payAmount, setPayAmount] = useState('5000');
   const [payMode, setPayMode] = useState('upi');
+  const [completedPayment, setCompletedPayment] = useState<any>(null);
 
   useEffect(() => {
     fetchData();
@@ -39,7 +40,13 @@ export const SavingSchemesView: React.FC = () => {
       });
 
       if (res.data.success) {
-        alert(res.data.message);
+        setCompletedPayment({
+          enrollment: activeEnrollment,
+          amount_paid: Number(payAmount),
+          payment_mode: payMode,
+          date: new Date().toLocaleDateString('en-IN'),
+          receipt_no: `SN-${Date.now().toString().slice(-6)}`,
+        });
         setShowPayModal(false);
         fetchData();
       }
@@ -224,6 +231,135 @@ export const SavingSchemesView: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Swarna Nidhi Deposit Receipt Modal / PDF Frame */}
+      {completedPayment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-[#181A22] rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden my-8">
+            {/* Top Toolbar (Screen Only) */}
+            <div className="no-print flex items-center justify-between px-6 py-3.5 bg-slate-900 text-white border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#35BFA0]" />
+                <span className="font-semibold text-sm">Installment Recorded Successfully</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-3.5 py-1.5 gold-gradient text-[#111318] font-bold rounded-lg text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" /> Print / Save PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCompletedPayment(null)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Printable Receipt Frame */}
+            <div className="p-6 bg-slate-100 dark:bg-[#111318]/50 overflow-y-auto max-h-[80vh] flex justify-center">
+              <div
+                id="printable-receipt"
+                className="printable-sheet bg-white text-[#111318] p-8 rounded-lg shadow-md w-full max-w-lg border-2 border-[#C9A34A] relative"
+                style={{
+                  boxShadow: '0 0 0 4px rgba(201,163,74,0.15)',
+                  fontFamily: "'Inter', sans-serif"
+                }}
+              >
+                {/* Decorative Inner Border */}
+                <div className="border border-[#C9A34A]/40 p-6 rounded">
+                  {/* Letterhead */}
+                  <div className="text-center pb-4 border-b border-dashed border-[#C9A34A]/60">
+                    <div className="inline-block px-3 py-0.5 mb-1.5 rounded-full bg-[#C9A34A]/10 border border-[#C9A34A]/30 text-[10px] font-bold tracking-widest text-[#C9A34A] uppercase">
+                      Swarna Nidhi Kitty Deposit
+                    </div>
+                    <h2 className="font-serif font-black text-2xl tracking-wider text-[#111318]">
+                      CHANDARKANT JEWELLERS
+                    </h2>
+                    <p className="text-[11px] text-slate-600 mt-0.5">
+                      Flagship Showroom • Choksi Bazar, Surat, Gujarat - 395003
+                    </p>
+                    <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+                      GSTIN: 24AAACC1234M1Z8 • BIS Lic: HM/SUR/2026/01
+                    </p>
+                  </div>
+
+                  {/* Receipt Meta */}
+                  <div className="grid grid-cols-2 gap-3 py-3 text-xs border-b border-slate-200">
+                    <div>
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Receipt Number</span>
+                      <span className="font-mono font-bold text-slate-900">{completedPayment.receipt_no}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Date & Time</span>
+                      <span className="font-medium text-slate-900">{completedPayment.date}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Patron / Customer</span>
+                      <span className="font-bold text-slate-900">{completedPayment.enrollment?.customer?.name || 'Valued Patron'}</span>
+                      <span className="text-[11px] text-slate-500 block font-mono">{completedPayment.enrollment?.customer?.phone || ''}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-slate-500 block uppercase tracking-wider">Scheme Plan</span>
+                      <span className="font-bold text-[#C9A34A]">{completedPayment.enrollment?.scheme?.name || 'Swarna Nidhi (11+1)'}</span>
+                    </div>
+                  </div>
+
+                  {/* Payment Details Card */}
+                  <div className="my-4 p-4 rounded-lg bg-amber-50/60 border border-amber-200/70 text-center">
+                    <span className="text-[11px] uppercase tracking-wider text-amber-900/70 font-semibold block">
+                      Installment Deposited
+                    </span>
+                    <div className="text-3xl font-serif font-bold text-[#111318] my-1">
+                      ₹{Number(completedPayment.amount_paid).toLocaleString('en-IN')}.00
+                    </div>
+                    <span className="inline-block mt-1 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-white border border-amber-300 text-amber-900">
+                      Payment Mode: {completedPayment.payment_mode.toUpperCase()}
+                    </span>
+                  </div>
+
+                  {/* Cumulative Status */}
+                  <div className="py-2.5 px-3 bg-slate-50 rounded border border-slate-200 text-xs space-y-1.5">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Total Accumulated Balance:</span>
+                      <span className="font-bold font-mono text-slate-900">
+                        ₹{(Number(completedPayment.enrollment?.total_paid || 0) + Number(completedPayment.amount_paid)).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Maturity Entitlement:</span>
+                      <span className="font-semibold text-emerald-700">1 Month Extra Jeweller Bonus on Completion</span>
+                    </div>
+                  </div>
+
+                  {/* Terms & Footer */}
+                  <div className="mt-5 pt-3 border-t border-dashed border-slate-300 text-[9px] text-slate-500 leading-tight">
+                    <p className="italic">
+                      • Installment is valid for 100% redemption against BIS Hallmarked Gold / Diamond Jewellery.
+                      <br />• Retain this computer-generated receipt for maturity settlement. No cash refunds.
+                    </p>
+                    <div className="mt-6 flex justify-between items-end">
+                      <div className="text-center">
+                        <div className="h-7 border-b border-slate-400 w-24"></div>
+                        <span className="text-[9px] text-slate-600">Customer Signature</span>
+                      </div>
+                      <div className="text-center">
+                        <div className="font-serif font-bold text-[10px] text-[#C9A34A] uppercase">For Chandarkant Jewellers</div>
+                        <div className="h-6"></div>
+                        <span className="text-[9px] text-slate-600">Authorized Cashier Stamp</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
