@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import * as XLSX from 'xlsx';
 import {
   Search,
   ArrowUpDown,
@@ -12,6 +13,10 @@ import {
   SlidersHorizontal,
   FileSpreadsheet,
   Layers,
+  X,
+  RotateCcw,
+  Sparkles,
+  Check,
 } from 'lucide-react';
 
 export interface Column<T> {
@@ -67,24 +72,100 @@ export function DataTable<T extends Record<string, any>>({
     return init;
   });
   const [showColumnPicker, setShowColumnPicker] = useState(false);
+  const [showFilterDrawer, setShowFilterDrawer] = useState(false);
+  const [filterColumn, setFilterColumn] = useState<string>('');
+  const [filterValue, setFilterValue] = useState<string>('');
+  const [minVal, setMinVal] = useState<string>('');
+  const [maxVal, setMaxVal] = useState<string>('');
+  const [quickPreset, setQuickPreset] = useState<'all' | 'high_value' | 'has_data'>('all');
 
-  // Filter data
-  const filteredData = useMemo(() => {
-    if (!search.trim()) return data;
-    const lower = search.toLowerCase();
-
-    return data.filter((item) => {
-      if (searchKeys.length > 0) {
-        return searchKeys.some((k) => {
-          const val = item[k as keyof T];
-          return val !== undefined && val !== null && String(val).toLowerCase().includes(lower);
-        });
+  // Compute unique values for the selected filter column
+  const uniqueFilterValues = useMemo(() => {
+    if (!filterColumn) return [];
+    const set = new Set<string>();
+    data.forEach((item) => {
+      const v = item[filterColumn];
+      if (v !== undefined && v !== null && String(v).trim()) {
+        set.add(String(v).trim());
       }
-      return Object.values(item).some(
-        (val) => val !== undefined && val !== null && String(val).toLowerCase().includes(lower)
-      );
     });
-  }, [data, search, searchKeys]);
+    return Array.from(set).slice(0, 30);
+  }, [data, filterColumn]);
+
+  // Enhanced Filter data (Search + Column Filter + Range Filter + Quick Presets)
+  const filteredData = useMemo(() => {
+    let result = data;
+
+    // 1. Quick Presets
+    if (quickPreset === 'high_value') {
+      result = result.filter((item) => {
+        return Object.values(item).some((v) => typeof v === 'number' && v >= 50000);
+      });
+    } else if (quickPreset === 'has_data') {
+      result = result.filter((item) => {
+        return Object.values(item).some((v) => v !== null && v !== undefined && String(v).trim() !== '');
+      });
+    }
+
+    // 2. Specific Column Value Filter
+    if (filterColumn && filterValue.trim()) {
+      const lower = filterValue.toLowerCase().trim();
+      result = result.filter((item) => {
+        const val = item[filterColumn];
+        if (val === undefined || val === null) return false;
+        return String(val).toLowerCase().includes(lower);
+      });
+    }
+
+    // 3. Numeric Min/Max Range Filter
+    if (filterColumn && (minVal !== '' || maxVal !== '')) {
+      const min = minVal !== '' ? Number(minVal) : -Infinity;
+      const max = maxVal !== '' ? Number(maxVal) : Infinity;
+      result = result.filter((item) => {
+        const num = Number(item[filterColumn]);
+        if (isNaN(num)) return true;
+        return num >= min && num <= max;
+      });
+    }
+
+    // 4. Global Search
+    if (search.trim()) {
+      const lower = search.toLowerCase();
+      result = result.filter((item) => {
+        if (searchKeys.length > 0) {
+          return searchKeys.some((k) => {
+            const val = item[k as keyof T];
+            return val !== undefined && val !== null && String(val).toLowerCase().includes(lower);
+          });
+        }
+        return Object.values(item).some(
+          (val) => val !== undefined && val !== null && String(val).toLowerCase().includes(lower)
+        );
+      });
+    }
+
+    return result;
+  }, [data, search, searchKeys, filterColumn, filterValue, minVal, maxVal, quickPreset]);
+
+  // Active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (search.trim()) count++;
+    if (filterColumn && filterValue.trim()) count++;
+    if (minVal !== '' || maxVal !== '') count++;
+    if (quickPreset !== 'all') count++;
+    return count;
+  }, [search, filterColumn, filterValue, minVal, maxVal, quickPreset]);
+
+  const handleResetFilters = () => {
+    setSearch('');
+    setFilterColumn('');
+    setFilterValue('');
+    setMinVal('');
+    setMaxVal('');
+    setQuickPreset('all');
+    setCurrentPage(1);
+  };
 
   // Sort data
   const sortedData = useMemo(() => {
@@ -133,28 +214,74 @@ export function DataTable<T extends Record<string, any>>({
     }
   };
 
-  const handleExportCsv = () => {
+  const handleExportExcel = () => {
     const activeCols = columns.filter((col) => visibleColumns[col.key]);
-    const headers = activeCols.map((c) => `"${c.header}"`).join(',');
+    const titleText = (title || 'REPORT').toUpperCase();
+    const generatedDate = new Date().toLocaleString('en-IN');
 
-    const rows = sortedData.map((row) =>
-      activeCols
-        .map((col) => {
-          const val = row[col.key];
-          const clean = val !== undefined && val !== null ? String(val).replace(/"/g, '""') : '';
-          return `"${clean}"`;
-        })
-        .join(',')
-    );
+    // Header metadata block
+    const aoa: any[][] = [
+      [`CHANDARKANT JEWELLERS - ${titleText}`],
+      [`Generated: ${generatedDate} | Firm GSTIN: 24AAACC1234M1Z8 | BIS Lic: HM/SUR/2026/01`],
+      [`Total Records: ${sortedData.length} | Export Format: Microsoft Excel Spreadsheet (.xlsx)`],
+      [], // blank line
+      activeCols.map((col) => col.header), // Row 5 (index 4 in 0-based array)
+    ];
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${exportFileName}-${new Date().toISOString().split('T')[0]}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Rows with typed numbers for Excel formula compatibility
+    sortedData.forEach((row) => {
+      const rowData = activeCols.map((col) => {
+        let val = row[col.key];
+        if (typeof val === 'object' && val !== null) {
+          val = Object.values(val).join(' ');
+        }
+        if (val === undefined || val === null) {
+          return '';
+        }
+        const strVal = String(val).trim();
+        // If purely numeric without leading zeroes or plus signs, save as Number for Excel sums
+        if (
+          strVal !== '' &&
+          !isNaN(Number(strVal)) &&
+          !strVal.startsWith('0') &&
+          !strVal.startsWith('+') &&
+          strVal.length < 15
+        ) {
+          return Number(strVal);
+        }
+        return val;
+      });
+      aoa.push(rowData);
+    });
+
+    const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+
+    // Auto-Filter enabled across all columns on row 5
+    const headerRow = 5;
+    const lastRow = aoa.length;
+    const lastCol = XLSX.utils.encode_col(activeCols.length - 1);
+    worksheet['!autofilter'] = {
+      ref: `A${headerRow}:${lastCol}${lastRow}`,
+    };
+
+    // Auto Column Widths
+    const colWidths = activeCols.map((col) => {
+      let maxLen = col.header.length;
+      sortedData.forEach((r) => {
+        const v = r[col.key];
+        if (v !== undefined && v !== null) {
+          const l = String(v).length;
+          if (l > maxLen) maxLen = l;
+        }
+      });
+      return { wch: Math.min(Math.max(maxLen + 4, 15), 45) };
+    });
+    worksheet['!cols'] = colWidths;
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Ledger Data');
+    const safeFilename = `${exportFileName}-${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, safeFilename, { bookType: 'xlsx' });
   };
 
   const handlePrint = () => {
@@ -445,13 +572,32 @@ export function DataTable<T extends Record<string, any>>({
             />
           </div>
 
-          <div className="flex items-center gap-2 self-end md:self-auto">
+          <div className="flex items-center gap-2 self-end md:self-auto flex-wrap">
+            {/* Filter & Formatting Drawer Trigger */}
+            <button
+              onClick={() => setShowFilterDrawer(!showFilterDrawer)}
+              title="Filter and format ledger records"
+              className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center gap-1.5 transition-all cursor-pointer ${
+                activeFiltersCount > 0 || showFilterDrawer
+                  ? 'border-[#C9A34A] bg-[#C9A34A]/10 text-[#C9A34A] font-semibold'
+                  : 'border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5'
+              }`}
+            >
+              <Filter className="w-3.5 h-3.5 text-[#C9A34A]" />
+              <span className="hidden sm:inline">Filter & Format</span>
+              {activeFiltersCount > 0 && (
+                <span className="px-1.5 py-0.2 bg-[#C9A34A] text-[#111318] font-bold rounded-full text-[10px]">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+
             {/* Column Picker Trigger */}
             <div className="relative">
               <button
                 onClick={() => setShowColumnPicker(!showColumnPicker)}
                 title="Customize table columns"
-                className="px-3 py-2 rounded-xl text-xs font-medium border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 flex items-center gap-1.5 transition-colors"
+                className="px-3 py-2 rounded-xl text-xs font-medium border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Columns</span>
@@ -484,26 +630,237 @@ export function DataTable<T extends Record<string, any>>({
               )}
             </div>
 
-            {/* Export to Excel / CSV */}
+            {/* Export to Excel (.xlsx) with Autofilter */}
             <button
-              onClick={handleExportCsv}
-              title="Export visible dataset to Excel (.csv)"
-              className="px-3 py-2 rounded-xl text-xs font-medium border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 flex items-center gap-1.5 transition-colors"
+              onClick={handleExportExcel}
+              title="Export formatted dataset to Microsoft Excel (.xlsx)"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold border border-emerald-600/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-[#35BFA0]" />
-              <span className="hidden sm:inline">Export CSV</span>
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="hidden sm:inline">Export Excel (.xlsx)</span>
             </button>
 
             {/* Print trigger */}
             <button
               onClick={handlePrint}
               title="Print Table View"
-              className="px-2.5 py-2 rounded-xl text-xs font-medium border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors"
+              className="px-2.5 py-2 rounded-xl text-xs font-medium border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
+
+        {/* Filter & Formatting Drawer Panel */}
+        {showFilterDrawer && (
+          <div className="mt-3 p-4 bg-[#ECEAE4]/30 dark:bg-[#111318]/60 border border-[#E3DFD7] dark:border-white/10 rounded-xl space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-[#E3DFD7]/60 dark:border-white/10">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#C9A34A]" />
+                <span className="text-xs font-bold text-[#111318] dark:text-[#F6F5F1]">
+                  Filter & Formatting Controls
+                </span>
+              </div>
+              <button
+                onClick={handleResetFilters}
+                className="text-[11px] text-[#C9A34A] hover:underline flex items-center gap-1 cursor-pointer font-medium"
+              >
+                <RotateCcw className="w-3 h-3" /> Reset All Filters
+              </button>
+            </div>
+
+            {/* Filter Controls Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              {/* Column Filter Selector */}
+              <div>
+                <label className="block text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6] mb-1 font-medium">
+                  Filter by Specific Column
+                </label>
+                <select
+                  value={filterColumn}
+                  onChange={(e) => {
+                    setFilterColumn(e.target.value);
+                    setFilterValue('');
+                    setMinVal('');
+                    setMaxVal('');
+                    setCurrentPage(1);
+                  }}
+                  className="w-full bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-[#111318] dark:text-[#F6F5F1] outline-none focus:border-[#C9A34A]"
+                >
+                  <option value="">Choose Column...</option>
+                  {columns.map((col) => (
+                    <option key={col.key} value={col.key}>
+                      {col.header}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Column Value (Dropdown or Text) */}
+              <div>
+                <label className="block text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6] mb-1 font-medium">
+                  Match Value
+                </label>
+                {uniqueFilterValues.length > 0 && uniqueFilterValues.length <= 15 ? (
+                  <select
+                    value={filterValue}
+                    onChange={(e) => {
+                      setFilterValue(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="w-full bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-[#111318] dark:text-[#F6F5F1] outline-none focus:border-[#C9A34A]"
+                  >
+                    <option value="">All values...</option>
+                    {uniqueFilterValues.map((val) => (
+                      <option key={val} value={val}>
+                        {val}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Enter filter term..."
+                    value={filterValue}
+                    onChange={(e) => {
+                      setFilterValue(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    disabled={!filterColumn}
+                    className="w-full bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-[#111318] dark:text-[#F6F5F1] outline-none focus:border-[#C9A34A] disabled:opacity-50"
+                  />
+                )}
+              </div>
+
+              {/* Quick Preset Pills */}
+              <div>
+                <label className="block text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6] mb-1 font-medium">
+                  Quick Filter Preset
+                </label>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      setQuickPreset('all');
+                      setCurrentPage(1);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+                      quickPreset === 'all'
+                        ? 'bg-[#C9A34A] text-[#111318] border-[#C9A34A] font-bold'
+                        : 'border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6]'
+                    }`}
+                  >
+                    All Records
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuickPreset('high_value');
+                      setCurrentPage(1);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors cursor-pointer ${
+                      quickPreset === 'high_value'
+                        ? 'bg-[#C9A34A] text-[#111318] border-[#C9A34A] font-bold'
+                        : 'border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6]'
+                    }`}
+                  >
+                    High Value (&ge; ₹50k)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Numeric Range Filter (if applicable) */}
+            {filterColumn && (
+              <div className="pt-2 border-t border-[#E3DFD7]/60 dark:border-white/10 flex items-center gap-3">
+                <span className="text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6] font-medium">
+                  Numeric Range Filter:
+                </span>
+                <input
+                  type="number"
+                  placeholder="Min Value"
+                  value={minVal}
+                  onChange={(e) => {
+                    setMinVal(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="w-24 bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded px-2 py-1 text-xs text-[#111318] dark:text-[#F6F5F1] outline-none focus:border-[#C9A34A]"
+                />
+                <span className="text-slate-400">to</span>
+                <input
+                  type="number"
+                  placeholder="Max Value"
+                  value={maxVal}
+                  onChange={(e) => {
+                    setMaxVal(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="w-24 bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded px-2 py-1 text-xs text-[#111318] dark:text-[#F6F5F1] outline-none focus:border-[#C9A34A]"
+                />
+                {(minVal !== '' || maxVal !== '') && (
+                  <button
+                    onClick={() => {
+                      setMinVal('');
+                      setMaxVal('');
+                    }}
+                    className="text-[10px] text-red-500 hover:underline"
+                  >
+                    Clear Range
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Active Filter Pills Strip */}
+        {activeFiltersCount > 0 && (
+          <div className="flex items-center gap-2 flex-wrap pt-1 text-[11px]">
+            <span className="text-[#8E929E] font-medium">Active Filters:</span>
+            {search.trim() && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#C9A34A]/10 text-[#C9A34A] border border-[#C9A34A]/20">
+                Search: "{search}"
+                <button onClick={() => setSearch('')} className="hover:text-red-500 cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {filterColumn && filterValue.trim() && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                {filterColumn}: "{filterValue}"
+                <button onClick={() => setFilterValue('')} className="hover:text-red-500 cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {(minVal !== '' || maxVal !== '') && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                Range: {minVal || '0'} - {maxVal || '∞'}
+                <button
+                  onClick={() => {
+                    setMinVal('');
+                    setMaxVal('');
+                  }}
+                  className="hover:text-red-500 cursor-pointer"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {quickPreset !== 'all' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                Preset: {quickPreset}
+                <button onClick={() => setQuickPreset('all')} className="hover:text-red-500 cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            <button
+              onClick={handleResetFilters}
+              className="text-[#8E929E] hover:text-[#111318] dark:hover:text-[#F6F5F1] underline ml-1 cursor-pointer"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Table Content */}
@@ -582,7 +939,9 @@ export function DataTable<T extends Record<string, any>>({
               paginatedData.map((item, rowIdx) => (
                 <tr
                   key={item.id || rowIdx}
-                  className="hover:bg-[#C9A34A]/5 dark:hover:bg-white/[0.03] transition-colors"
+                  className={`hover:bg-[#C9A34A]/10 dark:hover:bg-white/[0.04] transition-colors ${
+                    rowIdx % 2 === 1 ? 'bg-[#ECEAE4]/25 dark:bg-white/[0.015]' : 'bg-transparent'
+                  }`}
                 >
                   {activeCols.map((col) => (
                     <td

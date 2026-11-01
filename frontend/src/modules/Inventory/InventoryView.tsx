@@ -288,7 +288,7 @@ export const InventoryView: React.FC = () => {
         data={items}
         loading={loading}
         title="Showroom Inventory Stream"
-        subtitle="Sortable, filterable ledger with instant CSV export and column visibility"
+        subtitle="Sortable, filterable catalog with Microsoft Excel (.xlsx) export, auto-filters, and column visibility"
         searchPlaceholder="Search by SKU, Tag, HUID, or Item Title..."
         exportFileName="cjc-inventory-catalog"
         emptyMessage="No jewellery items matched your query."

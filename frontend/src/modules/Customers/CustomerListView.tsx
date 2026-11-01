@@ -179,7 +179,7 @@ export const CustomerListView: React.FC = () => {
         data={customers}
         columns={columns}
         title="Patron CRM Ledger & KYC Compliance Directory"
-        subtitle="Sortable, filterable client ledger with instant A4 report print and CSV export"
+        subtitle="Sortable, filterable client ledger with Microsoft Excel (.xlsx) export, auto-filters, and A4 print"
         searchPlaceholder="Search patrons by name, phone, PAN card, or city..."
         searchKeys={['name', 'phone', 'pan_number', 'city', 'loyalty_tier']}
         exportFileName="cjc-patrons-ledger"
