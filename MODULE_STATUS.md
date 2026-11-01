@@ -1,0 +1,35 @@
+# Chandarkant Jewellers Cloud — Module Implementation Status
+
+This tracker reflects the real-time engineering and testing status across all 26 product domains.
+Statuses allowed: `NOT STARTED` | `IN PROGRESS` | `IMPLEMENTED` | `TESTED` | `VERIFIED IN PRODUCTION`
+
+---
+
+| # | Domain Module | Database | Backend | Frontend | API | Permissions | Automated Tests | Integration Tests | PDF Tests | Deployment |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | **Auth & Authorization** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 2 | **Tenant & Company Mgmt** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 3 | **Branch Management** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 4 | **Jewellery Inventory & HUID** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 5 | **Precious Metal Rates** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 6 | **Point of Sale (POS)** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 7 | **Billing & Invoicing** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 8 | **Purchase Management** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 9 | **Old Gold Management** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 10 | **Customer CRM & Loyalty** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 11 | **Supplier Management** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 12 | **Customer Orders** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 13 | **Repair Management** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 14 | **Karigar Management** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 15 | **Gold Loan Records** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 16 | **Saving Schemes (Kitty)**| TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 17 | **Accounting & GST Engine**| TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 18 | **Financial Management** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 19 | **Reporting & Analytics** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | NOT STARTED |
+| 20 | **Bulk Messaging Engine** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | N/A | NOT STARTED |
+| 21 | **Workflow Automation** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | N/A | NOT STARTED |
+| 22 | **AI Intelligence Layer** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 23 | **Subscription Management**| IN PROGRESS | IN PROGRESS | IN PROGRESS | IN PROGRESS | IN PROGRESS | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED |
+| 24 | **Notification Mgmt** | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | N/A | NOT STARTED |
+| 25 | **Audit & Security** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |
+| 26 | **System Administration** | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | TESTED | N/A | NOT STARTED |

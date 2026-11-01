@@ -1,0 +1,27 @@
+# Dependencies & Builds
+node_modules/
+dist/
+vendor/
+
+# Environment files
+.env
+.env.backup
+.env.production
+
+# Logs & Storage
+*.log
+storage/*.key
+storage/logs/*
+!storage/logs/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

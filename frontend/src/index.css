@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --jewellery-burgundy: #56111C;
+    --jewellery-burgundy-dark: #380810;
+    --jewellery-gold: #D4AF37;
+    --jewellery-gold-light: #F4E297;
+    --jewellery-gold-dark: #A6841E;
+    --jewellery-ivory: #FDFBF7;
+    --jewellery-card: #FFFFFF;
+    --jewellery-border: #E8DFD5;
+  }
+
+  body {
+    background-color: #F8F6F2;
+    color: #1F191A;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Luxury Jewellery Aesthetic Utilities */
+.bg-burgundy-900 {
+  background-color: #380810;
+}
+.bg-burgundy-800 {
+  background-color: #56111C;
+}
+.bg-burgundy-700 {
+  background-color: #721926;
+}
+.text-burgundy-900 {
+  color: #380810;
+}
+.text-burgundy-800 {
+  color: #56111C;
+}
+.border-burgundy-700 {
+  border-color: #721926;
+}
+
+.bg-gold-500 {
+  background-color: #D4AF37;
+}
+.bg-gold-400 {
+  background-color: #E6C65A;
+}
+.bg-gold-100 {
+  background-color: #FDF9E8;
+}
+.text-gold-600 {
+  color: #A6841E;
+}
+.text-gold-500 {
+  color: #D4AF37;
+}
+.border-gold-400 {
+  border-color: #E6C65A;
+}
+.border-gold-300 {
+  border-color: #F0DA8A;
+}
+
+/* Subtle Shimmer & Polish */
+.gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #F5DE88 50%, #C49E28 100%);
+}
+
+.burgundy-gradient {
+  background: linear-gradient(135deg, #440A13 0%, #681523 50%, #30060C 100%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
