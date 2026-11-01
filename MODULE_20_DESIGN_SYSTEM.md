@@ -8,17 +8,19 @@
 
 ---
 
-### 1. Visual Design & Design Tokens
-The design system establishes a high-contrast, accessible, and regal aesthetic tailored for high-value gold and diamond commerce:
+### 1. Official Design Tokens & Semantic Roles
+The Chandarkant Jewellers Cloud design system is anchored strictly by five official design tokens applied with restraint and visual hierarchy:
 
-| Token / Layer | Light Mode | Dark Mode | Semantic Role |
+| Official Token | Hex Code | Visual Identity | Strict Semantic Role |
 | :--- | :--- | :--- | :--- |
-| **Canvas Background** | `#F8F6F2` (Warm Ivory) | `#09090D` (Midnight Obsidian) | Primary workspace backdrop |
-| **Surface Card** | `#FFFFFF` | `#111118` (Obsidian Slate) | Elevated cards, forms, tables |
-| **Luxury Gold** | `#D4AF37` / `#F5DE88` | `#E5C358` / `#F7E9B2` | Accents, active indicators, borders |
-| **Regal Burgundy** | `#380810` / `#56111C` | `#200408` / `#2C070C` | Brand typography, executive banners |
-| **Fintech Violet** | `rgba(139, 92, 246, 0.12)` | `#8B5CF6` | Chart gradients & AI telemetry glow |
-| **Border System** | `#E8DFD5` / `zinc-200` | `rgba(255, 255, 255, 0.10)` | Crisp 1px structural separation |
+| **MIDNIGHT** | `#111318` | Deep Obsidian Charcoal | **Dark Foundation**: Workspace canvas, dark mode surfaces (`#181A22`), and high-contrast typography in light mode. |
+| **ROYAL GOLD** | `#C9A34A` | Imperial Heritage Gold | **Primary Branding & Action**: Brand emblems, active navigation pills, primary CTAs (`gold-gradient`), bullion rates, and key accents. |
+| **IVORY** | `#F6F5F1` | Elegant Warm White | **Light Foundation**: Workspace canvas, light mode elevated surfaces (`#FFFFFF`), and high-contrast text in dark mode. |
+| **ELECTRIC VIOLET** | `#8B7CF6` | Vivid Holographic Violet | **AI Exclusivity**: Exclusively reserved for AI-related features (AI Copilot, Autonomous Zero-Capture, voice intent, OCR scanning) and selected interactive elements. |
+| **MINT** | `#35BFA0` | Radiant Emerald Mint | **Success & Positive Finance**: Exclusively reserved for success states, BIS HUID hallmark verification, trial balance reconciliation, cash inflows, and positive financial indicators. |
+
+#### Restraint & Visual Hierarchy
+The interface deliberately avoids splashing all five colors simultaneously. Backgrounds rest comfortably on **Midnight** (`#111318`) or **Ivory** (`#F6F5F1`), actions and branding emerge with **Royal Gold** (`#C9A34A`), while **Electric Violet** and **Mint** act with focused semantic precision.
 
 #### Typography Stack
 1. **Body & Controls**: `Inter` — Ultra-clean legibility, proportional spacing, neutral character geometry.

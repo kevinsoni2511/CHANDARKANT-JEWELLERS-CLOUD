@@ -107,12 +107,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/60 backdrop-blur-sm animate-fade-in">
       <div
-        className="w-full max-w-xl bg-white dark:bg-[#111118] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+        className="w-full max-w-xl bg-[#FFFFFF] dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-200 dark:border-white/10">
-          <Search className="w-5 h-5 text-gray-400" />
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[#E3DFD7] dark:border-white/10">
+          <Search className="w-5 h-5 text-[#C9A34A]" />
           <input
             ref={inputRef}
             type="text"
@@ -122,7 +122,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            className="w-full bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none"
+            className="w-full bg-transparent text-sm text-[#111318] dark:text-[#F6F5F1] placeholder-[#8E929E] outline-none"
           />
           <span className="kbd-badge">ESC</span>
         </div>
@@ -130,13 +130,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         {/* Results List */}
         <div className="max-h-80 overflow-y-auto p-2">
           {filteredItems.length === 0 ? (
-            <div className="py-8 text-center text-xs text-gray-400">
+            <div className="py-8 text-center text-xs text-[#8E929E]">
               No matching commands found for "{query}".
             </div>
           ) : (
             filteredItems.map((item, index) => {
               const Icon = item.icon;
               const isSelected = index === selectedIndex;
+              const isAi = item.id.includes('zero') || item.id.includes('ai') || item.id.includes('voice');
               return (
                 <div
                   key={item.id}
@@ -151,17 +152,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                   onMouseEnter={() => setSelectedIndex(index)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-amber-500/15 text-[#56111C] dark:text-amber-300 font-semibold border border-amber-500/30'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5'
+                      ? 'bg-[#C9A34A]/15 text-[#111318] dark:text-[#F6F5F1] font-semibold border border-[#C9A34A]/30'
+                      : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                    <Icon className={`w-4 h-4 shrink-0 ${isAi ? 'text-[#8B7CF6]' : 'text-[#C9A34A]'}`} />
                     <span>{item.title}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-gray-400 uppercase font-mono">{item.section}</span>
-                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />}
+                    <span className="text-[10px] text-[#8E929E] uppercase font-mono">{item.section}</span>
+                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-[#C9A34A]" />}
                   </div>
                 </div>
               );
@@ -170,7 +171,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer shortcuts hint */}
-        <div className="px-4 py-2 bg-gray-50 dark:bg-white/5 border-t border-gray-200 dark:border-white/10 flex items-center justify-between text-[11px] text-gray-500">
+        <div className="px-4 py-2 bg-[#ECEAE4]/50 dark:bg-white/5 border-t border-[#E3DFD7] dark:border-white/10 flex items-center justify-between text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
           <div className="flex items-center gap-3">
             <span>
               <span className="kbd-badge">↑</span> <span className="kbd-badge">↓</span> Navigate
@@ -179,7 +180,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               <span className="kbd-badge">↵</span> Select
             </span>
           </div>
-          <span className="text-[10px] text-amber-700 dark:text-amber-400 font-medium font-luxury">
+          <span className="text-[10px] text-[#C9A34A] font-medium font-luxury">
             Chandarkant Jewellers Cloud
           </span>
         </div>

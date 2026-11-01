@@ -122,7 +122,7 @@ export const DashboardView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-zinc-200 dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#200408] dark:text-[#E5C358]">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
               {displayRole === 'sales' && 'Sales Executive Counter Terminal'}
               {displayRole === 'accountant' && 'Chief Financial & Tax Accounting Command'}
               {displayRole === 'stock' && 'Jewellery Vault & Inventory Telemetry'}
@@ -159,22 +159,22 @@ export const DashboardView: React.FC = () => {
 
           <a
             href="/pos"
-            className="px-4 py-2 rounded-xl gold-gradient text-[#200408] font-bold text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-2"
+            className="px-4 py-2 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-2"
           >
-            <Receipt className="w-4 h-4" /> Instant POS Bill
+            <Receipt className="w-4 h-4 text-[#111318]" /> Instant POS Bill
           </a>
         </div>
       </div>
 
       {/* Widget Customizer Dropdown Drawer */}
       {showCustomizer && (
-        <div className="p-4 bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl shadow-lg space-y-3 animate-fade-in">
-          <div className="flex items-center justify-between border-b border-zinc-100 dark:border-white/5 pb-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
-              <SlidersHorizontal className="w-4 h-4 text-amber-500" />
+        <div className="p-4 bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl shadow-lg space-y-3 animate-fade-in">
+          <div className="flex items-center justify-between border-b border-[#E3DFD7] dark:border-white/5 pb-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#111318] dark:text-[#F6F5F1]">
+              <SlidersHorizontal className="w-4 h-4 text-[#C9A34A]" />
               <span>Personalize Your Dashboard Grid</span>
             </div>
-            <span className="text-[10px] text-zinc-400 font-mono">Changes persist automatically</span>
+            <span className="text-[10px] text-[#8E929E] font-mono">Changes persist automatically</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
@@ -193,12 +193,12 @@ export const DashboardView: React.FC = () => {
                   onClick={() => toggleWidget(w.id as keyof typeof widgets)}
                   className={`px-3 py-2 rounded-xl text-xs font-medium border flex items-center justify-between transition-all ${
                     active
-                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300 font-semibold'
-                      : 'border-zinc-200 dark:border-white/10 text-zinc-400 opacity-60'
+                      ? 'bg-[#C9A34A]/15 border-[#C9A34A]/30 text-[#C9A34A] font-semibold'
+                      : 'border-[#E3DFD7] dark:border-white/10 text-[#8E929E] opacity-60'
                   }`}
                 >
                   <span>{w.label}</span>
-                  {active ? <Eye className="w-3.5 h-3.5 text-amber-500" /> : <EyeOff className="w-3.5 h-3.5" />}
+                  {active ? <Eye className="w-3.5 h-3.5 text-[#C9A34A]" /> : <EyeOff className="w-3.5 h-3.5" />}
                 </button>
               );
             })}
@@ -208,9 +208,9 @@ export const DashboardView: React.FC = () => {
 
       {/* Role Switcher Toolbar for Showroom Owners / Administrators */}
       {isPrivileged && (
-        <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
-          <div className="flex items-center gap-2 text-zinc-800 dark:text-zinc-200 font-semibold">
-            <Sparkles className="w-4 h-4 text-amber-500" />
+        <div className="bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
+          <div className="flex items-center gap-2 text-[#111318] dark:text-[#F6F5F1] font-semibold">
+            <Sparkles className="w-4 h-4 text-[#C9A34A]" />
             <span>Role Perspective Switcher:</span>
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
@@ -227,8 +227,8 @@ export const DashboardView: React.FC = () => {
                 onClick={() => setActiveRoleView(r.id)}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
                   displayRole === r.id
-                    ? 'bg-[#200408] text-amber-200 dark:bg-amber-500/20 dark:text-amber-300 shadow font-bold border border-amber-500/30'
-                    : 'bg-zinc-50 dark:bg-white/5 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/10 border border-zinc-200 dark:border-white/5'
+                    ? 'gold-gradient text-[#111318] shadow font-bold'
+                    : 'bg-[#ECEAE4]/50 dark:bg-white/5 text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#ECEAE4] dark:hover:bg-white/10 border border-[#E3DFD7] dark:border-white/5'
                 }`}
               >
                 {r.label}
@@ -286,7 +286,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   My Sales Today
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.my_today_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
@@ -298,7 +298,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   My Month Sales
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.my_month_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <div className="mt-2 w-full bg-zinc-100 dark:bg-white/10 rounded-full h-1.5 overflow-hidden">
@@ -318,7 +318,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Gold 22K Retail Rate
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-mono">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-mono">
                   ₹{Number(data?.metal_rates?.find((r: any) => r.metal_type === 'gold' && r.purity_karat === '22K')?.rate_per_gram || 7350).toFixed(2)}
                   <span className="text-xs font-sans text-zinc-500"> /g</span>
                 </p>
@@ -329,7 +329,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Silver 99.9% Rate
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-mono">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-mono">
                   ₹{Number(data?.metal_rates?.find((r: any) => r.metal_type === 'silver')?.rate_per_gram || 88.5).toFixed(2)}
                   <span className="text-xs font-sans text-zinc-500"> /g</span>
                 </p>
@@ -396,8 +396,8 @@ export const DashboardView: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_invoices?.map((inv: any) => (
-                      <tr key={inv.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#56111C] dark:text-amber-400">{inv.invoice_number}</td>
+                      <tr key={inv.id} className="hover:bg-[#C9A34A]/5 transition-colors">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{inv.invoice_number}</td>
                         <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{inv.invoice_date}</td>
                         <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{inv.customer?.name || 'Walk-in'}</td>
                         <td className="py-2.5 px-3 font-bold text-right font-serif">₹{Number(inv.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
@@ -427,7 +427,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Showroom Cash in Hand
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.cash_in_hand || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 font-mono">GL A/c: 1001</p>
@@ -437,7 +437,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Bank & UPI Balance
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.bank_balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Reconciled Current A/c</p>
@@ -447,7 +447,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Output GST (Current Month)
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.month_output_gst || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-1 font-mono">
@@ -459,7 +459,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Customer Debtors
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.customer_receivables || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-blue-600 dark:text-blue-400 mt-1 font-medium">Active ledger accounts</p>
@@ -499,8 +499,8 @@ export const DashboardView: React.FC = () => {
                     const totalDebit = v.entries?.reduce((sum: number, e: any) => sum + Number(e.debit), 0);
                     const totalCredit = v.entries?.reduce((sum: number, e: any) => sum + Number(e.credit), 0);
                     return (
-                      <tr key={v.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#56111C] dark:text-amber-400">{v.voucher_number}</td>
+                      <tr key={v.id} className="hover:bg-[#C9A34A]/5 transition-colors">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{v.voucher_number}</td>
                         <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{v.voucher_date}</td>
                         <td className="py-2.5 px-3 uppercase text-[10px] font-bold text-zinc-700 dark:text-zinc-300">{v.voucher_type}</td>
                         <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400 truncate max-w-xs">{v.narration}</td>
@@ -532,7 +532,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Fine Gold Gross Stock
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {Number(data?.gold_gross_stock || 0).toFixed(3)} <span className="text-xs font-sans text-zinc-500">grams</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
@@ -544,7 +544,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Silver Bullion Stock
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {Number(data?.silver_gross_stock || 0).toFixed(3)} <span className="text-xs font-sans text-zinc-500">grams</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Purity 92.5% - 99.9%</p>
@@ -554,7 +554,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Total Tagged Pieces
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.total_items_in_stock || 0} <span className="text-xs font-sans text-zinc-500">items</span>
                 </p>
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">In Showroom Trays</p>
@@ -615,8 +615,8 @@ export const DashboardView: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_items?.map((it: any) => (
-                      <tr key={it.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#56111C] dark:text-amber-400">{it.sku || it.item_code}</td>
+                      <tr key={it.id} className="hover:bg-[#C9A34A]/5 transition-colors">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{it.sku || it.item_code}</td>
                         <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{it.name}</td>
                         <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">{it.purity_karat}</td>
                         <td className="py-2.5 px-3 font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
@@ -647,7 +647,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Active Job Cards
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.active_jobs_count || 0} <span className="text-xs font-sans text-zinc-500">jobs</span>
                 </p>
                 <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-1 font-medium">Currently in manufacturing</p>
@@ -657,7 +657,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Pure Gold Issued
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {Number(data?.gold_issued_in_workshop || 0).toFixed(3)} <span className="text-xs font-sans text-zinc-500">grams</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">24K fine metal with artisans</p>
@@ -677,7 +677,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Master Artisans
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.karigars?.length || 0} <span className="text-xs font-sans text-zinc-500">specialists</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Filigree, Setting, Casting</p>
@@ -708,8 +708,8 @@ export const DashboardView: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                   {data?.active_jobs?.map((j: any) => (
-                    <tr key={j.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
-                      <td className="py-2.5 px-3 font-mono font-semibold text-[#56111C] dark:text-amber-400">{j.job_number}</td>
+                    <tr key={j.id} className="hover:bg-[#C9A34A]/5 transition-colors">
+                      <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{j.job_number}</td>
                       <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{j.karigar?.name}</td>
                       <td className="py-2.5 px-3 text-zinc-700 dark:text-zinc-300">{j.item_description}</td>
                       <td className="py-2.5 px-3 font-mono font-semibold text-amber-700 dark:text-amber-400">{Number(j.gold_issued_pure).toFixed(3)}g</td>
@@ -738,7 +738,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Sales Today
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.branch_today_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
@@ -750,7 +750,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Month Revenue
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.branch_month_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Showroom target on track</p>
@@ -760,7 +760,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Stock In Trays
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.branch_items_in_stock || 0} <span className="text-xs font-sans text-zinc-500">pieces</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
@@ -772,7 +772,7 @@ export const DashboardView: React.FC = () => {
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Active Sales Team
                 </span>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.staff_performance?.length || 0} <span className="text-xs font-sans text-zinc-500">staff</span>
                 </p>
                 <p className="text-[11px] text-blue-600 dark:text-blue-400 mt-1 font-medium">Counter attendance 100%</p>
@@ -788,12 +788,12 @@ export const DashboardView: React.FC = () => {
               </h3>
               <div className="space-y-3">
                 {data?.staff_performance?.map((s: any, idx: number) => (
-                  <div key={idx} className="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                  <div key={idx} className="p-3 rounded-xl bg-[#C9A34A]/5 border border-[#C9A34A]/20 flex items-center justify-between">
                     <div>
                       <p className="font-semibold text-xs text-zinc-900 dark:text-zinc-100">{s.staff_name}</p>
                       <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">{s.bills_count} bills settled</p>
                     </div>
-                    <span className="font-bold text-xs text-[#56111C] dark:text-amber-400 font-serif">
+                    <span className="font-bold text-xs text-[#C9A34A] font-serif">
                       ₹{Number(s.total_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
@@ -806,7 +806,7 @@ export const DashboardView: React.FC = () => {
                 <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                   Recent Branch Invoices
                 </h3>
-                <a href="/pos" className="text-xs text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+                <a href="/pos" className="text-xs text-[#C9A34A] font-semibold hover:underline">
                   View All POS Billing →
                 </a>
               </div>
@@ -823,15 +823,15 @@ export const DashboardView: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_invoices?.map((inv: any) => (
-                      <tr key={inv.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#56111C] dark:text-amber-400">{inv.invoice_number}</td>
+                      <tr key={inv.id} className="hover:bg-[#C9A34A]/5 transition-colors">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{inv.invoice_number}</td>
                         <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{inv.invoice_date}</td>
                         <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{inv.customer?.name || 'Walk-in'}</td>
                         <td className="py-2.5 px-3 font-bold text-right font-serif">
                           ₹{Number(inv.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#35BFA0]/10 text-[#35BFA0] border border-[#35BFA0]/20">
                             {inv.status}
                           </span>
                         </td>
@@ -862,7 +862,7 @@ export const DashboardView: React.FC = () => {
                     <DollarSign className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.today_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 flex items-center gap-1">
@@ -879,7 +879,7 @@ export const DashboardView: React.FC = () => {
                     <TrendingUp className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.month_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
@@ -896,7 +896,7 @@ export const DashboardView: React.FC = () => {
                     <Coins className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {Number(data?.gold_gross_stock || 0).toFixed(3)} <span className="text-xs font-sans text-zinc-500">grams</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
@@ -913,7 +913,7 @@ export const DashboardView: React.FC = () => {
                     <Users className="w-4 h-4" />
                   </div>
                 </div>
-                <p className="text-2xl font-bold text-[#200408] dark:text-[#E5C358] mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.outstanding_receivables || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
@@ -943,8 +943,8 @@ export const DashboardView: React.FC = () => {
                     <AreaChart data={data?.sales_trend || []}>
                       <defs>
                         <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.6} />
-                          <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.05} />
+                          <stop offset="5%" stopColor="#C9A34A" stopOpacity={0.6} />
+                          <stop offset="95%" stopColor="#8B7CF6" stopOpacity={0.05} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#27272A' : '#E4E4E7'} />
@@ -966,7 +966,7 @@ export const DashboardView: React.FC = () => {
                       <Area
                         type="monotone"
                         dataKey="revenue"
-                        stroke="#D4AF37"
+                        stroke="#C9A34A"
                         strokeWidth={2.5}
                         fillOpacity={1}
                         fill="url(#colorRev)"
@@ -979,25 +979,25 @@ export const DashboardView: React.FC = () => {
 
             {/* Live Metal Rate Board */}
             {widgets.rates && (
-              <div className="bg-[#200408] dark:bg-[#111118] text-amber-100 rounded-2xl p-5 border border-[#D4AF37]/30 dark:border-white/10 shadow-md flex flex-col justify-between">
+              <div className="bg-[#FFFFFF] dark:bg-[#181A22] text-[#111318] dark:text-[#F6F5F1] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-amber-500/20 dark:border-white/10">
-                    <h3 className="font-serif font-bold text-amber-200 text-sm flex items-center gap-2">
-                      <Coins className="w-4 h-4 text-amber-400" /> Today's Retail Rates
+                  <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/10">
+                    <h3 className="font-serif font-bold text-[#C9A34A] text-sm flex items-center gap-2">
+                      <Coins className="w-4 h-4 text-[#C9A34A]" /> Today's Retail Rates
                     </h3>
-                    <span className="text-[10px] text-amber-300/60 uppercase font-mono">Live INR / g</span>
+                    <span className="text-[10px] text-[#8E929E] uppercase font-mono">Live INR / g</span>
                   </div>
 
                   <div className="mt-4 space-y-2.5">
                     {data?.metal_rates?.map((rate: any) => (
                       <div
                         key={rate.id}
-                        className="flex items-center justify-between text-xs py-2 px-3 rounded-xl bg-black/25 dark:bg-white/5 border border-amber-500/10 dark:border-white/5"
+                        className="flex items-center justify-between text-xs py-2 px-3 rounded-xl bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/5"
                       >
-                        <span className="font-medium text-amber-200 dark:text-zinc-300">
+                        <span className="font-medium text-[#5A5E6B] dark:text-[#A6AAB6]">
                           {rate.metal_type.toUpperCase()} {rate.purity_karat} ({rate.purity_percentage}%)
                         </span>
-                        <strong className="text-amber-300 font-mono text-sm">
+                        <strong className="text-[#C9A34A] font-mono text-sm">
                           ₹{Number(rate.rate_per_gram).toFixed(2)}
                         </strong>
                       </div>
@@ -1005,10 +1005,10 @@ export const DashboardView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-amber-500/20 dark:border-white/10 text-center">
+                <div className="pt-4 border-t border-[#E3DFD7] dark:border-white/10 text-center">
                   <a
                     href="/rates"
-                    className="text-xs text-amber-300 hover:text-amber-100 font-semibold underline underline-offset-4"
+                    className="text-xs text-[#C9A34A] hover:underline font-semibold underline-offset-4"
                   >
                     Adjust Daily Board Rates →
                   </a>
@@ -1025,18 +1025,18 @@ export const DashboardView: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {data.branch_comparison.map((b: any, idx: number) => (
-                  <div key={idx} className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                  <div key={idx} className="p-4 rounded-xl bg-[#C9A34A]/5 border border-[#C9A34A]/20 flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-sm text-[#200408] dark:text-[#E5C358] flex items-center gap-2">
-                        <Building2 className="w-4 h-4 text-amber-600 dark:text-amber-400" /> {b.branch_name}
+                      <p className="font-bold text-sm text-[#111318] dark:text-[#F6F5F1] flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-[#C9A34A]" /> {b.branch_name}
                       </p>
                       <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{b.invoices_count} invoices generated</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold font-serif text-[#56111C] dark:text-amber-400">
+                      <p className="text-lg font-bold font-serif text-[#C9A34A]">
                         ₹{Number(b.month_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </p>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">3% GST Included</span>
+                      <span className="text-[10px] text-[#35BFA0] font-semibold">3% GST Included</span>
                     </div>
                   </div>
                 ))}

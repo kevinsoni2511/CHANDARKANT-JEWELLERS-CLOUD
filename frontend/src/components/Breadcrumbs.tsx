@@ -19,14 +19,14 @@ export const Breadcrumbs: React.FC = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <nav aria-label="Breadcrumb" className="flex items-center text-xs text-zinc-500 dark:text-zinc-400 py-2.5 px-6 border-b border-amber-900/10 dark:border-white/5 bg-white/40 dark:bg-black/20 backdrop-blur-md sticky top-16 z-30 transition-colors">
+    <nav aria-label="Breadcrumb" className="flex items-center text-xs text-[#5A5E6B] dark:text-[#A6AAB6] py-2.5 px-6 border-b border-[#E3DFD7] dark:border-white/5 bg-[#FFFFFF]/60 dark:bg-[#111318]/60 backdrop-blur-md sticky top-16 z-30 transition-colors">
       <ol className="flex items-center space-x-2">
         <li>
           <Link
             to="/"
-            className="flex items-center gap-1.5 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+            className="flex items-center gap-1.5 hover:text-[#C9A34A] transition-colors font-medium"
           >
-            <Home className="w-3.5 h-3.5" />
+            <Home className="w-3.5 h-3.5 text-[#C9A34A]" />
             <span>HQ Showroom</span>
           </Link>
         </li>
@@ -38,15 +38,15 @@ export const Breadcrumbs: React.FC = () => {
 
           return (
             <li key={to} className="flex items-center space-x-2">
-              <ChevronRight className="w-3 h-3 text-zinc-400 dark:text-zinc-600 shrink-0" />
+              <ChevronRight className="w-3 h-3 text-[#8E929E] shrink-0" />
               {isLast ? (
-                <span className="font-semibold text-zinc-900 dark:text-amber-300 capitalize truncate max-w-[200px] sm:max-w-none">
+                <span className="font-semibold text-[#111318] dark:text-[#C9A34A] capitalize truncate max-w-[200px] sm:max-w-none">
                   {displayName}
                 </span>
               ) : (
                 <Link
                   to={to}
-                  className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors capitalize"
+                  className="hover:text-[#C9A34A] transition-colors capitalize"
                 >
                   {displayName}
                 </Link>

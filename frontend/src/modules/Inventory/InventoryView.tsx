@@ -103,7 +103,7 @@ export const InventoryView: React.FC = () => {
       header: 'Tag / SKU',
       sortable: true,
       accessor: (item) => (
-        <span className="font-mono font-semibold text-[#56111C] dark:text-amber-400">
+        <span className="font-mono font-semibold text-[#C9A34A]">
           {item.sku}
         </span>
       ),
@@ -127,8 +127,8 @@ export const InventoryView: React.FC = () => {
       sortable: true,
       accessor: (item) =>
         item.huid ? (
-          <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-md border border-amber-500/25">
-            <ShieldCheck className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+          <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold bg-[#35BFA0]/15 text-[#35BFA0] px-2 py-0.5 rounded-md border border-[#35BFA0]/30">
+            <ShieldCheck className="w-3 h-3 text-[#35BFA0]" />
             {item.huid}
           </span>
         ) : (
@@ -140,7 +140,7 @@ export const InventoryView: React.FC = () => {
       header: 'Purity',
       sortable: true,
       accessor: (item) => (
-        <span className="font-semibold text-amber-800 dark:text-amber-400 font-mono">
+        <span className="font-semibold text-[#C9A34A] font-mono">
           {item.purity_karat}
         </span>
       ),
@@ -195,7 +195,7 @@ export const InventoryView: React.FC = () => {
         <span
           className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
             item.status === 'in_stock'
-              ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20'
+              ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
               : 'bg-zinc-500/10 text-zinc-600 dark:text-zinc-400'
           }`}
         >
@@ -211,23 +211,23 @@ export const InventoryView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#200408] dark:text-[#E5C358]">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
               Jewellery Vault & Inventory
             </h2>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 font-mono font-bold uppercase tracking-wider">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-mono font-bold uppercase tracking-wider border border-[#C9A34A]/25">
               {items.length} items
             </span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-0.5">
             Real-time bullion stock with 6-digit BIS Hallmark Unique Identifiers (HUID) & milligram precision
           </p>
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 rounded-xl gold-gradient text-[#200408] font-bold text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-2 self-start sm:self-auto"
+          className="px-4 py-2 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-2 self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4" /> Tag New Jewellery
+          <Plus className="w-4 h-4 text-[#111318]" /> Tag New Jewellery
         </button>
       </div>
 
@@ -238,7 +238,7 @@ export const InventoryView: React.FC = () => {
         </span>
 
         {/* Status Filters */}
-        <div className="flex items-center gap-1 border-r border-zinc-200 dark:border-white/10 pr-2">
+        <div className="flex items-center gap-1 border-r border-[#E3DFD7] dark:border-white/10 pr-2">
           {[
             { id: '', label: 'All Statuses' },
             { id: 'in_stock', label: 'In Stock' },
@@ -250,8 +250,8 @@ export const InventoryView: React.FC = () => {
               onClick={() => setStatusFilter(st.id)}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                 statusFilter === st.id
-                  ? 'bg-amber-600 text-white dark:bg-amber-500/20 dark:text-amber-300 dark:border dark:border-amber-500/30 font-semibold'
-                  : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5'
+                  ? 'gold-gradient text-[#111318] font-bold shadow-sm'
+                  : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5'
               }`}
             >
               {st.label}
@@ -272,8 +272,8 @@ export const InventoryView: React.FC = () => {
               onClick={() => setMetalFilter(m.id)}
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                 metalFilter === m.id
-                  ? 'bg-[#200408] text-amber-200 dark:bg-amber-500/20 dark:text-amber-300 dark:border dark:border-amber-500/30 font-semibold'
-                  : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5'
+                  ? 'gold-gradient text-[#111318] font-bold shadow-sm'
+                  : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5'
               }`}
             >
               {m.label}
@@ -301,10 +301,10 @@ export const InventoryView: React.FC = () => {
       {/* Tag New Piece Modal (Gen Z Luxury Dark/Light) */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
-              <h3 className="font-serif font-bold text-sm text-[#200408] dark:text-[#E5C358] flex items-center gap-2">
-                <Tag className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Tag New Jewellery Item
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E3DFD7] dark:border-white/10 pb-3">
+              <h3 className="font-serif font-bold text-sm text-[#111318] dark:text-[#F6F5F1] flex items-center gap-2">
+                <Tag className="w-4 h-4 text-[#C9A34A]" /> Tag New Jewellery Item
               </h3>
               <button
                 onClick={() => setShowModal(false)}
@@ -444,7 +444,7 @@ export const InventoryView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl gold-gradient text-[#200408] font-bold shadow-md hover:brightness-105"
+                  className="px-5 py-2 rounded-xl gold-gradient text-[#111318] font-bold shadow-md hover:brightness-105"
                 >
                   Confirm & Print Barcode Tag
                 </button>

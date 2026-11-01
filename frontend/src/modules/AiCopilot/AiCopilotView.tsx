@@ -44,12 +44,15 @@ export const AiCopilotView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-4 flex flex-col h-[calc(100vh-6rem)]">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto space-y-4 flex flex-col h-[calc(100vh-6rem)]">
       <div>
-        <h2 className="text-2xl font-serif font-bold text-[#380810] flex items-center gap-2">
-          <Sparkles className="w-6 h-6 text-amber-500" /> AI Business Intelligence & Copilot
+        <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1] flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl violet-gradient flex items-center justify-center text-white shadow-sm">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <span>AI Business Intelligence & Copilot</span>
         </h2>
-        <p className="text-xs text-gray-600">
+        <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-1">
           Ask questions in Gujarati, Hindi, or English about your sales, stock, metal rates, or generate approved promotional campaigns
         </p>
       </div>
@@ -60,7 +63,7 @@ export const AiCopilotView: React.FC = () => {
           <button
             key={i}
             onClick={() => handleSend(qp)}
-            className="text-[11px] bg-white hover:bg-amber-50 text-gray-700 px-3 py-1.5 rounded-full border border-amber-200/80 shadow-sm transition-all"
+            className="text-[11px] bg-[#FFFFFF] dark:bg-[#181A22] hover:bg-[#8B7CF6]/10 text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#8B7CF6] dark:hover:text-[#A79BF8] px-3.5 py-1.5 rounded-full border border-[#E3DFD7] dark:border-white/10 hover:border-[#8B7CF6]/40 shadow-sm transition-all"
           >
             {qp}
           </button>
@@ -68,7 +71,7 @@ export const AiCopilotView: React.FC = () => {
       </div>
 
       {/* Chat Messages Feed */}
-      <div className="flex-1 bg-white rounded-xl border border-gray-200 shadow-sm p-4 overflow-y-auto space-y-4">
+      <div className="flex-1 bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm p-4 overflow-y-auto space-y-4">
         {messages.map((m, idx) => (
           <div
             key={idx}
@@ -79,18 +82,18 @@ export const AiCopilotView: React.FC = () => {
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                 m.role === 'user'
-                  ? 'bg-[#56111C] text-amber-100'
-                  : 'gold-gradient text-[#380810] shadow'
+                  ? 'gold-gradient text-[#111318] font-bold text-xs shadow'
+                  : 'violet-gradient text-white shadow'
               }`}
             >
-              {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+              {m.role === 'user' ? <User className="w-4 h-4 text-[#111318]" /> : <Bot className="w-4 h-4 text-white" />}
             </div>
 
             <div
-              className={`max-w-[80%] rounded-2xl p-4 text-xs whitespace-pre-wrap ${
+              className={`max-w-[80%] rounded-2xl p-4 text-xs whitespace-pre-wrap leading-relaxed shadow-sm ${
                 m.role === 'user'
-                  ? 'bg-[#56111C] text-amber-100 font-medium'
-                  : 'bg-[#FAF8F5] border border-amber-200/60 text-gray-800'
+                  ? 'bg-[#111318] dark:bg-[#21242E] text-[#F6F5F1] font-medium border border-[#E3DFD7]/20 dark:border-white/10'
+                  : 'bg-[#ECEAE4]/50 dark:bg-[#111318] border border-[#8B7CF6]/25 text-[#111318] dark:text-[#F6F5F1]'
               }`}
             >
               {m.text}
@@ -99,9 +102,9 @@ export const AiCopilotView: React.FC = () => {
         ))}
 
         {loading && (
-          <div className="flex items-center gap-2 text-xs text-amber-700 italic p-2">
-            <Sparkles className="w-4 h-4 animate-spin text-amber-600" />
-            <span>Analyzing jewellery business records...</span>
+          <div className="flex items-center gap-2 text-xs text-[#8B7CF6] italic p-2">
+            <Sparkles className="w-4 h-4 animate-spin text-[#8B7CF6]" />
+            <span>Analyzing jewellery business records with Gemini AI...</span>
           </div>
         )}
       </div>
@@ -112,19 +115,19 @@ export const AiCopilotView: React.FC = () => {
           e.preventDefault();
           handleSend();
         }}
-        className="flex items-center gap-2 bg-white p-2 rounded-xl border border-amber-300 shadow-sm"
+        className="flex items-center gap-2 bg-[#FFFFFF] dark:bg-[#181A22] p-2 rounded-2xl border border-[#8B7CF6]/40 dark:border-[#8B7CF6]/30 shadow-sm"
       >
         <input
           type="text"
           placeholder="Ask anything about sales, gold stock, rates, or campaigns..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="flex-1 px-3 py-2 text-xs focus:outline-none bg-transparent"
+          className="flex-1 px-3 py-2 text-xs focus:outline-none bg-transparent text-[#111318] dark:text-[#F6F5F1] placeholder-[#8E929E]"
         />
         <button
           type="submit"
           disabled={loading || !prompt.trim()}
-          className="px-4 py-2 bg-[#56111C] hover:bg-[#380810] text-amber-100 font-semibold text-xs rounded-lg shadow disabled:opacity-50 transition-all flex items-center gap-1.5"
+          className="px-4 py-2 violet-gradient hover:brightness-105 text-white font-semibold text-xs rounded-xl shadow disabled:opacity-50 transition-all flex items-center gap-1.5"
         >
           <Send className="w-3.5 h-3.5" /> Send Query
         </button>

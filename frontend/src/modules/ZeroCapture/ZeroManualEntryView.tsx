@@ -227,34 +227,34 @@ export const ZeroManualEntryView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#E3DFD7] dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-serif font-bold text-[#380810]">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
               Zero-Manual-Entry & Intelligent Data Capture
             </h2>
-            <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider bg-amber-100 text-[#56111C] border border-amber-300 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-600" /> AI Autonomous
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-[#8B7CF6]/15 text-[#8B7CF6] border border-[#8B7CF6]/30 flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#8B7CF6]" /> AI Autonomous
             </span>
           </div>
-          <p className="text-xs text-gray-600 mt-1">
+          <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-1">
             Multilingual voice commands, invoice image scanning, digital scale telemetry, and barcode lookups with human approval gates.
           </p>
         </div>
 
         <button
           onClick={() => setActiveTab('queue')}
-          className="px-4 py-2 rounded-lg bg-[#56111C] text-amber-200 font-semibold text-xs shadow hover:bg-[#380810] transition-all flex items-center gap-2 self-start sm:self-auto"
+          className="px-4 py-2 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2 self-start sm:self-auto"
         >
-          <ShieldCheck className="w-4 h-4 text-amber-400" />
+          <ShieldCheck className="w-4 h-4 text-[#111318]" />
           <span>Approval Queue ({pendingCount} Pending)</span>
         </button>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
+      <div className="flex flex-wrap gap-2 border-b border-[#E3DFD7] dark:border-white/10 pb-2">
         {[
           { id: 'voice', label: 'Voice Command Studio', icon: Mic },
           { id: 'scanner', label: 'Invoice & Bill Scanner', icon: Upload },
@@ -267,10 +267,10 @@ export const ZeroManualEntryView: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                 activeTab === tab.id
-                  ? 'gold-gradient text-[#380810] shadow-sm'
-                  : 'bg-white text-gray-700 hover:bg-amber-50 border border-gray-200'
+                  ? 'gold-gradient text-[#111318] font-bold shadow-sm'
+                  : 'bg-[#FFFFFF] dark:bg-[#181A22] text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 border border-[#E3DFD7] dark:border-white/10'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -285,11 +285,11 @@ export const ZeroManualEntryView: React.FC = () => {
          ========================================================================= */}
       {activeTab === 'voice' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl p-6 border border-amber-200 shadow-sm flex flex-col items-center text-center">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl p-6 border border-[#E3DFD7] dark:border-white/10 shadow-sm flex flex-col items-center text-center">
             {/* Language Selector */}
             <div className="flex items-center gap-2 mb-4">
-              <Languages className="w-4 h-4 text-amber-700" />
-              <span className="text-xs font-semibold text-gray-600">Spoken Language:</span>
+              <Languages className="w-4 h-4 text-[#C9A34A]" />
+              <span className="text-xs font-semibold text-[#5A5E6B] dark:text-[#A6AAB6]">Spoken Language:</span>
               <div className="flex gap-1.5">
                 {[
                   { id: 'hi', label: 'हिन्दी (Hindi)' },
@@ -299,10 +299,10 @@ export const ZeroManualEntryView: React.FC = () => {
                   <button
                     key={l.id}
                     onClick={() => setLanguage(l.id as any)}
-                    className={`px-3 py-1 rounded text-xs font-medium ${
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                       language === l.id
-                        ? 'bg-[#56111C] text-amber-200 font-bold'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'gold-gradient text-[#111318] font-bold'
+                        : 'bg-[#ECEAE4]/60 dark:bg-[#111318] text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#ECEAE4]'
                     }`}
                   >
                     {l.label}
@@ -316,11 +316,11 @@ export const ZeroManualEntryView: React.FC = () => {
               onClick={toggleListening}
               className={`w-20 h-20 rounded-full flex items-center justify-center transition-all shadow-lg ${
                 isListening
-                  ? 'bg-rose-600 text-white animate-pulse ring-8 ring-rose-200'
-                  : 'gold-gradient text-[#380810] hover:scale-105'
+                  ? 'violet-gradient text-white animate-pulse ring-8 ring-[#8B7CF6]/30'
+                  : 'violet-gradient text-white hover:scale-105 shadow-md shadow-[#8B7CF6]/25'
               }`}
             >
-              {isListening ? <MicOff className="w-8 h-8" /> : <Mic className="w-8 h-8" />}
+              {isListening ? <MicOff className="w-8 h-8 text-white" /> : <Mic className="w-8 h-8 text-white" />}
             </button>
 
             <p className="text-xs font-semibold text-gray-800 mt-4">
@@ -365,30 +365,30 @@ export const ZeroManualEntryView: React.FC = () => {
 
           {/* Voice Execution Result Card */}
           {voiceResult && (
-            <div className="bg-white rounded-xl p-5 border border-emerald-200 shadow-sm animate-fade-in">
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> AI Intent Understood ({voiceResult.intent})
+            <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl p-5 border border-[#35BFA0]/30 shadow-sm animate-fade-in">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5">
+                <span className="text-xs font-bold text-[#35BFA0] uppercase tracking-wider flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#35BFA0]" /> AI Intent Understood ({voiceResult.intent})
                 </span>
-                <span className="text-[11px] text-gray-500 uppercase">Lang: {voiceResult.language}</span>
+                <span className="text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6] uppercase">Lang: {voiceResult.language}</span>
               </div>
-              <div className="mt-3 p-4 rounded-lg bg-[#FAF8F5] border border-amber-200/80">
-                <p className="text-sm font-semibold text-[#380810]">{voiceResult.reply}</p>
+              <div className="mt-3 p-4 rounded-xl bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10">
+                <p className="text-sm font-semibold text-[#111318] dark:text-[#F6F5F1]">{voiceResult.reply}</p>
                 {voiceResult.data && (
-                  <pre className="mt-2 text-[11px] font-mono bg-white p-3 rounded border border-gray-200 text-gray-700 overflow-x-auto">
+                  <pre className="mt-2 text-[11px] font-mono bg-[#FFFFFF] dark:bg-[#181A22] p-3 rounded-lg border border-[#E3DFD7] dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] overflow-x-auto">
                     {JSON.stringify(voiceResult.data, null, 2)}
                   </pre>
                 )}
                 {voiceResult.captured_document && (
-                  <div className="mt-3 flex items-center justify-between text-xs bg-emerald-50 p-2.5 rounded border border-emerald-200">
-                    <span className="text-emerald-900 font-medium">
+                  <div className="mt-3 flex items-center justify-between text-xs bg-[#35BFA0]/10 p-2.5 rounded-lg border border-[#35BFA0]/25">
+                    <span className="text-[#35BFA0] font-medium">
                       Transaction draft queued! Approval required before committing.
                     </span>
                     <button
                       onClick={() => setActiveTab('queue')}
-                      className="px-3 py-1 rounded gold-gradient text-[#380810] font-semibold text-xs flex items-center gap-1"
+                      className="px-3 py-1 rounded-lg gold-gradient text-[#111318] font-bold text-xs flex items-center gap-1"
                     >
-                      Review in Queue <ArrowRight className="w-3 h-3" />
+                      Review in Queue <ArrowRight className="w-3 h-3 text-[#111318]" />
                     </button>
                   </div>
                 )}
@@ -403,23 +403,23 @@ export const ZeroManualEntryView: React.FC = () => {
          ========================================================================= */}
       {activeTab === 'scanner' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl p-6 border border-amber-200 shadow-sm">
-            <h3 className="font-serif font-bold text-gray-900 text-base mb-1">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl p-6 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+            <h3 className="font-serif font-bold text-[#111318] dark:text-[#F6F5F1] text-base mb-1">
               AI-Powered Invoice & Bullion Bill Extraction
             </h3>
-            <p className="text-xs text-gray-500 mb-4">
+            <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mb-4">
               Drop an image of a vendor purchase bill, manual counter memo, or supplier voucher (JPG, PNG, PDF, Excel) for automated entity extraction.
             </p>
 
-            <div className="border-2 border-dashed border-amber-300 rounded-xl p-8 text-center bg-[#FAF8F5]/60 hover:bg-amber-50/50 transition-colors">
-              <Upload className="w-10 h-10 text-amber-700 mx-auto mb-2" />
-              <p className="text-xs font-semibold text-gray-700">Select invoice document or drag & drop</p>
-              <p className="text-[10px] text-gray-500 mt-1">Supports Jewellery Purchase Invoices, Hallmarking Slips, Karigar Memos</p>
+            <div className="border-2 border-dashed border-[#C9A34A]/40 rounded-xl p-8 text-center bg-[#ECEAE4]/30 dark:bg-[#111318]/50 hover:bg-[#C9A34A]/5 transition-colors">
+              <Upload className="w-10 h-10 text-[#C9A34A] mx-auto mb-2" />
+              <p className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1]">Select invoice document or drag & drop</p>
+              <p className="text-[10px] text-[#8E929E] mt-1">Supports Jewellery Purchase Invoices, Hallmarking Slips, Karigar Memos</p>
               <input
                 type="file"
                 accept="image/*,.pdf,.xlsx,.csv"
                 onChange={(e) => setScannerFile(e.target.files?.[0] || null)}
-                className="mt-4 text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:gold-gradient file:text-[#380810] cursor-pointer"
+                className="mt-4 text-xs text-[#5A5E6B] dark:text-[#A6AAB6] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:gold-gradient file:text-[#111318] cursor-pointer"
               />
             </div>
 
@@ -427,9 +427,9 @@ export const ZeroManualEntryView: React.FC = () => {
               <button
                 onClick={handleUploadScan}
                 disabled={loading}
-                className="px-5 py-2.5 rounded-lg gold-gradient text-[#380810] font-semibold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 text-[#111318]" />
                 <span>{loading ? 'Analyzing with AI OCR...' : 'Scan & Extract Data'}</span>
               </button>
             </div>
@@ -482,15 +482,15 @@ export const ZeroManualEntryView: React.FC = () => {
                 </div>
                 <div>
                   <span className="text-gray-500 text-[10px] uppercase font-semibold">Financial Settlement</span>
-                  <p className="font-bold text-[#56111C] font-serif text-sm">₹{Number(scanResult.extracted_data?.grand_total).toLocaleString('en-IN')}</p>
-                  <p className="text-[10px] text-emerald-600 font-medium">3% GST: ₹{scanResult.extracted_data?.gst_3_percent}</p>
+                  <p className="font-bold text-[#C9A34A] font-serif text-sm">₹{Number(scanResult.extracted_data?.grand_total).toLocaleString('en-IN')}</p>
+                  <p className="text-[10px] text-[#35BFA0] font-medium">3% GST: ₹{scanResult.extracted_data?.gst_3_percent}</p>
                 </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-2">
                 <button
                   onClick={() => setActiveTab('queue')}
-                  className="px-4 py-2 rounded-lg bg-[#56111C] text-amber-200 text-xs font-semibold flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-lg gold-gradient text-[#111318] text-xs font-bold flex items-center gap-1.5 shadow-md hover:brightness-105 transition-all cursor-pointer"
                 >
                   Proceed to Approval Queue <ArrowRight className="w-3.5 h-3.5" />
                 </button>
@@ -577,18 +577,18 @@ export const ZeroManualEntryView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-[#E3DFD7] dark:border-white/5">
                 {scaleMsg && (
-                  <p className="text-[11px] text-emerald-700 font-medium mb-3 bg-emerald-50 p-2 rounded border border-emerald-200">
+                  <p className="text-[11px] text-[#35BFA0] font-medium mb-3 bg-[#35BFA0]/10 p-2.5 rounded-lg border border-[#35BFA0]/25">
                     {scaleMsg}
                   </p>
                 )}
                 <button
                   onClick={handleIngestScale}
                   disabled={loading}
-                  className="w-full py-2.5 rounded-lg gold-gradient text-[#380810] font-semibold text-xs shadow hover:brightness-105 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center justify-center gap-2"
                 >
-                  <Scale className="w-4 h-4" /> Commit Weight to Queue
+                  <Scale className="w-4 h-4 text-[#111318]" /> Commit Weight to Queue
                 </button>
               </div>
             </div>
@@ -601,11 +601,11 @@ export const ZeroManualEntryView: React.FC = () => {
          ========================================================================= */}
       {activeTab === 'barcode' && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl p-6 border border-amber-200 shadow-sm">
-            <h3 className="font-serif font-bold text-gray-900 text-base mb-1">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl p-6 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+            <h3 className="font-serif font-bold text-[#111318] dark:text-[#F6F5F1] text-base mb-1">
               Optical Barcode, QR Code & RFID Tag Scanner
             </h3>
-            <p className="text-xs text-gray-500 mb-4">
+            <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mb-4">
               Instant item lookup with real-time bullion valuation at today's retail rate.
             </p>
 
@@ -616,14 +616,14 @@ export const ZeroManualEntryView: React.FC = () => {
                 value={barcodeInput}
                 onChange={(e) => setBarcodeInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleBarcodeLookup()}
-                className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-xs font-mono focus:ring-2 focus:ring-amber-500 outline-none"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-[#E3DFD7] dark:border-white/10 bg-[#FFFFFF] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] text-xs font-mono focus:border-[#C9A34A] outline-none"
               />
               <button
                 onClick={handleBarcodeLookup}
                 disabled={loading}
-                className="px-5 py-2.5 rounded-lg gold-gradient text-[#380810] font-semibold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl gold-gradient text-[#111318] font-bold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2"
               >
-                <Barcode className="w-4 h-4" /> Scan
+                <Barcode className="w-4 h-4 text-[#111318]" /> Scan
               </button>
             </div>
           </div>
@@ -665,10 +665,10 @@ export const ZeroManualEntryView: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-gray-500 text-[10px] uppercase font-semibold">Live Retail Price</span>
-                      <p className="text-base font-bold text-[#56111C] font-serif">
+                      <p className="text-base font-bold text-[#C9A34A] font-serif">
                         ₹{barcodeResult.live_valuation.estimated_retail_price.toLocaleString('en-IN')}
                       </p>
-                      <a href="/pos" className="text-[10px] text-amber-700 font-semibold hover:underline">
+                      <a href="/pos" className="text-[10px] text-[#C9A34A] font-semibold hover:underline">
                         Add to POS Cart →
                       </a>
                     </div>
@@ -699,7 +699,7 @@ export const ZeroManualEntryView: React.FC = () => {
               </div>
               <button
                 onClick={fetchQueue}
-                className="text-xs text-[#56111C] font-semibold hover:underline flex items-center gap-1"
+                className="text-xs text-[#C9A34A] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Refresh Queue
               </button>

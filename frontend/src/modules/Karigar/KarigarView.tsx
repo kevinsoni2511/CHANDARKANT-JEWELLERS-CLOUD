@@ -76,17 +76,17 @@ export const KarigarView: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-[#380810]">
+          <h2 className="text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
             Karigar & Goldsmith Job Management
           </h2>
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Raw bullion issuance, fine gold reconciliation, scrap accounting, and artisan labour settlements
           </p>
         </div>
 
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 rounded-lg gold-gradient text-[#380810] font-semibold text-xs shadow hover:brightness-105 transition-all flex items-center gap-2 self-start sm:self-auto"
+          className="px-4 py-2 rounded-lg gold-gradient text-[#111318] font-bold text-xs shadow-md hover:brightness-105 transition-all flex items-center gap-2 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" /> + Issue New Job Card
         </button>
@@ -95,20 +95,20 @@ export const KarigarView: React.FC = () => {
       {/* Artisan Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {karigars.map((k) => (
-          <div key={k.id} className="bg-white rounded-xl p-4 border border-amber-200 shadow-sm space-y-2">
+          <div key={k.id} className="bg-white dark:bg-[#181A22] rounded-xl p-4 border border-slate-200 dark:border-white/10 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif font-bold text-sm text-[#380810] flex items-center gap-2">
-                <User className="w-4 h-4 text-amber-600" /> {k.name}
+              <h3 className="font-serif font-bold text-sm text-[#111318] dark:text-[#F6F5F1] flex items-center gap-2">
+                <User className="w-4 h-4 text-[#C9A34A]" /> {k.name}
               </h3>
-              <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">
+              <span className="text-[10px] bg-[#C9A34A]/10 text-[#C9A34A] border border-[#C9A34A]/20 font-bold px-2 py-0.5 rounded">
                 {k.jobs_count || 0} active jobs
               </span>
             </div>
-            <p className="text-xs text-gray-500">{k.specialization || 'Master Artisan'}</p>
-            <p className="text-xs text-gray-600 font-mono">Mobile: {k.phone}</p>
-            <div className="pt-2 border-t border-gray-100 flex justify-between items-center text-xs">
-              <span className="text-gray-500">Unreturned Pure Gold:</span>
-              <strong className="font-mono text-[#56111C] font-bold">
+            <p className="text-xs text-slate-500 dark:text-slate-400">{k.specialization || 'Master Artisan'}</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-mono">Mobile: {k.phone}</p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/10 flex justify-between items-center text-xs">
+              <span className="text-slate-500 dark:text-slate-400">Unreturned Pure Gold:</span>
+              <strong className="font-mono text-[#C9A34A] font-bold">
                 {Number(k.pure_gold_balance).toFixed(3)}g
               </strong>
             </div>
@@ -117,14 +117,14 @@ export const KarigarView: React.FC = () => {
       </div>
 
       {/* Job Cards Table */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 bg-[#FAF8F5] border-b border-gray-200 font-serif font-bold text-xs text-gray-800 flex justify-between items-center">
+      <div className="bg-white dark:bg-[#181A22] rounded-xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+        <div className="p-4 bg-[#F6F5F1] dark:bg-[#111318] border-b border-slate-200 dark:border-white/10 font-serif font-bold text-xs text-[#111318] dark:text-[#F6F5F1] flex justify-between items-center">
           <span>Active Manufacturing & Repair Job Sheets</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF8F5] text-gray-600 font-semibold border-b border-gray-200">
+            <thead className="bg-[#F6F5F1] dark:bg-[#111318] text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-white/10">
               <tr>
                 <th className="py-2.5 px-4">Job Number</th>
                 <th className="py-2.5 px-4">Artisan</th>
@@ -135,24 +135,28 @@ export const KarigarView: React.FC = () => {
                 <th className="py-2.5 px-4 text-center">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/10">
               {jobs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-gray-400">
+                  <td colSpan={7} className="py-8 text-center text-slate-400">
                     No active job cards found. Issue raw metal to create a job card.
                   </td>
                 </tr>
               ) : (
                 jobs.map((j) => (
-                  <tr key={j.id} className="hover:bg-amber-50/20">
-                    <td className="py-2.5 px-4 font-mono font-semibold text-[#56111C]">{j.job_number}</td>
-                    <td className="py-2.5 px-4 font-semibold text-gray-800">{j.karigar?.name}</td>
-                    <td className="py-2.5 px-4 text-gray-700">{j.item_description}</td>
+                  <tr key={j.id} className="hover:bg-[#C9A34A]/5">
+                    <td className="py-2.5 px-4 font-mono font-semibold text-[#C9A34A]">{j.job_number}</td>
+                    <td className="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{j.karigar?.name}</td>
+                    <td className="py-2.5 px-4 text-slate-700 dark:text-slate-300">{j.item_description}</td>
                     <td className="py-2.5 px-4 text-right font-mono">{Number(j.gold_issued_gross).toFixed(3)}g</td>
-                    <td className="py-2.5 px-4 text-right font-mono font-bold text-amber-900">{Number(j.gold_issued_pure).toFixed(3)}g</td>
-                    <td className="py-2.5 px-4 text-right font-mono">₹{Number(j.labour_charges).toFixed(2)}</td>
+                    <td className="py-2.5 px-4 text-right font-mono font-bold text-[#C9A34A]">{Number(j.gold_issued_pure).toFixed(3)}g</td>
+                    <td className="py-2.5 px-4 text-right font-mono font-semibold text-slate-800 dark:text-slate-200">₹{Number(j.labour_charges).toFixed(2)}</td>
                     <td className="py-2.5 px-4 text-center">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        j.status === 'completed'
+                          ? 'bg-[#35BFA0]/10 text-[#35BFA0] border border-[#35BFA0]/20'
+                          : 'bg-[#C9A34A]/10 text-[#C9A34A] border border-[#C9A34A]/20'
+                      }`}>
                         {j.status}
                       </span>
                     </td>
@@ -166,24 +170,24 @@ export const KarigarView: React.FC = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-serif font-bold text-sm text-[#380810]">
+          <div className="bg-white dark:bg-[#181A22] rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-slate-200 dark:border-white/10">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+              <h3 className="font-serif font-bold text-sm text-[#111318] dark:text-[#F6F5F1]">
                 Issue Metal & Job Card to Artisan
               </h3>
-              <button onClick={() => setShowModal(false)}>
-                <X className="w-4 h-4 text-gray-500" />
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleIssueJob} className="space-y-3 text-xs">
               <div>
-                <label className="block text-gray-600 mb-1">Select Karigar *</label>
+                <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Select Karigar *</label>
                 <select
                   required
                   value={form.karigar_id}
                   onChange={(e) => setForm({ ...form, karigar_id: e.target.value })}
-                  className="w-full border rounded px-3 py-2 font-medium"
+                  className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2 font-medium"
                 >
                   <option value="">Choose Karigar...</option>
                   {karigars.map((k) => (
@@ -195,20 +199,20 @@ export const KarigarView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-600 mb-1">Jewellery Item Description *</label>
+                <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Jewellery Item Description *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. 22K 45g Antique Choker Crafting"
                   value={form.item_description}
                   onChange={(e) => setForm({ ...form, item_description: e.target.value })}
-                  className="w-full border rounded px-3 py-2"
+                  className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-gray-600 mb-1">Gross Issued (g) *</label>
+                  <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Gross Issued (g) *</label>
                   <input
                     type="number"
                     step="0.001"
@@ -216,56 +220,56 @@ export const KarigarView: React.FC = () => {
                     placeholder="0.000"
                     value={form.gold_issued_gross}
                     onChange={(e) => setForm({ ...form, gold_issued_gross: e.target.value })}
-                    className="w-full border rounded px-3 py-2 font-mono"
+                    className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2 font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 mb-1">Purity Fineness (%)</label>
+                  <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Purity Fineness (%)</label>
                   <input
                     type="number"
                     step="0.001"
                     value={form.gold_issued_purity}
                     onChange={(e) => setForm({ ...form, gold_issued_purity: e.target.value })}
-                    className="w-full border rounded px-3 py-2 font-mono"
+                    className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2 font-mono"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-gray-600 mb-1">Permissible Wastage (g)</label>
+                  <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Permissible Wastage (g)</label>
                   <input
                     type="number"
                     step="0.001"
                     value={form.allowed_wastage}
                     onChange={(e) => setForm({ ...form, allowed_wastage: e.target.value })}
-                    className="w-full border rounded px-3 py-2 font-mono"
+                    className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2 font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-gray-600 mb-1">Artisan Labour Charge (₹)</label>
+                  <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Artisan Labour Charge (₹)</label>
                   <input
                     type="number"
                     value={form.labour_charges}
                     onChange={(e) => setForm({ ...form, labour_charges: e.target.value })}
-                    className="w-full border rounded px-3 py-2 font-mono"
+                    className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded-lg px-3 py-2 font-mono"
                   />
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2 border-t">
+              <div className="pt-2 flex justify-end gap-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-3 py-2 border rounded text-gray-600"
+                  className="px-3 py-2 border border-slate-300 dark:border-white/10 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#56111C] text-amber-100 font-semibold rounded shadow"
+                  className="px-4 py-2 gold-gradient text-[#111318] font-bold rounded-lg shadow-md hover:brightness-105 transition-all cursor-pointer"
                 >
                   Confirm Issue & Debit Gold Balance
                 </button>

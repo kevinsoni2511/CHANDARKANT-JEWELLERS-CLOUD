@@ -52,10 +52,10 @@ export const SavingSchemesView: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-[#380810]">
+          <h2 className="text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
             Swarna Nidhi & Kitty Saving Schemes
           </h2>
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Gold installment accumulation schemes (11+1), passbook registers, and maturity bonus tracking
           </p>
         </div>
@@ -64,31 +64,31 @@ export const SavingSchemesView: React.FC = () => {
       {/* Scheme Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {schemes.map((s) => (
-          <div key={s.id} className="bg-white rounded-xl p-5 border border-amber-300 shadow-sm relative overflow-hidden">
+          <div key={s.id} className="bg-white dark:bg-[#181A22] rounded-xl p-5 border border-slate-200 dark:border-white/10 shadow-sm relative overflow-hidden">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="font-serif font-bold text-base text-[#380810] flex items-center gap-2">
-                  <PiggyBank className="w-5 h-5 text-amber-600" /> {s.name}
+                <h3 className="font-serif font-bold text-base text-[#111318] dark:text-[#F6F5F1] flex items-center gap-2">
+                  <PiggyBank className="w-5 h-5 text-[#C9A34A]" /> {s.name}
                 </h3>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Duration: {s.duration_months} Months Customer + 1 Month Jeweller Bonus
                 </p>
               </div>
-              <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-bold text-[#C9A34A] bg-[#C9A34A]/10 border border-[#C9A34A]/20 px-2.5 py-1 rounded-full">
                 {s.enrollments_count || 0} Enrolled
               </span>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/10 flex justify-between items-center text-xs">
               <div>
-                <span className="text-gray-500">Monthly Contribution:</span>
-                <p className="font-serif font-bold text-sm text-[#56111C]">
+                <span className="text-slate-500 dark:text-slate-400">Monthly Contribution:</span>
+                <p className="font-serif font-bold text-sm text-[#C9A34A]">
                   ₹{Number(s.monthly_installment).toLocaleString('en-IN')}/mo
                 </p>
               </div>
               <div>
-                <span className="text-gray-500">Maturity Benefit:</span>
-                <p className="font-serif font-bold text-sm text-emerald-800">
+                <span className="text-slate-500 dark:text-slate-400">Maturity Benefit:</span>
+                <p className="font-serif font-bold text-sm text-[#35BFA0]">
                   ₹{(Number(s.monthly_installment) * (s.duration_months + 1)).toLocaleString('en-IN')}
                 </p>
               </div>
@@ -98,14 +98,14 @@ export const SavingSchemesView: React.FC = () => {
       </div>
 
       {/* Customer Passbooks Table */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-4 bg-[#FAF8F5] border-b border-gray-200 font-serif font-bold text-xs text-gray-800 flex justify-between items-center">
+      <div className="bg-white dark:bg-[#181A22] rounded-xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+        <div className="p-4 bg-[#F6F5F1] dark:bg-[#111318] border-b border-slate-200 dark:border-white/10 font-serif font-bold text-xs text-[#111318] dark:text-[#F6F5F1] flex justify-between items-center">
           <span>Active Customer Passbooks & Installment Status</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF8F5] text-gray-600 font-semibold border-b border-gray-200">
+            <thead className="bg-[#F6F5F1] dark:bg-[#111318] text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-white/10">
               <tr>
                 <th className="py-2.5 px-4">Passbook #</th>
                 <th className="py-2.5 px-4">Patron Name</th>
@@ -117,31 +117,31 @@ export const SavingSchemesView: React.FC = () => {
                 <th className="py-2.5 px-4 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/10">
               {enrollments.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-gray-400">
+                  <td colSpan={8} className="py-8 text-center text-slate-400">
                     No active saving scheme enrollments.
                   </td>
                 </tr>
               ) : (
                 enrollments.map((e) => (
-                  <tr key={e.id} className="hover:bg-amber-50/20">
-                    <td className="py-2.5 px-4 font-mono font-semibold text-[#56111C]">
+                  <tr key={e.id} className="hover:bg-[#C9A34A]/5">
+                    <td className="py-2.5 px-4 font-mono font-semibold text-[#C9A34A]">
                       {e.passbook_number}
                     </td>
-                    <td className="py-2.5 px-4 font-semibold text-gray-800">
+                    <td className="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">
                       {e.customer?.name} ({e.customer?.phone})
                     </td>
-                    <td className="py-2.5 px-4 text-gray-700">{e.scheme?.name}</td>
-                    <td className="py-2.5 px-4 text-gray-500">{e.start_date}</td>
-                    <td className="py-2.5 px-4 text-center font-bold text-emerald-800">
+                    <td className="py-2.5 px-4 text-slate-700 dark:text-slate-300">{e.scheme?.name}</td>
+                    <td className="py-2.5 px-4 text-slate-500 dark:text-slate-400">{e.start_date}</td>
+                    <td className="py-2.5 px-4 text-center font-bold text-[#35BFA0]">
                       {e.installments?.length || 0} / {e.scheme?.duration_months || 11}
                     </td>
-                    <td className="py-2.5 px-4 text-right font-mono font-bold text-gray-900">
+                    <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-900 dark:text-slate-100">
                       ₹{Number(e.total_paid).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="py-2.5 px-4 text-right font-mono font-bold text-[#56111C]">
+                    <td className="py-2.5 px-4 text-right font-mono font-bold text-[#35BFA0]">
                       ₹{Number(e.maturity_value).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-2.5 px-4 text-center">
@@ -151,7 +151,7 @@ export const SavingSchemesView: React.FC = () => {
                           setPayAmount(String(e.scheme?.monthly_installment || 5000));
                           setShowPayModal(true);
                         }}
-                        className="px-2.5 py-1 bg-[#56111C] hover:bg-[#380810] text-amber-100 text-[11px] font-semibold rounded shadow"
+                        className="px-2.5 py-1 gold-gradient text-[#111318] text-[11px] font-bold rounded shadow-md hover:brightness-105 transition-all cursor-pointer"
                       >
                         + Collect
                       </button>
@@ -167,39 +167,39 @@ export const SavingSchemesView: React.FC = () => {
       {/* Collect Installment Modal */}
       {showPayModal && activeEnrollment && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-sm w-full p-5 shadow-2xl space-y-3">
-            <div className="flex items-center justify-between border-b pb-2">
-              <h3 className="font-serif font-bold text-sm text-[#380810]">
+          <div className="bg-white dark:bg-[#181A22] rounded-xl max-w-sm w-full p-5 shadow-2xl space-y-3 border border-slate-200 dark:border-white/10">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-2">
+              <h3 className="font-serif font-bold text-sm text-[#111318] dark:text-[#F6F5F1]">
                 Collect Monthly Installment
               </h3>
-              <button onClick={() => setShowPayModal(false)}>
-                <X className="w-4 h-4 text-gray-500" />
+              <button onClick={() => setShowPayModal(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handlePay} className="space-y-3 text-xs">
-              <p className="text-gray-600">
+              <p className="text-slate-600 dark:text-slate-300">
                 <strong>Passbook:</strong> {activeEnrollment.passbook_number} (
                 {activeEnrollment.customer?.name})
               </p>
 
               <div>
-                <label className="block text-gray-600 mb-1">Installment Amount (₹) *</label>
+                <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Installment Amount (₹) *</label>
                 <input
                   type="number"
                   required
                   value={payAmount}
                   onChange={(e) => setPayAmount(e.target.value)}
-                  className="w-full border rounded px-3 py-1.5 font-mono text-sm font-bold text-[#56111C]"
+                  className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded px-3 py-1.5 font-mono text-sm font-bold text-[#C9A34A] focus:border-[#C9A34A] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-600 mb-1">Payment Mode</label>
+                <label className="block text-slate-600 dark:text-slate-300 mb-1 font-medium">Payment Mode</label>
                 <select
                   value={payMode}
                   onChange={(e) => setPayMode(e.target.value)}
-                  className="w-full border rounded px-3 py-1.5"
+                  className="w-full border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] rounded px-3 py-1.5 font-medium"
                 >
                   <option value="upi">UPI / QR Code</option>
                   <option value="cash">Cash Counter</option>
@@ -208,17 +208,17 @@ export const SavingSchemesView: React.FC = () => {
                 </select>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2 border-t">
+              <div className="pt-2 flex justify-end gap-2 border-t border-slate-200 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowPayModal(false)}
-                  className="px-3 py-1.5 border rounded text-gray-600"
+                  className="px-3 py-1.5 border border-slate-300 dark:border-white/10 rounded text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-[#56111C] text-amber-100 font-semibold rounded shadow flex items-center gap-1.5"
+                  className="px-4 py-1.5 gold-gradient text-[#111318] font-bold rounded shadow-md hover:brightness-105 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Receipt className="w-3.5 h-3.5" /> Issue Receipt
                 </button>

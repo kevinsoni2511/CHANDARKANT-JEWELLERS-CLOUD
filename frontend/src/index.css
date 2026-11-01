@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
+@theme {
+  --color-midnight: #111318;
+  --color-midnight-surface: #181A22;
+  --color-midnight-subtle: #21242E;
+  
+  --color-royal-gold: #C9A34A;
+  --color-royal-gold-light: #DFBE6B;
+  --color-royal-gold-dark: #A68434;
+
+  --color-ivory: #F6F5F1;
+  --color-ivory-surface: #FFFFFF;
+  --color-ivory-subtle: #ECEAE4;
+
+  --color-electric-violet: #8B7CF6;
+  --color-electric-violet-light: #A79BF8;
+  --color-electric-violet-dark: #6D5CE6;
+
+  --color-mint: #35BFA0;
+  --color-mint-light: #52CFB4;
+  --color-mint-dark: #26987F;
+}
+
 @layer base {
   :root {
-    --bg-main: #F8F6F2;
-    --card-main: #FFFFFF;
-    --text-primary: #18181B;
-    --text-secondary: #52525B;
-    --border-color: #E8DFD5;
-    --jewellery-gold: #D4AF37;
-    --jewellery-gold-light: #F4E297;
-    --jewellery-burgundy: #4A0812;
+    --bg-main: #F6F5F1; /* IVORY */
+    --surface-card: #FFFFFF;
+    --surface-card-subtle: #ECEAE4;
+    --text-primary: #111318; /* MIDNIGHT */
+    --text-secondary: #5A5E6B;
+    --text-muted: #8E929E;
+    --border-color: #E3DFD7;
+
+    --royal-gold: #C9A34A;
+    --royal-gold-light: #DFBE6B;
+    --electric-violet: #8B7CF6;
+    --mint: #35BFA0;
   }
 
   html.dark {
-    --bg-main: #09090D;
-    --card-main: #111118;
-    --text-primary: #F4F4F5;
-    --text-secondary: #A1A1AA;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --jewellery-gold: #E5C358;
-    --jewellery-gold-light: #F7E9B2;
-    --jewellery-burgundy: #681523;
+    --bg-main: #111318; /* MIDNIGHT */
+    --surface-card: #181A22;
+    --surface-card-subtle: #21242E;
+    --text-primary: #F6F5F1; /* IVORY */
+    --text-secondary: #A6AAB6;
+    --text-muted: #6E7382;
+    --border-color: rgba(246, 245, 241, 0.08);
+
+    --royal-gold: #C9A34A;
+    --royal-gold-light: #DFBE6B;
+    --electric-violet: #8B7CF6;
+    --mint: #35BFA0;
   }
 
   body {
@@ -32,7 +62,7 @@
   }
 }
 
-/* Linear & Stripe Inspired SaaS Polish */
+/* Linear & Stripe Inspired Typography */
 .font-luxury {
   font-family: 'Cinzel', serif;
 }
@@ -42,37 +72,45 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Luxury Jewellery Gold Gradients */
+/* Official Color Gradients */
 .gold-gradient {
-  background: linear-gradient(135deg, #D4AF37 0%, #F5DE88 50%, #C49E28 100%);
+  background: linear-gradient(135deg, #C9A34A 0%, #DFBE6B 50%, #A68434 100%);
 }
 
 .gold-gradient-subtle {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(245, 222, 136, 0.06) 100%);
+  background: linear-gradient(135deg, rgba(201, 163, 74, 0.14) 0%, rgba(223, 190, 107, 0.05) 100%);
 }
 
-.burgundy-gradient {
-  background: linear-gradient(135deg, #380810 0%, #56111C 60%, #200408 100%);
+.violet-gradient {
+  background: linear-gradient(135deg, #8B7CF6 0%, #A79BF8 100%);
 }
 
-.dark .dark-card {
-  background-color: #111118;
-  border-color: rgba(255, 255, 255, 0.08);
+.violet-gradient-subtle {
+  background: linear-gradient(135deg, rgba(139, 124, 246, 0.14) 0%, rgba(139, 124, 246, 0.04) 100%);
 }
 
+.mint-gradient {
+  background: linear-gradient(135deg, #35BFA0 0%, #52CFB4 100%);
+}
+
+.mint-gradient-subtle {
+  background: linear-gradient(135deg, rgba(53, 191, 160, 0.14) 0%, rgba(53, 191, 160, 0.04) 100%);
+}
+
+/* Glass Panels */
 .glass-panel {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(201, 163, 74, 0.2);
 }
 
 .dark .glass-panel {
-  background: rgba(17, 17, 24, 0.85);
+  background: rgba(24, 26, 34, 0.85);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(246, 245, 241, 0.08);
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -81,11 +119,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(201, 163, 74, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.5);
+  background: rgba(201, 163, 74, 0.5);
 }
 
 /* Keyboard Shortcut Tag */
@@ -98,13 +136,13 @@
   font-family: 'JetBrains Mono', monospace;
   font-weight: 600;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: #71717A;
+  background: rgba(17, 19, 24, 0.06);
+  border: 1px solid rgba(17, 19, 24, 0.12);
+  color: #5A5E6B;
 }
 
 .dark .kbd-badge {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #A1A1AA;
+  background: rgba(246, 245, 241, 0.08);
+  border-color: rgba(246, 245, 241, 0.15);
+  color: #A6AAB6;
 }

@@ -128,22 +128,22 @@ export const AccountingView: React.FC = () => {
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#200408] dark:text-[#E5C358]">
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
             Double-Entry Financial Accounting
           </h2>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-0.5">
             Automated journal vouchers, balanced trial balance, and statutory Indian GST registers
           </p>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex items-center gap-1 bg-zinc-200 dark:bg-white/10 p-1 rounded-xl text-xs self-start sm:self-auto font-medium transition-colors">
+        <div className="flex items-center gap-1 bg-[#ECEAE4]/60 dark:bg-white/5 p-1 rounded-xl text-xs self-start sm:self-auto font-medium transition-colors">
           <button
             onClick={() => setActiveTab('trial_balance')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               activeTab === 'trial_balance'
-                ? 'bg-white dark:bg-[#111118] text-[#200408] dark:text-amber-300 shadow font-bold'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                ? 'gold-gradient text-[#111318] shadow font-bold'
+                : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#111318] dark:hover:text-[#F6F5F1]'
             }`}
           >
             Trial Balance
@@ -152,8 +152,8 @@ export const AccountingView: React.FC = () => {
             onClick={() => setActiveTab('day_book')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               activeTab === 'day_book'
-                ? 'bg-white dark:bg-[#111118] text-[#200408] dark:text-amber-300 shadow font-bold'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                ? 'gold-gradient text-[#111318] shadow font-bold'
+                : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#111318] dark:hover:text-[#F6F5F1]'
             }`}
           >
             Day Book Register
@@ -162,8 +162,8 @@ export const AccountingView: React.FC = () => {
             onClick={() => setActiveTab('chart_of_accounts')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               activeTab === 'chart_of_accounts'
-                ? 'bg-white dark:bg-[#111118] text-[#200408] dark:text-amber-300 shadow font-bold'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                ? 'gold-gradient text-[#111318] shadow font-bold'
+                : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#111318] dark:hover:text-[#F6F5F1]'
             }`}
           >
             Chart of Accounts
@@ -175,25 +175,25 @@ export const AccountingView: React.FC = () => {
       {activeTab === 'trial_balance' && (
         <div className="space-y-4">
           {/* Balance Status Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FFFFFF] dark:bg-[#181A22] p-4 rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm">
             <div className="flex items-center gap-2">
-              <Scale className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              <Scale className="w-5 h-5 text-[#C9A34A]" />
               <div>
-                <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">
+                <h4 className="font-semibold text-[#111318] dark:text-[#F6F5F1] text-xs sm:text-sm">
                   General Ledger Balance Verification
                 </h4>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                <p className="text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
                   Total Debit: ₹{Number(trialBalance?.total_debit || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })} | Total Credit: ₹{Number(trialBalance?.total_credit || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
               </div>
             </div>
 
             {trialBalance?.is_balanced ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25 self-start sm:self-auto">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Strictly Balanced: Debit = Credit
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30 self-start sm:self-auto">
+                <CheckCircle2 className="w-4 h-4 text-[#35BFA0]" /> Strictly Balanced: Debit = Credit
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/25 self-start sm:self-auto">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/25 self-start sm:self-auto">
                 <AlertTriangle className="w-4 h-4 text-rose-600" /> Out of Balance Variance
               </span>
             )}
@@ -215,74 +215,74 @@ export const AccountingView: React.FC = () => {
       {/* Day Book Tab */}
       {activeTab === 'day_book' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FFFFFF] dark:bg-[#181A22] p-4 rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <Calendar className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+              <Calendar className="w-4 h-4 text-[#C9A34A]" />
+              <span className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1]">
                 Select Register Date:
               </span>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-1.5 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500"
+                className="bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10 rounded-xl px-3 py-1.5 text-xs font-mono text-[#111318] dark:text-[#F6F5F1] focus:outline-none focus:border-[#C9A34A]"
               />
             </div>
             <button
               onClick={() => window.print()}
-              className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-white/10 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 flex items-center gap-1.5 self-start sm:self-auto"
+              className="px-3 py-1.5 rounded-xl border border-[#E3DFD7] dark:border-white/10 text-xs font-medium text-[#5A5E6B] dark:text-[#A6AAB6] hover:bg-[#111318]/5 dark:hover:bg-white/5 flex items-center gap-1.5 self-start sm:self-auto"
             >
-              <Printer className="w-3.5 h-3.5" /> Print Day Register
+              <Printer className="w-3.5 h-3.5 text-[#C9A34A]" /> Print Day Register
             </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-[#111118] p-5 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-3">
-              <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider font-mono">
+            <div className="bg-[#FFFFFF] dark:bg-[#181A22] p-5 rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm space-y-3">
+              <h4 className="text-xs font-bold text-[#111318] dark:text-[#F6F5F1] uppercase tracking-wider font-mono">
                 Cash in Hand Position
               </h4>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">Cash Inflow:</span>
-                  <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">Cash Inflow:</span>
+                  <span className="font-mono text-[#35BFA0] font-semibold">
                     ₹{Number(dayBook?.summary?.cash_received || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">Cash Outflow:</span>
-                  <span className="font-mono text-rose-600 dark:text-rose-400 font-semibold">
+                  <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">Cash Outflow:</span>
+                  <span className="font-mono text-rose-500 font-semibold">
                     ₹{Number(dayBook?.summary?.cash_paid || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex justify-between border-t border-zinc-100 dark:border-white/5 pt-2 font-bold">
-                  <span className="text-zinc-900 dark:text-zinc-100">Net Cash Flow:</span>
-                  <span className="font-mono text-amber-600 dark:text-amber-400">
+                <div className="flex justify-between border-t border-[#E3DFD7] dark:border-white/5 pt-2 font-bold">
+                  <span className="text-[#111318] dark:text-[#F6F5F1]">Net Cash Flow:</span>
+                  <span className="font-mono text-[#C9A34A]">
                     ₹{Number(dayBook?.summary?.net_cash || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-[#111118] p-5 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-3">
-              <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider font-mono">
+            <div className="bg-[#FFFFFF] dark:bg-[#181A22] p-5 rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm space-y-3">
+              <h4 className="text-xs font-bold text-[#111318] dark:text-[#F6F5F1] uppercase tracking-wider font-mono">
                 Bank & UPI Clearing Position
               </h4>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">Bank Inflow:</span>
-                  <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">Bank Inflow:</span>
+                  <span className="font-mono text-[#35BFA0] font-semibold">
                     ₹{Number(dayBook?.summary?.bank_received || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">Bank Outflow:</span>
-                  <span className="font-mono text-rose-600 dark:text-rose-400 font-semibold">
+                  <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">Bank Outflow:</span>
+                  <span className="font-mono text-rose-500 font-semibold">
                     ₹{Number(dayBook?.summary?.bank_paid || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex justify-between border-t border-zinc-100 dark:border-white/5 pt-2 font-bold">
-                  <span className="text-zinc-900 dark:text-zinc-100">Net Bank Flow:</span>
-                  <span className="font-mono text-amber-600 dark:text-amber-400">
+                <div className="flex justify-between border-t border-[#E3DFD7] dark:border-white/5 pt-2 font-bold">
+                  <span className="text-[#111318] dark:text-[#F6F5F1]">Net Bank Flow:</span>
+                  <span className="font-mono text-[#C9A34A]">
                     ₹{Number(dayBook?.summary?.net_bank || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -294,24 +294,24 @@ export const AccountingView: React.FC = () => {
 
       {/* Chart of Accounts Tab */}
       {activeTab === 'chart_of_accounts' && (
-        <div className="bg-white dark:bg-[#111118] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden transition-colors">
-          <div className="p-4 bg-zinc-50/70 dark:bg-black/30 border-b border-zinc-200 dark:border-white/10 font-serif font-bold text-xs text-zinc-900 dark:text-zinc-100 flex items-center justify-between">
+        <div className="bg-[#FFFFFF] dark:bg-[#181A22] rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm overflow-hidden transition-colors">
+          <div className="p-4 bg-[#ECEAE4]/40 dark:bg-[#111318] border-b border-[#E3DFD7] dark:border-white/10 font-serif font-bold text-xs text-[#111318] dark:text-[#F6F5F1] flex items-center justify-between">
             <span>Enterprise Chart of Accounts</span>
-            <span className="text-[10px] font-mono text-zinc-400">{accounts.length} Ledgers</span>
+            <span className="text-[10px] font-mono text-[#8E929E]">{accounts.length} Ledgers</span>
           </div>
-          <div className="divide-y divide-zinc-100 dark:divide-white/5">
+          <div className="divide-y divide-[#E3DFD7]/60 dark:divide-white/5">
             {accounts.map((acc) => (
               <div
                 key={acc.id}
-                className="p-3.5 flex items-center justify-between text-xs hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors"
+                className="p-3.5 flex items-center justify-between text-xs hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-[#56111C] dark:text-amber-400">
+                  <span className="font-mono font-bold text-[#C9A34A]">
                     [{acc.code}]
                   </span>
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">{acc.name}</span>
+                  <span className="font-semibold text-[#111318] dark:text-[#F6F5F1]">{acc.name}</span>
                 </div>
-                <span className="uppercase text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300">
+                <span className="uppercase text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#ECEAE4] dark:bg-white/10 text-[#5A5E6B] dark:text-[#A6AAB6]">
                   {acc.type}
                 </span>
               </div>

@@ -23,10 +23,11 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenCommandPalette }) =>
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#111118]/95 backdrop-blur-lg border-t border-zinc-200 dark:border-white/10 px-2 py-1 shadow-2xl transition-colors safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF]/95 dark:bg-[#111318]/95 backdrop-blur-lg border-t border-[#E3DFD7] dark:border-white/10 px-2 py-1 shadow-2xl transition-colors safe-area-pb">
       <div className="flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
+          const isAi = item.to === '/zero-capture';
           return (
             <NavLink
               key={item.name}
@@ -34,8 +35,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenCommandPalette }) =>
               className={({ isActive }) =>
                 `flex flex-col items-center justify-center py-1.5 px-2 rounded-xl transition-all relative ${
                   isActive
-                    ? 'text-amber-600 dark:text-amber-400 font-semibold'
-                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    ? 'text-[#C9A34A] font-semibold'
+                    : 'text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#111318] dark:hover:text-[#F6F5F1]'
                 }`
               }
             >
@@ -44,9 +45,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenCommandPalette }) =>
                   <div
                     className={`p-1.5 rounded-lg transition-transform ${
                       item.highlight && !isActive
-                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                        ? 'bg-[#8B7CF6]/15 text-[#8B7CF6]'
                         : isActive
-                        ? 'scale-110 bg-amber-500/15'
+                        ? 'scale-110 bg-[#C9A34A]/15 text-[#C9A34A]'
                         : ''
                     }`}
                   >
@@ -54,7 +55,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenCommandPalette }) =>
                   </div>
                   <span className="text-[10px] tracking-tight mt-0.5">{item.name}</span>
                   {isActive && (
-                    <span className="w-1 h-1 rounded-full bg-amber-500 absolute -bottom-0.5" />
+                    <span className="w-1 h-1 rounded-full bg-[#C9A34A] absolute -bottom-0.5" />
                   )}
                 </>
               )}
@@ -66,10 +67,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({ onOpenCommandPalette }) =>
         <button
           onClick={onOpenCommandPalette}
           title="Open Command Palette (Ctrl+K)"
-          className="flex flex-col items-center justify-center py-1.5 px-2 text-zinc-500 dark:text-zinc-400 hover:text-amber-500 transition-colors"
+          className="flex flex-col items-center justify-center py-1.5 px-2 text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] transition-colors"
         >
-          <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-white/5">
-            <Search className="w-5 h-5" />
+          <div className="p-1.5 rounded-lg bg-[#111318]/5 dark:bg-white/5">
+            <Search className="w-5 h-5 text-[#C9A34A]" />
           </div>
           <span className="text-[10px] tracking-tight mt-0.5">Search</span>
         </button>

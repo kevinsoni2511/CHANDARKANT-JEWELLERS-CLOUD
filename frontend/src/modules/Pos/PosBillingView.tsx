@@ -223,14 +223,14 @@ export const PosBillingView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#200408] dark:text-[#E5C358]">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
               Point of Sale & Billing Terminal
             </h2>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 font-mono font-bold uppercase tracking-wider">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-mono font-bold uppercase tracking-wider border border-[#C9A34A]/25">
               POS v2.4
             </span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-[#5A5E6B] dark:text-[#A6AAB6] mt-0.5">
             Rapid barcode tag scanning, old gold exchange offset, and GST compliant tax invoices
           </p>
         </div>
@@ -240,21 +240,21 @@ export const PosBillingView: React.FC = () => {
         {/* Left 2 Cols: Cart, Scanner, Items */}
         <div className="lg:col-span-2 space-y-4">
           {/* Barcode & Search Bar */}
-          <div className="bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center gap-3 transition-colors">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] p-4 rounded-2xl border border-[#E3DFD7] dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center gap-3 transition-colors">
             <form onSubmit={handleBarcodeLookup} className="flex-1 flex items-center gap-2 w-full">
               <div className="relative flex-1">
-                <Barcode className="w-4 h-4 text-amber-600 dark:text-amber-400 absolute left-3 top-2.5" />
+                <Barcode className="w-4 h-4 text-[#C9A34A] absolute left-3 top-2.5" />
                 <input
                   type="text"
                   placeholder="Scan Tag Barcode or Enter SKU (e.g. CJ-G-NCK-1001)..."
                   value={scanCode}
                   onChange={(e) => setScanCode(e.target.value)}
-                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:border-amber-500 transition-colors"
+                  className="w-full bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-[#111318] dark:text-[#F6F5F1] placeholder-[#8E929E] focus:outline-none focus:border-[#C9A34A] transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 font-bold text-xs rounded-xl shadow border border-amber-500/30 hover:brightness-110 transition-all"
+                className="px-4 py-2 gold-gradient text-[#111318] font-bold text-xs rounded-xl shadow hover:brightness-105 transition-all"
               >
                 Scan / Add
               </button>
@@ -366,8 +366,8 @@ export const PosBillingView: React.FC = () => {
                   onChange={(e) => setEnableOldGold(e.target.checked)}
                   className="rounded text-amber-600 focus:ring-amber-500"
                 />
-                <span className="font-serif font-bold text-xs text-[#200408] dark:text-[#E5C358] flex items-center gap-1.5">
-                  <Coins className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Customer Old Gold Exchange / Purchase
+                <span className="font-serif font-bold text-xs text-[#111318] dark:text-[#F6F5F1] flex items-center gap-1.5">
+                  <Coins className="w-4 h-4 text-[#C9A34A]" /> Customer Old Gold Exchange / Purchase
                 </span>
               </label>
 
@@ -568,7 +568,7 @@ export const PosBillingView: React.FC = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between pt-2 border-t-2 border-amber-500/40 font-serif font-bold text-base text-[#200408] dark:text-[#E5C358]">
+              <div className="flex justify-between pt-2 border-t-2 border-[#C9A34A]/40 font-serif font-bold text-base text-[#C9A34A]">
                 <span>Grand Total:</span>
                 <span className="font-mono">
                   ₹{Number(estimate?.grand_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -577,8 +577,8 @@ export const PosBillingView: React.FC = () => {
             </div>
 
             {/* Payment Method Splitting */}
-            <div className="pt-3 border-t border-zinc-100 dark:border-white/5 space-y-2">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
+            <div className="pt-3 border-t border-[#E3DFD7] dark:border-white/5 space-y-2">
+              <label className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1] block">
                 Payment Collection Mode
               </label>
 
@@ -592,7 +592,7 @@ export const PosBillingView: React.FC = () => {
                       setPayments(updated);
                     }}
                     aria-label="Payment method"
-                    className="w-28 bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-2 py-1.5 text-xs text-zinc-800 dark:text-zinc-200"
+                    className="w-28 bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10 rounded-xl px-2 py-1.5 text-xs text-[#111318] dark:text-[#F6F5F1]"
                   >
                     <option value="upi">UPI / QR</option>
                     <option value="cash">Cash</option>
@@ -609,7 +609,7 @@ export const PosBillingView: React.FC = () => {
                       updated[idx].amount = e.target.value;
                       setPayments(updated);
                     }}
-                    className="flex-1 bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-mono text-zinc-900 dark:text-zinc-100"
+                    className="flex-1 bg-[#ECEAE4]/40 dark:bg-[#111318] border border-[#E3DFD7] dark:border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-mono text-[#111318] dark:text-[#F6F5F1]"
                   />
                 </div>
               ))}
@@ -620,9 +620,9 @@ export const PosBillingView: React.FC = () => {
               type="button"
               disabled={isSubmitting || selectedItems.length === 0}
               onClick={handleFinalizeBill}
-              className="w-full py-3 rounded-xl gold-gradient text-[#200408] font-serif font-bold text-sm shadow-md hover:brightness-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
+              className="w-full py-3 rounded-xl gold-gradient text-[#111318] font-serif font-bold text-sm shadow-md hover:brightness-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
             >
-              <CheckCircle2 className="w-5 h-5" />
+              <CheckCircle2 className="w-5 h-5 text-[#111318]" />
               {isSubmitting ? 'Posting Financial Voucher...' : 'Complete Sale & Print Tax Invoice'}
             </button>
           </div>
@@ -634,7 +634,7 @@ export const PosBillingView: React.FC = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
           <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
-              <h3 className="font-serif font-bold text-sm text-[#200408] dark:text-[#E5C358]">
+              <h3 className="font-serif font-bold text-sm text-[#111318] dark:text-[#F6F5F1]">
                 Register New Jewellery Patron
               </h3>
               <button
@@ -700,7 +700,7 @@ export const PosBillingView: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 border border-amber-500/30 font-bold rounded-xl shadow"
+                  className="px-4 py-2 gold-gradient text-[#111318] font-bold rounded-xl shadow"
                 >
                   Save Customer
                 </button>
@@ -713,27 +713,27 @@ export const PosBillingView: React.FC = () => {
       {/* Tax Invoice Success / Print Modal */}
       {completedInvoice && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                <CheckCircle2 className="w-5 h-5" />
-                <h3 className="font-serif font-bold text-base text-zinc-900 dark:text-zinc-100">
+          <div className="bg-[#FFFFFF] dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E3DFD7] dark:border-white/10 pb-3">
+              <div className="flex items-center gap-2 text-[#35BFA0]">
+                <CheckCircle2 className="w-5 h-5 text-[#35BFA0]" />
+                <h3 className="font-serif font-bold text-base text-[#111318] dark:text-[#F6F5F1]">
                   Sale Finalized & Ledger Balanced!
                 </h3>
               </div>
               <button
                 onClick={() => setCompletedInvoice(null)}
-                className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                className="p-1 text-[#8E929E] hover:text-[#111318] dark:hover:text-[#F6F5F1]"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Printable Invoice Sheet */}
-            <div className="border border-zinc-200 dark:border-white/10 p-6 rounded-xl bg-zinc-50 dark:bg-black/30 text-xs space-y-4 font-sans text-zinc-800 dark:text-zinc-200" id="printable-invoice">
+            <div className="border border-[#E3DFD7] dark:border-white/10 p-6 rounded-xl bg-[#F6F5F1] dark:bg-[#111318] text-xs space-y-4 font-sans text-[#111318] dark:text-[#F6F5F1]" id="printable-invoice">
               {/* Header */}
-              <div className="text-center pb-3 border-b border-zinc-200 dark:border-white/10">
-                <h2 className="font-serif font-bold text-xl text-[#200408] dark:text-[#E5C358] tracking-wide">
+              <div className="text-center pb-3 border-b border-[#E3DFD7] dark:border-white/10">
+                <h2 className="font-serif font-bold text-xl text-[#C9A34A] tracking-wide">
                   CHANDARKANT JEWELLERS PVT LTD
                 </h2>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -750,7 +750,7 @@ export const PosBillingView: React.FC = () => {
               {/* Meta details */}
               <div className="grid grid-cols-2 gap-4 text-zinc-700 dark:text-zinc-300">
                 <div>
-                  <p><strong>Invoice No:</strong> <span className="font-mono text-[#56111C] dark:text-amber-400 font-semibold">{completedInvoice.invoice_number}</span></p>
+                  <p><strong>Invoice No:</strong> <span className="font-mono text-[#C9A34A] font-semibold">{completedInvoice.invoice_number}</span></p>
                   <p><strong>Date:</strong> {completedInvoice.invoice_date}</p>
                   <p><strong>Place of Supply:</strong> Gujarat (24)</p>
                 </div>
@@ -807,7 +807,7 @@ export const PosBillingView: React.FC = () => {
                     <span>SGST (1.50%):</span>
                     <span className="font-mono">₹{Number(completedInvoice.sgst_amount).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between border-t border-zinc-200 dark:border-white/10 pt-1 font-bold text-sm text-[#200408] dark:text-[#E5C358]">
+                  <div className="flex justify-between border-t border-[#E3DFD7] dark:border-white/10 pt-1 font-bold text-sm text-[#C9A34A]">
                     <span>Grand Total:</span>
                     <span className="font-mono">₹{Number(completedInvoice.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                   </div>
@@ -815,7 +815,7 @@ export const PosBillingView: React.FC = () => {
               </div>
 
               {/* Footer Declaration */}
-              <div className="pt-4 border-t border-zinc-200 dark:border-white/10 flex justify-between items-end text-[10px] text-zinc-500">
+              <div className="pt-4 border-t border-[#E3DFD7] dark:border-white/10 flex justify-between items-end text-[10px] text-[#8E929E]">
                 <div>
                   <p>Certified that the particulars given above are true and correct.</p>
                   <p>All gold items hallmarked with 6-digit BIS HUID.</p>
@@ -832,9 +832,9 @@ export const PosBillingView: React.FC = () => {
                 href={`http://127.0.0.1:8000/api/v1/pos/invoices/${completedInvoice.id}/print?format=a4`}
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 font-bold text-xs rounded-xl shadow border border-amber-500/30 flex items-center gap-2 hover:brightness-110"
+                className="px-4 py-2 gold-gradient text-[#111318] font-bold text-xs rounded-xl shadow flex items-center gap-2 hover:brightness-105"
               >
-                <Printer className="w-4 h-4" /> Print A4 Tax Invoice
+                <Printer className="w-4 h-4 text-[#111318]" /> Print A4 Tax Invoice
               </a>
               <a
                 href={`http://127.0.0.1:8000/api/v1/pos/invoices/${completedInvoice.id}/print?format=thermal`}

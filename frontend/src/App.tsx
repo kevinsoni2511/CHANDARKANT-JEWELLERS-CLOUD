@@ -39,10 +39,10 @@ const ProtectedLayout: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#1A0306] dark:bg-[#09090D] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F6F5F1] dark:bg-[#111318] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-xs font-mono text-amber-200/80 tracking-widest uppercase">
+          <div className="w-10 h-10 border-4 border-[#C9A34A] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xs font-mono text-[#C9A34A] tracking-widest uppercase">
             Loading Chandarkant Cloud...
           </p>
         </div>
@@ -55,7 +55,7 @@ const ProtectedLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8F6F2] dark:bg-[#09090D] text-zinc-900 dark:text-zinc-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] transition-colors">
       {/* Top Navigation */}
       <Navbar
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
