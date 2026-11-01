@@ -7,6 +7,9 @@ use App\Models\Category;
 use App\Models\ChartOfAccount;
 use App\Models\Customer;
 use App\Models\InventoryItem;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
+use App\Models\InvoicePayment;
 use App\Models\Karigar;
 use App\Models\MetalRate;
 use App\Models\SavingScheme;
@@ -442,5 +445,61 @@ class DatabaseSeeder extends Seeder
                 'payment_mode' => 'upi',
             ]);
         }
+
+        // 12. Seed an initial POS Tax Invoice and Ledger Entries
+        $invoice = Invoice::create([
+            'tenant_id' => $tenant->id,
+            'branch_id' => $mainBranch->id,
+            'customer_id' => $customerModels[0]->id,
+            'user_id' => $sales->id,
+            'invoice_number' => 'INV-2026-0001',
+            'invoice_date' => now()->toDateString(),
+            'subtotal' => 345000.00,
+            'discount_amount' => 0.00,
+            'old_gold_amount' => 0.00,
+            'taxable_amount' => 345000.00,
+            'cgst_rate' => 1.50,
+            'cgst_amount' => 5175.00,
+            'sgst_rate' => 1.50,
+            'sgst_amount' => 5175.00,
+            'igst_rate' => 0.00,
+            'igst_amount' => 0.00,
+            'round_off' => 0.00,
+            'grand_total' => 355350.00,
+            'paid_amount' => 355350.00,
+            'due_amount' => 0.00,
+            'status' => 'paid',
+            'notes' => 'Bridal necklace set sold with full BIS HUID hallmark certification.',
+        ]);
+
+        InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'item_name' => '22K Royal Antique Gold Bridal Necklace',
+            'sku' => 'CJ-G-NCK-1001',
+            'huid' => 'HUID-9B7C1A',
+            'metal_type' => 'gold',
+            'purity_karat' => '22K',
+            'gross_weight' => 45.850,
+            'stone_weight' => 2.150,
+            'net_weight' => 43.700,
+            'metal_rate_applied' => 7287.50,
+            'metal_value' => 318463.75,
+            'wastage_percent' => 3.50,
+            'wastage_weight' => 1.530,
+            'wastage_amount' => 11149.88,
+            'making_charge_type' => 'per_gram',
+            'making_charge_rate' => 850.00,
+            'making_charges' => 37145.00,
+            'stone_charges' => 2500.00,
+            'item_total' => 345000.00,
+        ]);
+
+        InvoicePayment::create([
+            'invoice_id' => $invoice->id,
+            'payment_mode' => 'upi',
+            'amount' => 355350.00,
+            'reference_number' => 'UPI-REF-2026-9921',
+            'payment_date' => now()->toDateString(),
+        ]);
     }
 }
