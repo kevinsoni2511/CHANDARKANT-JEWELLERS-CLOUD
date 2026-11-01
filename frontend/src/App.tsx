@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Navbar } from './components/Navbar';
@@ -24,6 +24,15 @@ const ProtectedLayout: React.FC = () => {
   const { user, isLoading } = useAuth();
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isActivityFeedOpen, setIsActivityFeedOpen] = useState(false);
+  const location = useLocation();
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  // Automatically reset scroll position to top whenever navigating between module pages
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
 
   // Global Ctrl + K listener
   useEffect(() => {
@@ -67,7 +76,7 @@ const ProtectedLayout: React.FC = () => {
         <Sidebar />
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <div ref={mainContentRef} className="flex-1 flex flex-col min-w-0 overflow-y-auto scroll-smooth">
           {/* Breadcrumbs Navigation */}
           <Breadcrumbs />
 

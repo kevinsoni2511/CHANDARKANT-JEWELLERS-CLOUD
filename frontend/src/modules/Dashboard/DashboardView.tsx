@@ -120,8 +120,8 @@ export const DashboardView: React.FC = () => {
 
   const quickActionItems = [
     { title: 'POS Billing', href: '/pos', icon: Receipt, badge: 'Fast' },
-    { title: 'Voice AI Studio', href: '/zero-capture', icon: Mic, badge: 'AI' },
-    { title: 'Smart OCR Scan', href: '/zero-capture', icon: Sparkles, badge: 'OCR' },
+    { title: 'Voice AI', href: '/zero-capture', icon: Mic, badge: 'AI' },
+    { title: 'Smart OCR', href: '/zero-capture', icon: Sparkles, badge: 'OCR' },
     { title: 'Tag Vault Piece', href: '/inventory', icon: Boxes },
     { title: 'Bullion Board', href: '/rates', icon: TrendingUp },
     { title: 'Day Book Ledger', href: '/accounting', icon: FileSpreadsheet },
