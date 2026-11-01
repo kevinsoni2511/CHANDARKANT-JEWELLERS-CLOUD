@@ -17,24 +17,45 @@ import { useAuth } from '../contexts/AuthContext';
 export const Sidebar: React.FC = () => {
   const { user } = useAuth();
 
-  const navigation = [
-    { name: 'Dashboard', to: '/', icon: LayoutDashboard },
-    { name: 'Point of Sale (POS)', to: '/pos', icon: ShoppingCart },
-    { name: 'Jewellery Inventory', to: '/inventory', icon: Boxes },
-    { name: 'Precious Metal Rates', to: '/rates', icon: TrendingUp },
-    { name: 'Financial Accounting', to: '/accounting', icon: BookOpen },
-    { name: 'Customer CRM', to: '/customers', icon: Users },
-    { name: 'Karigar Management', to: '/karigar', icon: Hammer },
-    { name: 'Saving Schemes (Kitty)', to: '/saving-schemes', icon: PiggyBank },
-    { name: 'AI Business Copilot', to: '/ai', icon: Sparkles },
+  const role = user?.role || 'owner';
+
+  const allNavigation = [
+    { name: 'Dashboard', to: '/', icon: LayoutDashboard, roles: ['*'] },
+    { name: 'Point of Sale (POS)', to: '/pos', icon: ShoppingCart, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
+    { name: 'Jewellery Inventory', to: '/inventory', icon: Boxes, roles: ['owner', 'manager', 'stock', 'super_admin'] },
+    { name: 'Precious Metal Rates', to: '/rates', icon: TrendingUp, roles: ['owner', 'manager', 'sales', 'stock', 'accountant', 'karigar', 'super_admin'] },
+    { name: 'Financial Accounting', to: '/accounting', icon: BookOpen, roles: ['owner', 'accountant', 'super_admin'] },
+    { name: 'Customer CRM', to: '/customers', icon: Users, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
+    { name: 'Karigar Management', to: '/karigar', icon: Hammer, roles: ['owner', 'manager', 'stock', 'karigar', 'super_admin'] },
+    { name: 'Saving Schemes (Kitty)', to: '/saving-schemes', icon: PiggyBank, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
+    { name: 'AI Business Copilot', to: '/ai', icon: Sparkles, roles: ['*'] },
   ];
+
+  const navigation = allNavigation.filter(
+    (item) => item.roles.includes('*') || item.roles.includes(role)
+  );
+
+  const roleLabelMap: Record<string, string> = {
+    owner: 'Showroom Owner',
+    manager: 'Branch Manager',
+    sales: 'Sales Executive',
+    accountant: 'Chief Accountant',
+    stock: 'Inventory Head',
+    karigar: 'Master Karigar',
+    super_admin: 'Super Admin',
+  };
 
   return (
     <aside className="w-64 bg-[#2C070C] text-amber-100 flex flex-col border-r border-[#D4AF37]/20 min-h-[calc(100vh-4rem)]">
       <div className="p-4 flex-1 space-y-1">
-        <p className="text-[11px] font-semibold text-amber-400/60 uppercase tracking-wider px-3 mb-2">
-          Enterprise Operations
-        </p>
+        <div className="px-3 mb-3 flex items-center justify-between">
+          <p className="text-[10px] font-semibold text-amber-400/60 uppercase tracking-wider">
+            Enterprise Operations
+          </p>
+          <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold uppercase tracking-wider border border-amber-500/20">
+            {roleLabelMap[role] || role}
+          </span>
+        </div>
 
         {navigation.map((item) => {
           const Icon = item.icon;
@@ -64,7 +85,7 @@ export const Sidebar: React.FC = () => {
           <span>BIS & GST Compliant</span>
         </div>
         <p>Tenant: {user?.branch?.name || 'Surat Flagship'}</p>
-        <p className="text-[9px] mt-1 text-amber-400/40">CJC Enterprise v0.1.0</p>
+        <p className="text-[10px] text-amber-300/70 mt-0.5 font-medium">Signed in: {user?.name}</p>
       </div>
     </aside>
   );
