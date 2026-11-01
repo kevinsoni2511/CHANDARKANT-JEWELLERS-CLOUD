@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   PanelLeftClose,
   PanelLeftOpen,
+  Bot,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -69,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { name: 'Financial Accounting', shortName: 'Accounting', to: '/accounting', icon: BookOpen, roles: ['owner', 'accountant', 'super_admin'] },
         { name: 'Customer CRM', shortName: 'Customers', to: '/customers', icon: Users, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
         { name: 'Saving Schemes (Kitty)', shortName: 'Saving Kitty', to: '/saving-schemes', icon: PiggyBank, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
-        { name: 'AI Business Copilot', shortName: 'AI Copilot', to: '/ai', icon: ShieldCheck, roles: ['*'] },
+        { name: 'AI Business Copilot', shortName: 'AI Copilot', to: '/ai', icon: Bot, roles: ['*'] },
       ],
     },
   ];
@@ -86,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      className={`hidden md:flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-r border-[#E3DFD7] dark:border-white/10 transition-all duration-300 select-none h-full shrink-0 relative z-20 ${
+      className={`hidden md:flex flex-col bg-[#F6F5F1] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-r border-[#E3DFD7] dark:border-white/10 transition-all duration-300 select-none h-full shrink-0 relative z-30 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -124,10 +125,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Navigation Sections */}
       <div
-        className={`flex-1 py-2 overflow-y-auto ${
+        className={`flex-1 py-2.5 ${
           isCollapsed
-            ? 'space-y-1.5 px-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
-            : 'space-y-3.5 px-3'
+            ? 'space-y-1.5 px-2 overflow-visible'
+            : 'space-y-3 px-3 overflow-y-auto'
         }`}
       >
         {sections.map((section) => {
@@ -152,11 +153,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <NavLink
                     key={item.to}
                     to={item.to}
-                    title={isCollapsed ? item.name : undefined}
                     className={({ isActive }) =>
                       `flex items-center rounded-xl text-xs font-medium transition-all group relative ${
                         isCollapsed
-                          ? 'w-12 h-11 mx-auto justify-center'
+                          ? 'w-11 h-10 mx-auto justify-center'
                           : 'gap-3 px-3 py-2.5'
                       } ${
                         isActive
