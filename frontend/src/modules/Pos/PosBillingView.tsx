@@ -218,14 +218,19 @@ export const PosBillingView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Title */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-serif font-bold text-[#380810]">
-            Point of Sale & Billing Terminal
-          </h2>
-          <p className="text-xs text-gray-600">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#200408] dark:text-[#E5C358]">
+              Point of Sale & Billing Terminal
+            </h2>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 font-mono font-bold uppercase tracking-wider">
+              POS v2.4
+            </span>
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-0.5">
             Rapid barcode tag scanning, old gold exchange offset, and GST compliant tax invoices
           </p>
         </div>
@@ -235,21 +240,21 @@ export const PosBillingView: React.FC = () => {
         {/* Left 2 Cols: Cart, Scanner, Items */}
         <div className="lg:col-span-2 space-y-4">
           {/* Barcode & Search Bar */}
-          <div className="bg-white p-4 rounded-xl border border-amber-200 shadow-sm flex flex-col sm:flex-row items-center gap-3">
+          <div className="bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center gap-3 transition-colors">
             <form onSubmit={handleBarcodeLookup} className="flex-1 flex items-center gap-2 w-full">
               <div className="relative flex-1">
-                <Barcode className="w-4 h-4 text-amber-700 absolute left-3 top-2.5" />
+                <Barcode className="w-4 h-4 text-amber-600 dark:text-amber-400 absolute left-3 top-2.5" />
                 <input
                   type="text"
                   placeholder="Scan Tag Barcode or Enter SKU (e.g. CJ-G-NCK-1001)..."
                   value={scanCode}
                   onChange={(e) => setScanCode(e.target.value)}
-                  className="w-full bg-[#FAF8F5] border border-amber-300 rounded-lg pl-9 pr-3 py-2 text-xs font-mono focus:outline-none focus:border-amber-600"
+                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs font-mono text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:border-amber-500 transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#56111C] hover:bg-[#380810] text-amber-100 font-semibold text-xs rounded-lg shadow"
+                className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 font-bold text-xs rounded-xl shadow border border-amber-500/30 hover:brightness-110 transition-all"
               >
                 Scan / Add
               </button>
@@ -264,11 +269,11 @@ export const PosBillingView: React.FC = () => {
                 }}
                 value=""
                 aria-label="Select in-stock jewellery item"
-                className="w-full bg-[#FAF8F5] border border-amber-300 rounded-lg px-3 py-2 text-xs text-gray-700 focus:outline-none focus:border-amber-600"
+                className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-700 dark:text-zinc-300 focus:outline-none focus:border-amber-500"
               >
                 <option value="">+ Select In-Stock Item</option>
                 {availableItems.map((itm) => (
-                  <option key={itm.id} value={itm.id}>
+                  <option key={itm.id} value={itm.id} className="bg-white dark:bg-[#111118] text-zinc-900 dark:text-zinc-100">
                     {itm.name} ({itm.gross_weight}g)
                   </option>
                 ))}
@@ -277,15 +282,17 @@ export const PosBillingView: React.FC = () => {
           </div>
 
           {/* Cart Table */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="p-3 bg-[#FAF8F5] border-b border-gray-200 font-semibold text-xs text-gray-700 flex justify-between items-center">
+          <div className="bg-white dark:bg-[#111118] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden transition-colors">
+            <div className="p-3.5 bg-zinc-50/70 dark:bg-black/30 border-b border-zinc-200 dark:border-white/10 font-semibold text-xs text-zinc-700 dark:text-zinc-300 flex justify-between items-center">
               <span>Billed Jewellery Items ({selectedItems.length})</span>
-              <span className="text-[11px] text-gray-500 font-normal">Weights in Grams (3 Decimals)</span>
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-normal font-mono">
+                Weights in Grams (3 Decimals)
+              </span>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#FAF8F5] text-gray-500 border-b border-gray-200">
+                <thead className="bg-zinc-50/50 dark:bg-black/20 text-zinc-500 dark:text-zinc-400 border-b border-zinc-100 dark:border-white/5">
                   <tr>
                     <th className="py-2.5 px-3">SKU & Item Name</th>
                     <th className="py-2.5 px-3">Purity & HUID</th>
@@ -297,10 +304,10 @@ export const PosBillingView: React.FC = () => {
                     <th className="py-2.5 px-3 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                   {selectedItems.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-12 text-center text-gray-400">
+                      <td colSpan={8} className="py-12 text-center text-zinc-400 dark:text-zinc-500">
                         No items added yet. Scan a tag barcode or select an item above to begin billing.
                       </td>
                     </tr>
@@ -308,15 +315,15 @@ export const PosBillingView: React.FC = () => {
                     selectedItems.map((item, idx) => {
                       const estItem = estimate?.items?.[idx];
                       return (
-                        <tr key={item.id} className="hover:bg-amber-50/20">
+                        <tr key={item.id} className="hover:bg-amber-500/5 dark:hover:bg-white/5 transition-colors">
                           <td className="py-3 px-3">
-                            <p className="font-semibold text-gray-900">{item.name}</p>
-                            <span className="font-mono text-[10px] text-gray-500">{item.sku}</span>
+                            <p className="font-semibold text-zinc-900 dark:text-zinc-100">{item.name}</p>
+                            <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">{item.sku}</span>
                           </td>
                           <td className="py-3 px-3">
-                            <span className="font-semibold text-[#56111C]">{item.purity_karat}</span>
+                            <span className="font-semibold text-amber-700 dark:text-amber-400 font-mono">{item.purity_karat}</span>
                             {item.huid && (
-                              <p className="text-[10px] bg-amber-100 text-amber-800 font-mono px-1 rounded inline-block mt-0.5">
+                              <p className="text-[10px] bg-amber-500/10 text-amber-700 dark:text-amber-300 font-mono px-1.5 py-0.2 rounded border border-amber-500/20 inline-block mt-0.5">
                                 {item.huid}
                               </p>
                             )}
@@ -329,13 +336,13 @@ export const PosBillingView: React.FC = () => {
                           <td className="py-3 px-3 text-right font-mono">
                             ₹{Number(estItem?.making_charges || 0).toFixed(2)}
                           </td>
-                          <td className="py-3 px-3 text-right font-serif font-bold text-gray-900">
+                          <td className="py-3 px-3 text-right font-serif font-bold text-zinc-900 dark:text-zinc-100">
                             ₹{Number(estItem?.item_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </td>
                           <td className="py-3 px-3 text-center">
                             <button
                               onClick={() => removeItem(item.id)}
-                              className="text-red-500 hover:text-red-700 p-1"
+                              className="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-500/10 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -350,7 +357,7 @@ export const PosBillingView: React.FC = () => {
           </div>
 
           {/* Old Gold Purchase / Exchange Accordion */}
-          <div className="bg-white rounded-xl border border-amber-200 shadow-sm p-4">
+          <div className="bg-white dark:bg-[#111118] rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm p-4 transition-colors">
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -359,28 +366,28 @@ export const PosBillingView: React.FC = () => {
                   onChange={(e) => setEnableOldGold(e.target.checked)}
                   className="rounded text-amber-600 focus:ring-amber-500"
                 />
-                <span className="font-serif font-bold text-xs text-[#380810] flex items-center gap-1.5">
-                  <Coins className="w-4 h-4 text-amber-600" /> Customer Old Gold Exchange / Purchase
+                <span className="font-serif font-bold text-xs text-[#200408] dark:text-[#E5C358] flex items-center gap-1.5">
+                  <Coins className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Customer Old Gold Exchange / Purchase
                 </span>
               </label>
 
               {oldGoldItems.length > 0 && (
-                <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-                  Total Offset: ₹{Number(estimate?.old_gold_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                <span className="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20 font-mono">
+                  Offset: ₹{Number(estimate?.old_gold_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </span>
               )}
             </div>
 
             {enableOldGold && (
-              <div className="mt-4 pt-3 border-t border-gray-100 space-y-3">
+              <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-white/5 space-y-3">
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">Purity</label>
+                    <label className="text-[10px] text-zinc-500 dark:text-zinc-400 block mb-1">Purity</label>
                     <select
                       value={oldGoldForm.purity_karat}
                       onChange={(e) => setOldGoldForm({ ...oldGoldForm, purity_karat: e.target.value })}
                       aria-label="Old gold purity karat"
-                      className="w-full bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1.5 text-xs font-medium"
+                      className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-medium text-zinc-800 dark:text-zinc-200"
                     >
                       <option value="22K">22K (916)</option>
                       <option value="18K">18K (750)</option>
@@ -389,36 +396,36 @@ export const PosBillingView: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">Gross Wt (g)</label>
+                    <label className="text-[10px] text-zinc-500 dark:text-zinc-400 block mb-1">Gross Wt (g)</label>
                     <input
                       type="number"
                       step="0.001"
                       placeholder="e.g. 15.500"
                       value={oldGoldForm.gross_weight}
                       onChange={(e) => setOldGoldForm({ ...oldGoldForm, gross_weight: e.target.value })}
-                      className="w-full bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1.5 text-xs font-mono"
+                      className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-mono text-zinc-800 dark:text-zinc-200"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">Stone Deduc (g)</label>
+                    <label className="text-[10px] text-zinc-500 dark:text-zinc-400 block mb-1">Stone Deduc (g)</label>
                     <input
                       type="number"
                       step="0.001"
                       placeholder="0.000"
                       value={oldGoldForm.stone_deduction}
                       onChange={(e) => setOldGoldForm({ ...oldGoldForm, stone_deduction: e.target.value })}
-                      className="w-full bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1.5 text-xs font-mono"
+                      className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-mono text-zinc-800 dark:text-zinc-200"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[10px] text-gray-500 block mb-1">Buy Rate (₹/g)</label>
+                    <label className="text-[10px] text-zinc-500 dark:text-zinc-400 block mb-1">Buy Rate (₹/g)</label>
                     <input
                       type="number"
                       value={oldGoldForm.rate_per_gram}
                       onChange={(e) => setOldGoldForm({ ...oldGoldForm, rate_per_gram: e.target.value })}
-                      className="w-full bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1.5 text-xs font-mono"
+                      className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-mono text-zinc-800 dark:text-zinc-200"
                     />
                   </div>
 
@@ -426,7 +433,7 @@ export const PosBillingView: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleAddOldGold}
-                      className="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded shadow"
+                      className="w-full py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-lg shadow"
                     >
                       + Add Old Gold
                     </button>
@@ -439,9 +446,9 @@ export const PosBillingView: React.FC = () => {
                     {oldGoldItems.map((og, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between text-xs bg-amber-50/60 p-2 rounded border border-amber-200"
+                        className="flex items-center justify-between text-xs bg-amber-500/5 p-2 rounded-xl border border-amber-500/20"
                       >
-                        <span className="font-medium text-gray-700">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">
                           {og.purity_karat} Old Gold: Gross {og.gross_weight}g (Net:{' '}
                           {(Number(og.gross_weight) - Number(og.stone_deduction || 0)).toFixed(3)}g) @ ₹
                           {og.rate_per_gram}/g
@@ -449,7 +456,7 @@ export const PosBillingView: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setOldGoldItems(oldGoldItems.filter((_, i) => i !== idx))}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-rose-500 hover:text-rose-700"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -465,15 +472,15 @@ export const PosBillingView: React.FC = () => {
         {/* Right 1 Col: Customer Selection & Payment Summary */}
         <div className="space-y-4">
           {/* Customer Card */}
-          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+          <div className="bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-serif font-bold text-gray-700 flex items-center gap-1.5">
-                <User className="w-4 h-4 text-amber-600" /> Customer / Patron
+              <span className="text-xs font-serif font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
+                <User className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Customer / Patron
               </span>
               <button
                 type="button"
                 onClick={() => setShowCustModal(true)}
-                className="text-[11px] text-[#56111C] font-semibold hover:underline"
+                className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold hover:underline"
               >
                 + Register New
               </button>
@@ -486,24 +493,24 @@ export const PosBillingView: React.FC = () => {
                 setSelectedCustomer(c || null);
               }}
               aria-label="Select patron or walk-in customer"
-              className="w-full bg-[#FAF8F5] border border-gray-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-amber-600 font-medium"
+              className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500 font-medium"
             >
               <option value="">Walk-in Patron (Cash Counter)</option>
               {customers.map((c) => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.id} className="bg-white dark:bg-[#111118]">
                   {c.name} ({c.phone}) {c.loyalty_tier ? `[${c.loyalty_tier.toUpperCase()}]` : ''}
                 </option>
               ))}
             </select>
 
             {selectedCustomer && (
-              <div className="mt-2.5 p-2 bg-amber-50/50 rounded border border-amber-200/60 text-[11px] space-y-0.5">
-                <p className="font-semibold text-gray-800">{selectedCustomer.name}</p>
-                <p className="text-gray-600">Phone: {selectedCustomer.phone}</p>
+              <div className="mt-2.5 p-2.5 bg-amber-500/5 rounded-xl border border-amber-500/20 text-[11px] space-y-0.5">
+                <p className="font-semibold text-zinc-900 dark:text-zinc-100">{selectedCustomer.name}</p>
+                <p className="text-zinc-500 dark:text-zinc-400">Phone: {selectedCustomer.phone}</p>
                 {selectedCustomer.pan_number && (
-                  <p className="text-gray-600 font-mono">PAN: {selectedCustomer.pan_number}</p>
+                  <p className="text-zinc-500 dark:text-zinc-400 font-mono">PAN: {selectedCustomer.pan_number}</p>
                 )}
-                <p className="text-emerald-700 font-medium">
+                <p className="text-emerald-600 dark:text-emerald-400 font-medium">
                   Loyalty Points: {selectedCustomer.loyalty_points}
                 </p>
               </div>
@@ -511,21 +518,21 @@ export const PosBillingView: React.FC = () => {
           </div>
 
           {/* Financial Calculation Breakdown */}
-          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 className="font-serif font-bold text-xs text-gray-800 pb-2 border-b border-gray-100">
+          <div className="bg-white dark:bg-[#111118] p-4 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm space-y-3 transition-colors">
+            <h3 className="font-serif font-bold text-xs text-zinc-800 dark:text-zinc-200 pb-2 border-b border-zinc-100 dark:border-white/5">
               Billing & Tax Calculation
             </h3>
 
-            <div className="space-y-1.5 text-xs text-gray-600">
+            <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
               <div className="flex justify-between">
                 <span>Items Subtotal:</span>
-                <span className="font-mono font-medium">
+                <span className="font-mono font-medium text-zinc-900 dark:text-zinc-100">
                   ₹{Number(estimate?.subtotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {Number(estimate?.old_gold_total || 0) > 0 && (
-                <div className="flex justify-between text-amber-700 font-medium">
+                <div className="flex justify-between text-amber-700 dark:text-amber-400 font-medium">
                   <span>Old Gold Exchange Offset:</span>
                   <span className="font-mono">
                     -₹{Number(estimate?.old_gold_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -533,35 +540,35 @@ export const PosBillingView: React.FC = () => {
                 </div>
               )}
 
-              <div className="flex justify-between pt-1 border-t border-gray-100 font-medium text-gray-800">
+              <div className="flex justify-between pt-1 border-t border-zinc-100 dark:border-white/5 font-medium text-zinc-800 dark:text-zinc-200">
                 <span>Taxable Base Value:</span>
                 <span className="font-mono">
                   ₹{Number(estimate?.taxable_amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
-              <div className="flex justify-between text-[11px] text-gray-500">
+              <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
                 <span>Central GST (1.50%):</span>
                 <span className="font-mono">
                   ₹{Number(estimate?.gst?.cgst_amount || 0).toFixed(2)}
                 </span>
               </div>
 
-              <div className="flex justify-between text-[11px] text-gray-500">
+              <div className="flex justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
                 <span>State GST (1.50%):</span>
                 <span className="font-mono">
                   ₹{Number(estimate?.gst?.sgst_amount || 0).toFixed(2)}
                 </span>
               </div>
 
-              <div className="flex justify-between text-[11px] text-gray-400">
+              <div className="flex justify-between text-[11px] text-zinc-400">
                 <span>Round Off:</span>
                 <span className="font-mono">
                   {estimate?.round_off || '0.00'}
                 </span>
               </div>
 
-              <div className="flex justify-between pt-2 border-t-2 border-[#56111C] font-serif font-bold text-base text-[#380810]">
+              <div className="flex justify-between pt-2 border-t-2 border-amber-500/40 font-serif font-bold text-base text-[#200408] dark:text-[#E5C358]">
                 <span>Grand Total:</span>
                 <span className="font-mono">
                   ₹{Number(estimate?.grand_total || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -570,8 +577,8 @@ export const PosBillingView: React.FC = () => {
             </div>
 
             {/* Payment Method Splitting */}
-            <div className="pt-3 border-t border-gray-100 space-y-2">
-              <label className="text-xs font-semibold text-gray-700 block">
+            <div className="pt-3 border-t border-zinc-100 dark:border-white/5 space-y-2">
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
                 Payment Collection Mode
               </label>
 
@@ -585,7 +592,7 @@ export const PosBillingView: React.FC = () => {
                       setPayments(updated);
                     }}
                     aria-label="Payment method"
-                    className="w-28 bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1 text-xs"
+                    className="w-28 bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-2 py-1.5 text-xs text-zinc-800 dark:text-zinc-200"
                   >
                     <option value="upi">UPI / QR</option>
                     <option value="cash">Cash</option>
@@ -602,7 +609,7 @@ export const PosBillingView: React.FC = () => {
                       updated[idx].amount = e.target.value;
                       setPayments(updated);
                     }}
-                    className="flex-1 bg-[#FAF8F5] border border-gray-300 rounded px-2 py-1 text-xs font-mono"
+                    className="flex-1 bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-2.5 py-1.5 text-xs font-mono text-zinc-900 dark:text-zinc-100"
                   />
                 </div>
               ))}
@@ -613,7 +620,7 @@ export const PosBillingView: React.FC = () => {
               type="button"
               disabled={isSubmitting || selectedItems.length === 0}
               onClick={handleFinalizeBill}
-              className="w-full py-3 rounded-lg gold-gradient text-[#380810] font-serif font-bold text-sm shadow hover:brightness-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
+              className="w-full py-3 rounded-xl gold-gradient text-[#200408] font-serif font-bold text-sm shadow-md hover:brightness-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
             >
               <CheckCircle2 className="w-5 h-5" />
               {isSubmitting ? 'Posting Financial Voucher...' : 'Complete Sale & Print Tax Invoice'}
@@ -624,59 +631,62 @@ export const PosBillingView: React.FC = () => {
 
       {/* Customer Quick Registration Modal */}
       {showCustModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-serif font-bold text-sm text-[#380810]">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
+              <h3 className="font-serif font-bold text-sm text-[#200408] dark:text-[#E5C358]">
                 Register New Jewellery Patron
               </h3>
-              <button onClick={() => setShowCustModal(false)}>
-                <X className="w-4 h-4 text-gray-500" />
+              <button
+                onClick={() => setShowCustModal(false)}
+                className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleRegisterCustomer} className="space-y-3 text-xs">
               <div>
-                <label className="block text-gray-600 mb-1">Full Name *</label>
+                <label className="block text-zinc-700 dark:text-zinc-300 mb-1">Full Name *</label>
                 <input
                   type="text"
                   required
                   value={newCust.name}
                   onChange={(e) => setNewCust({ ...newCust, name: e.target.value })}
-                  className="w-full border rounded px-3 py-1.5 focus:border-amber-600"
+                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-600 mb-1">Mobile Phone Number *</label>
+                <label className="block text-zinc-700 dark:text-zinc-300 mb-1">Mobile Phone Number *</label>
                 <input
                   type="tel"
                   required
                   placeholder="10-digit mobile"
                   value={newCust.phone}
                   onChange={(e) => setNewCust({ ...newCust, phone: e.target.value })}
-                  className="w-full border rounded px-3 py-1.5 font-mono"
+                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-600 mb-1">PAN Card Number (Statutory for &gt;₹2 Lakh)</label>
+                <label className="block text-zinc-700 dark:text-zinc-300 mb-1">PAN Card Number (Statutory for &gt;₹2 Lakh)</label>
                 <input
                   type="text"
                   placeholder="e.g. ABCDE1234F"
                   value={newCust.pan_number}
                   onChange={(e) => setNewCust({ ...newCust, pan_number: e.target.value.toUpperCase() })}
-                  className="w-full border rounded px-3 py-1.5 font-mono uppercase"
+                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 font-mono uppercase text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-600 mb-1">City</label>
+                <label className="block text-zinc-700 dark:text-zinc-300 mb-1">City</label>
                 <input
                   type="text"
                   value={newCust.city}
                   onChange={(e) => setNewCust({ ...newCust, city: e.target.value })}
-                  className="w-full border rounded px-3 py-1.5"
+                  className="w-full bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl px-3 py-2 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
@@ -684,13 +694,13 @@ export const PosBillingView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowCustModal(false)}
-                  className="px-3 py-1.5 border rounded text-gray-600"
+                  className="px-3 py-2 border border-zinc-200 dark:border-white/10 rounded-xl text-zinc-600 dark:text-zinc-400"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-[#56111C] text-amber-100 font-semibold rounded shadow"
+                  className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 border border-amber-500/30 font-bold rounded-xl shadow"
                 >
                   Save Customer
                 </button>
@@ -702,42 +712,45 @@ export const PosBillingView: React.FC = () => {
 
       {/* Tax Invoice Success / Print Modal */}
       {completedInvoice && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center gap-2 text-emerald-700">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/10 pb-3">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                 <CheckCircle2 className="w-5 h-5" />
-                <h3 className="font-serif font-bold text-base text-gray-800">
-                  Sale Finalized & Voucher Balanced!
+                <h3 className="font-serif font-bold text-base text-zinc-900 dark:text-zinc-100">
+                  Sale Finalized & Ledger Balanced!
                 </h3>
               </div>
-              <button onClick={() => setCompletedInvoice(null)}>
-                <X className="w-4 h-4 text-gray-500" />
+              <button
+                onClick={() => setCompletedInvoice(null)}
+                className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Printable Invoice Sheet */}
-            <div className="border border-gray-300 p-6 rounded-lg bg-[#FAF8F5] text-xs space-y-4 font-sans" id="printable-invoice">
+            <div className="border border-zinc-200 dark:border-white/10 p-6 rounded-xl bg-zinc-50 dark:bg-black/30 text-xs space-y-4 font-sans text-zinc-800 dark:text-zinc-200" id="printable-invoice">
               {/* Header */}
-              <div className="text-center pb-3 border-b border-gray-300">
-                <h2 className="font-serif font-bold text-xl text-[#380810] tracking-wide">
+              <div className="text-center pb-3 border-b border-zinc-200 dark:border-white/10">
+                <h2 className="font-serif font-bold text-xl text-[#200408] dark:text-[#E5C358] tracking-wide">
                   CHANDARKANT JEWELLERS PVT LTD
                 </h2>
-                <p className="text-[11px] text-gray-600">
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
                   Ghanshyam Nagar, Varachha Main Road, Surat, Gujarat - 395006
                 </p>
-                <p className="text-[11px] text-gray-600 font-mono">
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
                   GSTIN: 24AAACC1234M1Z8 | BIS Hallmark License: HM/SUR/2026/01
                 </p>
-                <div className="inline-block mt-2 font-bold px-3 py-0.5 bg-amber-200/80 text-[#380810] rounded text-[10px] tracking-widest uppercase">
+                <div className="inline-block mt-2 font-bold px-3 py-0.5 bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/25 rounded text-[10px] tracking-widest uppercase">
                   TAX INVOICE (RULE 46 OF CGST RULES)
                 </div>
               </div>
 
               {/* Meta details */}
-              <div className="grid grid-cols-2 gap-4 text-gray-700">
+              <div className="grid grid-cols-2 gap-4 text-zinc-700 dark:text-zinc-300">
                 <div>
-                  <p><strong>Invoice No:</strong> <span className="font-mono text-[#56111C] font-semibold">{completedInvoice.invoice_number}</span></p>
+                  <p><strong>Invoice No:</strong> <span className="font-mono text-[#56111C] dark:text-amber-400 font-semibold">{completedInvoice.invoice_number}</span></p>
                   <p><strong>Date:</strong> {completedInvoice.invoice_date}</p>
                   <p><strong>Place of Supply:</strong> Gujarat (24)</p>
                 </div>
@@ -749,29 +762,29 @@ export const PosBillingView: React.FC = () => {
               </div>
 
               {/* Line Items */}
-              <table className="w-full text-left border-collapse border border-gray-300 text-[11px]">
+              <table className="w-full text-left border-collapse border border-zinc-200 dark:border-white/10 text-[11px]">
                 <thead>
-                  <tr className="bg-gray-200/70 text-gray-700">
-                    <th className="border border-gray-300 p-1.5">Description & HUID</th>
-                    <th className="border border-gray-300 p-1.5 text-right">Gross</th>
-                    <th className="border border-gray-300 p-1.5 text-right">Net</th>
-                    <th className="border border-gray-300 p-1.5 text-right">Rate/g</th>
-                    <th className="border border-gray-300 p-1.5 text-right">Making</th>
-                    <th className="border border-gray-300 p-1.5 text-right">Amount (₹)</th>
+                  <tr className="bg-zinc-200/70 dark:bg-white/10 text-zinc-800 dark:text-zinc-200">
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5">Description & HUID</th>
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Gross</th>
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Net</th>
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Rate/g</th>
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Making</th>
+                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Amount (₹)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {completedInvoice.items?.map((it: any) => (
                     <tr key={it.id}>
-                      <td className="border border-gray-300 p-1.5">
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5">
                         {it.item_name}
-                        {it.huid && <span className="text-[9px] font-mono block text-gray-500">HUID: {it.huid}</span>}
+                        {it.huid && <span className="text-[9px] font-mono block text-amber-600 dark:text-amber-400">HUID: {it.huid}</span>}
                       </td>
-                      <td className="border border-gray-300 p-1.5 text-right font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
-                      <td className="border border-gray-300 p-1.5 text-right font-mono">{Number(it.net_weight).toFixed(3)}g</td>
-                      <td className="border border-gray-300 p-1.5 text-right font-mono">₹{Number(it.metal_rate_applied).toFixed(0)}</td>
-                      <td className="border border-gray-300 p-1.5 text-right font-mono">₹{Number(it.making_charges).toFixed(2)}</td>
-                      <td className="border border-gray-300 p-1.5 text-right font-mono font-semibold">
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">{Number(it.net_weight).toFixed(3)}g</td>
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">₹{Number(it.metal_rate_applied).toFixed(0)}</td>
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">₹{Number(it.making_charges).toFixed(2)}</td>
+                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono font-semibold">
                         ₹{Number(it.item_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                       </td>
                     </tr>
@@ -794,7 +807,7 @@ export const PosBillingView: React.FC = () => {
                     <span>SGST (1.50%):</span>
                     <span className="font-mono">₹{Number(completedInvoice.sgst_amount).toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between border-t border-gray-300 pt-1 font-bold text-sm text-[#380810]">
+                  <div className="flex justify-between border-t border-zinc-200 dark:border-white/10 pt-1 font-bold text-sm text-[#200408] dark:text-[#E5C358]">
                     <span>Grand Total:</span>
                     <span className="font-mono">₹{Number(completedInvoice.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                   </div>
@@ -802,30 +815,39 @@ export const PosBillingView: React.FC = () => {
               </div>
 
               {/* Footer Declaration */}
-              <div className="pt-4 border-t border-gray-300 flex justify-between items-end text-[10px] text-gray-500">
+              <div className="pt-4 border-t border-zinc-200 dark:border-white/10 flex justify-between items-end text-[10px] text-zinc-500">
                 <div>
                   <p>Certified that the particulars given above are true and correct.</p>
                   <p>All gold items hallmarked with 6-digit BIS HUID.</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-32 border-b border-gray-400 mb-1"></div>
+                  <div className="w-32 border-b border-zinc-400 mb-1"></div>
                   <p>Authorized Signatory</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-[#56111C] hover:bg-[#380810] text-amber-100 font-semibold text-xs rounded-lg shadow flex items-center gap-2"
+            <div className="flex flex-wrap items-center justify-end gap-2.5 pt-2">
+              <a
+                href={`http://127.0.0.1:8000/api/v1/pos/invoices/${completedInvoice.id}/print?format=a4`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 bg-[#200408] dark:bg-amber-500/20 text-amber-200 dark:text-amber-300 font-bold text-xs rounded-xl shadow border border-amber-500/30 flex items-center gap-2 hover:brightness-110"
               >
-                <Printer className="w-4 h-4" /> Print Tax Invoice (A4)
-              </button>
+                <Printer className="w-4 h-4" /> Print A4 Tax Invoice
+              </a>
+              <a
+                href={`http://127.0.0.1:8000/api/v1/pos/invoices/${completedInvoice.id}/print?format=thermal`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 border border-zinc-300 dark:border-white/20 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 font-semibold text-xs rounded-xl flex items-center gap-2"
+              >
+                <Printer className="w-4 h-4" /> Print 80mm Thermal Slip
+              </a>
               <button
                 type="button"
                 onClick={() => setCompletedInvoice(null)}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-semibold rounded-lg"
+                className="px-4 py-2 bg-zinc-200 dark:bg-white/10 hover:bg-zinc-300 dark:hover:bg-white/15 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl"
               >
                 Done
               </button>
