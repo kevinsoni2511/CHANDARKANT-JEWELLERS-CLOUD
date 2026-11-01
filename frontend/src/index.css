@@ -146,3 +146,70 @@
   border-color: rgba(246, 245, 241, 0.15);
   color: #A6AAB6;
 }
+
+/* Dedicated Professional Print & PDF Stylesheet */
+@media print {
+  @page {
+    size: auto;
+    margin: 10mm;
+  }
+
+  /* Hide entire application navigation & chrome */
+  header,
+  aside,
+  nav,
+  .no-print,
+  [data-no-print],
+  button,
+  input,
+  select,
+  .breadcrumbs {
+    display: none !important;
+  }
+
+  /* Unlock layout heights and overflow for natural multi-page pagination */
+  html,
+  body,
+  #root,
+  .h-screen,
+  .overflow-hidden,
+  .overflow-y-auto,
+  .min-h-screen {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    position: static !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Clean print surface colors */
+  * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Clean table borders and pagination avoidance */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
+  th, td {
+    border: 1px solid #d1d5db !important;
+    color: #000000 !important;
+    background: transparent !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  th {
+    background-color: #f3f4f6 !important;
+    font-weight: 700 !important;
+  }
+}
+

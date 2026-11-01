@@ -158,7 +158,86 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   const handlePrint = () => {
-    window.print();
+    const printWindow = window.open('', '_blank', 'width=1000,height=800');
+    if (!printWindow) {
+      window.print();
+      return;
+    }
+    const visibleColDefs = columns.filter((c) => visibleColumns[c.key]);
+    const headersHtml = visibleColDefs
+      .map(
+        (col) =>
+          `<th style="padding: 8px 10px; border: 1px solid #d1d5db; background: #f3f4f6; text-align: ${
+            col.align || 'left'
+          }; font-size: 11px; font-weight: 700;">${col.header}</th>`
+      )
+      .join('');
+
+    const rowsHtml = sortedData
+      .map((item) => {
+        const cells = visibleColDefs
+          .map((col) => {
+            let val = item[col.key];
+            if (typeof val === 'object' && val !== null) {
+              val = Object.values(val).join(' ');
+            }
+            return `<td style="padding: 7px 10px; border: 1px solid #e5e7eb; text-align: ${
+              col.align || 'left'
+            }; font-size: 11px;">${val !== undefined && val !== null ? val : '-'}</td>`;
+          })
+          .join('');
+        return `<tr>${cells}</tr>`;
+      })
+      .join('');
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8"/>
+          <title>${title || 'Export'} - Chandarkant Jewellers Cloud</title>
+          <style>
+            @page { size: A4 landscape; margin: 10mm; }
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111; margin: 0; padding: 20px; font-size: 12px; }
+            * { box-sizing: border-box; }
+            .header-bar { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #C9A34A; padding-bottom: 10px; margin-bottom: 12px; }
+            .brand-name { font-size: 16px; font-weight: 800; color: #111318; font-family: serif; letter-spacing: 0.5px; }
+            .report-title { font-size: 13px; font-weight: 600; color: #C9A34A; margin-top: 2px; }
+            .meta-text { font-size: 10px; color: #6b7280; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            tr { page-break-inside: avoid; break-inside: avoid; }
+            @media print {
+              body { padding: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header-bar">
+            <div>
+              <div class="brand-name">CHANDARKANT JEWELLERS CLOUD</div>
+              <div class="report-title">${title || 'Data Register'}</div>
+              ${subtitle ? `<div style="font-size: 10px; color: #6b7280; margin-top: 2px;">${subtitle}</div>` : ''}
+            </div>
+            <div class="meta-text" style="text-align: right;">
+              <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+              <div><strong>Total Records:</strong> ${sortedData.length}</div>
+            </div>
+          </div>
+          <table>
+            <thead><tr>${headersHtml}</tr></thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+          <script>
+            window.onload = function() {
+              window.focus();
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   const activeCols = columns.filter((c) => visibleColumns[c.key]);
