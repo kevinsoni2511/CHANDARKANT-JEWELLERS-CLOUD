@@ -15,7 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 // Public Endpoints
 Route::prefix('v1')->group(function () {
-    Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::get('/auth/login', function () {
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The login route requires an HTTP POST request with email and password.',
+            ], 405);
+        }
+        return redirect(env('FRONTEND_URL', 'http://127.0.0.1:5174/login'));
+    });
 
     // Authenticated Endpoints
     Route::middleware(['auth:sanctum', TenantMiddleware::class])->group(function () {
