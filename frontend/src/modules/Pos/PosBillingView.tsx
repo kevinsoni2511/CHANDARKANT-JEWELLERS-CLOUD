@@ -13,6 +13,7 @@ import {
   X,
   FileText,
   User,
+  Gem,
 } from 'lucide-react';
 import { InventoryItem, Customer } from '../../types';
 
@@ -792,100 +793,137 @@ export const PosBillingView: React.FC = () => {
               </button>
             </div>
 
-            {/* Printable Invoice Sheet */}
-            <div className="border border-[#E3DFD7] dark:border-white/10 p-6 rounded-xl bg-[#F6F5F1] dark:bg-[#111318] text-xs space-y-4 font-sans text-[#111318] dark:text-[#F6F5F1]" id="printable-invoice">
-              {/* Header */}
-              <div className="text-center pb-3 border-b border-[#E3DFD7] dark:border-white/10">
-                <h2 className="font-serif font-bold text-xl text-[#C9A34A] tracking-wide">
-                  CHANDARKANT JEWELLERS PVT LTD
-                </h2>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                  Ghanshyam Nagar, Varachha Main Road, Surat, Gujarat - 395006
-                </p>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
-                  GSTIN: 24AAACC1234M1Z8 | BIS Hallmark License: HM/SUR/2026/01
-                </p>
-                <div className="inline-block mt-2 font-bold px-3 py-0.5 bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/25 rounded text-[10px] tracking-widest uppercase">
-                  TAX INVOICE (RULE 46 OF CGST RULES)
+            {/* Printable Luxury Tax Invoice Sheet */}
+            <div
+              className="bg-white text-zinc-900 p-2 rounded-2xl shadow-xl border-2 border-[#C9A34A]/50 select-text"
+              id="printable-invoice"
+            >
+              <div className="border border-[#C9A34A]/30 rounded-xl p-5 sm:p-6 space-y-4 bg-white relative overflow-hidden">
+                {/* Subtle Luxury Diamond Watermark Insignia */}
+                <div className="absolute right-4 top-4 opacity-5 pointer-events-none">
+                  <Gem className="w-44 h-44 text-[#C9A34A]" />
                 </div>
-              </div>
 
-              {/* Meta details */}
-              <div className="grid grid-cols-2 gap-4 text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <p><strong>Invoice No:</strong> <span className="font-mono text-[#C9A34A] font-semibold">{completedInvoice.invoice_number}</span></p>
-                  <p><strong>Date:</strong> {completedInvoice.invoice_date}</p>
-                  <p><strong>Place of Supply:</strong> Gujarat (24)</p>
+                {/* Regal Letterhead Header Frame */}
+                <div className="text-center pb-4 border-b-2 border-[#C9A34A]/40 relative">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <div className="w-7 h-7 rounded-lg gold-gradient flex items-center justify-center text-[#111318] shadow-sm">
+                      <Gem className="w-4 h-4 text-[#111318]" />
+                    </div>
+                    <h2 className="font-serif font-black text-xl sm:text-2xl text-[#111318] tracking-wider">
+                      CHANDARKANT JEWELLERS PVT LTD
+                    </h2>
+                  </div>
+                  <p className="text-[11px] text-zinc-600 font-medium">
+                    Ghanshyam Nagar, Varachha Main Road, Surat, Gujarat - 395006 | Phone: +91 261 2548900
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] text-zinc-500 font-mono mt-1">
+                    <span className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200">
+                      <strong>GSTIN:</strong> 24AAACC1234M1Z8
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-zinc-100 border border-zinc-200">
+                      <strong>PAN:</strong> AAACC1234M
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold">
+                      BIS Hallmark License: HM/SUR/2026/01
+                    </span>
+                  </div>
+                  <div className="inline-block mt-2.5 font-bold px-3 py-1 bg-gradient-to-r from-amber-50 via-amber-100 to-amber-50 text-amber-900 border border-amber-300 rounded-md text-[10px] tracking-widest uppercase shadow-2xs">
+                    TAX INVOICE (RULE 46 OF CGST RULES, 2017) &bull; ORIGINAL FOR RECIPIENT
+                  </div>
                 </div>
-                <div>
-                  <p><strong>Billed To:</strong> {completedInvoice.customer?.name || 'Walk-in Patron'}</p>
-                  {completedInvoice.customer?.phone && <p><strong>Mobile:</strong> {completedInvoice.customer.phone}</p>}
-                  {completedInvoice.customer?.pan_number && <p><strong>PAN:</strong> {completedInvoice.customer.pan_number}</p>}
-                </div>
-              </div>
 
-              {/* Line Items */}
-              <table className="w-full text-left border-collapse border border-zinc-200 dark:border-white/10 text-[11px]">
-                <thead>
-                  <tr className="bg-zinc-200/70 dark:bg-white/10 text-zinc-800 dark:text-zinc-200">
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5">Description & HUID</th>
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Gross</th>
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Net</th>
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Rate/g</th>
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Making</th>
-                    <th className="border border-zinc-200 dark:border-white/10 p-1.5 text-right">Amount (₹)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {completedInvoice.items?.map((it: any) => (
-                    <tr key={it.id}>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5">
-                        {it.item_name}
-                        {it.huid && <span className="text-[9px] font-mono block text-amber-600 dark:text-amber-400">HUID: {it.huid}</span>}
-                      </td>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">{Number(it.net_weight).toFixed(3)}g</td>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">₹{Number(it.metal_rate_applied).toFixed(0)}</td>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono">₹{Number(it.making_charges).toFixed(2)}</td>
-                      <td className="border border-zinc-200 dark:border-white/10 p-1.5 text-right font-mono font-semibold">
-                        ₹{Number(it.item_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                      </td>
+                {/* Meta details Grid Frame */}
+                <div className="grid grid-cols-2 gap-4 text-xs bg-[#FAF9F5] p-3 rounded-lg border border-[#E3DFD7]">
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] uppercase font-bold text-amber-800 tracking-wider">Billed To (Patron):</p>
+                    <p className="font-bold text-sm text-zinc-900">{completedInvoice.customer?.name || 'Walk-in Patron'}</p>
+                    {completedInvoice.customer?.phone && <p className="text-zinc-600"><strong>Mobile:</strong> {completedInvoice.customer.phone}</p>}
+                    {completedInvoice.customer?.pan_number && <p className="text-zinc-600 font-mono"><strong>PAN:</strong> {completedInvoice.customer.pan_number}</p>}
+                    <p className="text-zinc-600"><strong>Place of Supply:</strong> Gujarat (State Code: 24)</p>
+                  </div>
+                  <div className="space-y-0.5 text-right font-mono text-[11px]">
+                    <p><span className="text-zinc-500 font-sans">Invoice No:</span> <strong className="text-amber-800 text-xs">{completedInvoice.invoice_number}</strong></p>
+                    <p><span className="text-zinc-500 font-sans">Invoice Date:</span> <span className="text-zinc-800 font-bold">{completedInvoice.invoice_date}</span></p>
+                    <p><span className="text-zinc-500 font-sans">POS Terminal:</span> <span className="text-zinc-800">POS-SRT-01</span></p>
+                    <p><span className="text-zinc-500 font-sans">Reverse Charge:</span> <span className="text-zinc-800">No</span></p>
+                  </div>
+                </div>
+
+                {/* Line Items Table Frame */}
+                <table className="w-full text-left border-collapse border border-zinc-300 text-xs">
+                  <thead>
+                    <tr className="bg-[#FAF8F5] text-amber-950 font-bold text-[11px]">
+                      <th className="border border-zinc-300 p-2">Item Description & 6-Digit HUID</th>
+                      <th className="border border-zinc-300 p-2 text-right">Gross Wt</th>
+                      <th className="border border-zinc-300 p-2 text-right">Net Wt</th>
+                      <th className="border border-zinc-300 p-2 text-right">Rate/g</th>
+                      <th className="border border-zinc-300 p-2 text-right">Making</th>
+                      <th className="border border-zinc-300 p-2 text-right">Taxable Value</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {completedInvoice.items?.map((it: any) => (
+                      <tr key={it.id} className="hover:bg-amber-50/20">
+                        <td className="border border-zinc-300 p-2">
+                          <strong className="text-zinc-900">{it.item_name}</strong>
+                          {it.huid && (
+                            <span className="text-[10px] font-mono block text-amber-800 font-semibold mt-0.5">
+                              BIS HUID: {it.huid}
+                            </span>
+                          )}
+                        </td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono font-semibold">{Number(it.net_weight).toFixed(3)}g</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono">₹{Number(it.metal_rate_applied).toFixed(2)}</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono">₹{Number(it.making_charges).toFixed(2)}</td>
+                        <td className="border border-zinc-300 p-2 text-right font-mono font-bold text-zinc-900">
+                          ₹{Number(it.item_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-              {/* Totals */}
-              <div className="flex justify-end">
-                <div className="w-64 space-y-1 text-[11px]">
-                  <div className="flex justify-between">
-                    <span>Taxable Base:</span>
-                    <span className="font-mono">₹{Number(completedInvoice.taxable_amount).toFixed(2)}</span>
+                {/* Totals & Tax Breakdown Frame */}
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pt-1">
+                  <div className="text-[10px] text-zinc-600 space-y-1 bg-zinc-50 p-3 rounded-lg border border-zinc-200 w-full sm:max-w-xs">
+                    <p className="font-bold text-zinc-800 uppercase tracking-wide">Statutory Hallmarking Note:</p>
+                    <p>1. Gold purity and fineness verified per IS 1417:2019 standards.</p>
+                    <p>2. Hallmark Unique Identifier (HUID) verifiable on BIS Care Mobile App.</p>
+                    <p>3. 100% buyback guarantee on gold content at prevailing market rates.</p>
                   </div>
-                  <div className="flex justify-between">
-                    <span>CGST (1.50%):</span>
-                    <span className="font-mono">₹{Number(completedInvoice.cgst_amount).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>SGST (1.50%):</span>
-                    <span className="font-mono">₹{Number(completedInvoice.sgst_amount).toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between border-t border-[#E3DFD7] dark:border-white/10 pt-1 font-bold text-sm text-[#C9A34A]">
-                    <span>Grand Total:</span>
-                    <span className="font-mono">₹{Number(completedInvoice.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+
+                  <div className="w-full sm:w-72 space-y-1.5 text-xs bg-[#FAF9F5] p-3 rounded-lg border border-[#E3DFD7]">
+                    <div className="flex justify-between text-zinc-700">
+                      <span>Taxable Value:</span>
+                      <span className="font-mono font-semibold">₹{Number(completedInvoice.taxable_amount).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-zinc-600">
+                      <span>CGST (1.50%):</span>
+                      <span className="font-mono">₹{Number(completedInvoice.cgst_amount).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-zinc-600">
+                      <span>SGST (1.50%):</span>
+                      <span className="font-mono">₹{Number(completedInvoice.sgst_amount).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between border-t-2 border-amber-400 pt-1.5 font-bold text-base text-amber-900">
+                      <span>Grand Total:</span>
+                      <span className="font-mono">₹{Number(completedInvoice.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Footer Declaration */}
-              <div className="pt-4 border-t border-[#E3DFD7] dark:border-white/10 flex justify-between items-end text-[10px] text-[#8E929E]">
-                <div>
-                  <p>Certified that the particulars given above are true and correct.</p>
-                  <p>All gold items hallmarked with 6-digit BIS HUID.</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-32 border-b border-zinc-400 mb-1"></div>
-                  <p>Authorized Signatory</p>
+                {/* Footer Declaration & Stamp Frame */}
+                <div className="pt-4 border-t-2 border-[#C9A34A]/40 flex justify-between items-end text-[10px] text-zinc-600">
+                  <div>
+                    <p className="font-semibold text-zinc-800">For CHANDARKANT JEWELLERS PVT LTD</p>
+                    <p className="text-zinc-500 mt-0.5">Certified true and correct tax invoice under GST rules.</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-36 border-b border-zinc-400 mb-1"></div>
+                    <p className="font-semibold text-zinc-700">Authorized Signatory / Cashier</p>
+                  </div>
                 </div>
               </div>
             </div>

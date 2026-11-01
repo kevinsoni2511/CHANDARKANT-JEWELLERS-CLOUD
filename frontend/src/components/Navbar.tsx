@@ -51,27 +51,31 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="h-16 bg-[#FFFFFF] dark:bg-[#111318] text-[#111318] dark:text-[#F6F5F1] border-b border-[#E3DFD7] dark:border-white/10 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-40 backdrop-blur-md shadow-sm dark:shadow-lg transition-colors">
-      {/* Brand & Ticker */}
-      <div className="flex items-center gap-4 lg:gap-6">
-        <div className="flex items-center gap-2.5 group cursor-pointer" onClick={() => (window.location.href = '/')}>
-          <div className="w-9 h-9 rounded-xl gold-gradient flex items-center justify-center shadow-md text-[#111318] transform group-hover:scale-105 transition-transform duration-200">
-            <Gem className="w-5 h-5 text-[#111318]" />
+      {/* Mobile Brand Logo (Desktop brand is in Sidebar) & Desktop Live Bullion Ticker */}
+      <div className="flex items-center gap-3 lg:gap-4 shrink-0">
+        {/* Mobile Brand Logo */}
+        <div
+          className="flex md:hidden items-center gap-2 group cursor-pointer"
+          onClick={() => (window.location.href = '/')}
+        >
+          <div className="w-8 h-8 rounded-xl gold-gradient flex items-center justify-center shadow-md text-[#111318]">
+            <Gem className="w-4 h-4 text-[#111318]" />
           </div>
           <div>
-            <h1 className="font-serif font-bold text-base sm:text-lg tracking-wider text-[#C9A34A] leading-tight">
+            <h1 className="font-serif font-bold text-sm tracking-wider text-[#C9A34A] leading-tight">
               CHANDARKANT
             </h1>
-            <p className="text-[9px] sm:text-[10px] tracking-widest uppercase text-[#5A5E6B] dark:text-[#8E929E] font-sans font-medium">
+            <p className="text-[8px] tracking-widest uppercase text-[#5A5E6B] dark:text-[#8E929E] font-sans font-medium">
               Jewellers Cloud
             </p>
           </div>
         </div>
 
-        {/* Live Metal Rate Ticker Bar (Desktop 2xl) */}
-        <div className="hidden 2xl:flex items-center gap-2.5 bg-[#111318]/5 dark:bg-white/5 px-3 py-1.5 rounded-full border border-[#C9A34A]/25 dark:border-white/10 text-xs shrink-0">
+        {/* Live Metal Rate Ticker Bar (Desktop md and up) */}
+        <div className="hidden md:flex items-center gap-2.5 bg-[#111318]/5 dark:bg-white/5 px-3 py-1.5 rounded-full border border-[#C9A34A]/25 dark:border-white/10 text-xs shrink-0">
           <span className="flex items-center gap-1.5 text-[#C9A34A] font-medium">
             <span className="w-2 h-2 rounded-full bg-[#35BFA0] animate-pulse" />
-            <TrendingUp className="w-3.5 h-3.5" /> Bullion:
+            <TrendingUp className="w-3.5 h-3.5 text-[#C9A34A]" /> Bullion:
           </span>
           <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">
             24K: <strong className="text-[#C9A34A] font-mono">₹{rate24K}</strong>

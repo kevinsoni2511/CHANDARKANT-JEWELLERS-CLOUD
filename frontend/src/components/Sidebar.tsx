@@ -92,23 +92,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
-      {/* Top Header with Role & Collapse Button */}
-      <div className="p-3 border-b border-[#E3DFD7] dark:border-white/5 flex items-center justify-between shrink-0 h-14">
+      {/* Top Header with Brand & Collapse Button */}
+      <div className="px-3.5 border-b border-[#E3DFD7] dark:border-white/5 flex items-center justify-between shrink-0 h-16">
         {!isCollapsed ? (
           <>
-            <div className="flex items-center gap-2 overflow-hidden pl-2">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-[#C9A34A] font-mono">
-                Role:
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-bold uppercase tracking-wider border border-[#C9A34A]/25 truncate">
-                {roleLabelMap[role] || role}
-              </span>
+            <div
+              className="flex items-center gap-2.5 overflow-hidden cursor-pointer group"
+              onClick={() => (window.location.href = '/')}
+            >
+              <div className="w-9 h-9 rounded-xl gold-gradient flex items-center justify-center shadow-md text-[#111318] shrink-0 group-hover:scale-105 transition-transform duration-200">
+                <Gem className="w-5 h-5 text-[#111318]" />
+              </div>
+              <div className="truncate">
+                <h1 className="font-serif font-bold text-sm tracking-wider text-[#C9A34A] leading-tight truncate">
+                  CHANDARKANT
+                </h1>
+                <p className="text-[9px] tracking-widest uppercase text-[#5A5E6B] dark:text-[#8E929E] font-mono truncate">
+                  Jewellers Cloud
+                </p>
+              </div>
             </div>
 
             <button
               onClick={toggleCollapse}
               title="Collapse sidebar (Ctrl + B)"
-              className="p-1.5 rounded-lg text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#111318]/5 dark:hover:bg-white/5 transition-colors cursor-pointer shrink-0"
             >
               <PanelLeftClose className="w-4 h-4" />
             </button>
@@ -117,12 +125,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="relative group w-full flex justify-center">
             <button
               onClick={toggleCollapse}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-colors cursor-pointer"
+              className="w-10 h-10 rounded-xl gold-gradient flex items-center justify-center shadow-md text-[#111318] cursor-pointer hover:scale-105 transition-transform duration-200"
             >
-              <PanelLeftOpen className="w-4 h-4 text-[#C9A34A]" />
+              <Gem className="w-5 h-5 text-[#111318]" />
             </button>
             <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 flex items-center gap-2">
-              <span>Expand sidebar</span>
+              <span>Chandarkant Jewellers</span>
               <span className="kbd-badge text-[9px]">Ctrl+B</span>
             </div>
           </div>
@@ -220,24 +228,42 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer System Status */}
+      {/* Footer System Status & Role */}
       <div className="p-3 border-t border-[#E3DFD7] dark:border-white/5 bg-[#111318]/5 dark:bg-white/5 shrink-0">
         {!isCollapsed ? (
-          <div className="space-y-1 text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
-            <div className="flex items-center gap-1.5 text-[#35BFA0]">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#35BFA0] shrink-0" />
-              <span className="truncate font-medium">BIS HUID & GST Ready</span>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-[10px]">
+              <span className="font-semibold uppercase tracking-wider text-[#C9A34A] font-mono">
+                Role:
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-[#C9A34A]/15 text-[#C9A34A] font-bold uppercase tracking-wider border border-[#C9A34A]/25">
+                {roleLabelMap[role] || role}
+              </span>
             </div>
-            <p className="text-[10px] text-[#8E929E] truncate">
-              Store: {user?.branch?.name || 'Surat Flagship'}
-            </p>
+            <div className="pt-1.5 border-t border-[#E3DFD7]/60 dark:border-white/5 space-y-0.5 text-[11px] text-[#5A5E6B] dark:text-[#A6AAB6]">
+              <div className="flex items-center gap-1.5 text-[#35BFA0]">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#35BFA0] shrink-0" />
+                <span className="truncate font-medium text-[11px]">BIS HUID & GST Ready</span>
+              </div>
+              <p className="text-[10px] text-[#8E929E] truncate">
+                Store: {user?.branch?.name || 'Surat Flagship'}
+              </p>
+            </div>
           </div>
         ) : (
           <div className="relative group flex justify-center py-1">
             <ShieldCheck className="w-4 h-4 text-[#35BFA0] cursor-pointer" />
-            <div className="absolute left-full bottom-0 ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
-              <span className="text-[#35BFA0] font-bold">BIS HUID & GST Ready</span>
-              <p className="text-[10px] text-[#8E929E]">Store: {user?.branch?.name || 'Surat Flagship'}</p>
+            <div className="absolute left-full bottom-0 ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 space-y-0.5">
+              <div className="flex items-center gap-1.5 text-[#35BFA0] font-bold text-xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#35BFA0]" />
+                <span>BIS HUID & GST Ready</span>
+              </div>
+              <p className="text-[10px] text-[#C9A34A] font-mono font-semibold">
+                Role: {roleLabelMap[role] || role}
+              </p>
+              <p className="text-[10px] text-[#8E929E]">
+                Store: {user?.branch?.name || 'Surat Flagship'}
+              </p>
             </div>
           </div>
         )}

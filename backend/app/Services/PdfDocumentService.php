@@ -106,114 +106,248 @@ class PdfDocumentService
             <meta charset='utf-8'/>
             <title>{$l['title']} - {$invoice->invoice_number}</title>
             <style>
-                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1F2937; margin:0; padding:24px; background:#fff; font-size:12px; }
-                .invoice-box { max-width:800px; margin:auto; border:1px solid #E5E7EB; padding:24px; border-radius:8px; }
-                .header-table { width:100%; border-bottom:2px solid #56111C; padding-bottom:16px; margin-bottom:16px; }
-                .brand-title { font-size:24px; font-weight:bold; color:#380810; font-family:serif; letter-spacing:1px; }
-                .tax-title { font-size:16px; font-weight:bold; color:#D4AF37; text-align:right; }
-                .items-table { width:100%; border-collapse:collapse; margin-top:16px; font-size:11px; }
-                .items-table th { background:#FAF8F5; color:#56111C; padding:8px; border-bottom:2px solid #D4AF37; text-align:left; }
-                .totals-box { margin-top:16px; width:45%; margin-left:auto; font-size:12px; }
-                .totals-box table { width:100%; }
-                .totals-box td { padding:4px 0; }
-                .grand-total-row { font-size:14px; font-weight:bold; color:#380810; border-top:2px solid #56111C; border-bottom:2px solid #56111C; }
-                .footer-box { margin-top:32px; border-top:1px solid #E5E7EB; padding-top:16px; display:flex; justify-content:space-between; align-items:flex-end; }
+                @page {
+                    size: A4 portrait;
+                    margin: 10mm;
+                }
+                * { box-sizing: border-box; }
+                body { 
+                    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; 
+                    color: #111318; 
+                    margin: 0; 
+                    padding: 12px; 
+                    background: #F6F5F1; 
+                    font-size: 11px; 
+                }
+                .invoice-outer-frame {
+                    background: #FFFFFF;
+                    border: 2px solid #C9A34A;
+                    border-radius: 12px;
+                    padding: 6px;
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+                    max-width: 820px;
+                    margin: 0 auto;
+                }
+                .invoice-inner-frame {
+                    border: 1px solid rgba(201, 163, 74, 0.4);
+                    border-radius: 8px;
+                    padding: 22px;
+                    position: relative;
+                }
+                .header-table { 
+                    width: 100%; 
+                    border-bottom: 2px solid #C9A34A; 
+                    padding-bottom: 14px; 
+                    margin-bottom: 14px; 
+                }
+                .brand-badge {
+                    display: inline-block;
+                    background: linear-gradient(135deg, #DFBE6F 0%, #C9A34A 100%);
+                    color: #111318;
+                    font-weight: 900;
+                    font-size: 11px;
+                    padding: 2px 7px;
+                    border-radius: 4px;
+                    margin-right: 6px;
+                }
+                .brand-title { 
+                    font-size: 22px; 
+                    font-weight: 800; 
+                    color: #111318; 
+                    font-family: Georgia, 'Times New Roman', serif; 
+                    letter-spacing: 0.5px; 
+                }
+                .tax-title { 
+                    font-size: 14px; 
+                    font-weight: 800; 
+                    color: #92400e; 
+                    text-align: right; 
+                    letter-spacing: 0.5px;
+                }
+                .huid-pill {
+                    font-size: 10px;
+                    color: #15803d;
+                    background: #f0fdf4;
+                    border: 1px solid #bbf7d0;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    display: inline-block;
+                    font-weight: 700;
+                    margin-top: 4px;
+                }
+                .meta-table {
+                    width: 100%;
+                    background: #FAF9F5;
+                    border: 1px solid #E3DFD7;
+                    border-radius: 6px;
+                    padding: 10px 14px;
+                    margin-bottom: 14px;
+                }
+                .meta-table td {
+                    vertical-align: top;
+                }
+                .items-table { 
+                    width: 100%; 
+                    border-collapse: collapse; 
+                    margin-top: 8px; 
+                    font-size: 10.5px; 
+                }
+                .items-table th { 
+                    background: #FAF9F5; 
+                    color: #111318; 
+                    padding: 7px 8px; 
+                    border-top: 1px solid #E3DFD7;
+                    border-bottom: 2px solid #C9A34A; 
+                    text-align: left; 
+                    font-weight: 700;
+                }
+                .totals-box { 
+                    margin-top: 14px; 
+                    width: 48%; 
+                    margin-left: auto; 
+                    font-size: 11px; 
+                }
+                .totals-box table { width: 100%; border-collapse: collapse; }
+                .totals-box td { padding: 4px 6px; }
+                .grand-total-row { 
+                    font-size: 13px; 
+                    font-weight: 800; 
+                    color: #111318; 
+                    background: #FAF9F5;
+                    border-top: 2px solid #C9A34A; 
+                    border-bottom: 2px solid #C9A34A; 
+                }
+                .footer-box { 
+                    margin-top: 24px; 
+                    border-top: 1px solid #E3DFD7; 
+                    padding-top: 14px; 
+                }
                 @media print {
-                    body { padding:0; }
-                    .invoice-box { border:none; padding:0; }
+                    body { 
+                        padding: 0; 
+                        background: #FFFFFF; 
+                    }
+                    .invoice-outer-frame { 
+                        border: 2px solid #C9A34A !important; 
+                        box-shadow: none !important; 
+                        max-width: 100% !important; 
+                        padding: 4px !important;
+                    }
                 }
             </style>
         </head>
         <body>
-            <div class='invoice-box'>
-                <table class='header-table'>
-                    <tr>
-                        <td style='vertical-align:top;'>
-                            <div class='brand-title'>{$tenant->name}</div>
-                            <div style='font-size:11px; color:#4B5563; margin-top:4px;'>
-                                {$branch->address}, {$branch->city}, {$branch->state} - {$branch->pincode}<br/>
-                                Phone: {$branch->phone} | Email: {$tenant->email}<br/>
-                                <strong>GSTIN: {$tenant->gstin}</strong> | PAN: {$tenant->pan}
-                            </div>
-                        </td>
-                        <td style='text-align:right; vertical-align:top;'>
-                            <div class='tax-title'>{$l['title']}</div>
-                            <div style='font-size:10px; color:#059669; font-weight:bold; margin-top:2px;'>{$l['huid_label']}</div>
-                            <div style='margin-top:8px; font-size:11px;'>
-                                <strong>{$l['invoice_no']}</strong> {$invoice->invoice_number}<br/>
-                                <strong>{$l['date']}</strong> {$invoice->invoice_date}<br/>
-                                <strong>Branch:</strong> {$branch->name}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-                <div style='background:#FAF8F5; padding:10px 14px; border-radius:6px; margin-bottom:16px;'>
-                    <span style='font-size:11px; font-weight:bold; color:#56111C;'>{$l['bill_to']}</span>
-                    <div style='font-size:12px; margin-top:2px;'>
-                        <strong>" . ($customer ? $customer->name : 'Walk-in Patron') . "</strong> | 
-                        Phone: " . ($customer ? $customer->phone : 'N/A') . " | 
-                        PAN/Aadhaar: " . ($customer && $customer->pan ? $customer->pan : 'Verified') . "
-                    </div>
-                </div>
-
-                <table class='items-table'>
-                    <thead>
+            <div class='invoice-outer-frame'>
+                <div class='invoice-inner-frame'>
+                    <table class='header-table'>
                         <tr>
-                            <th style='width:30px;'>#</th>
-                            <th>{$l['item_desc']}</th>
-                            <th style='text-align:center;'>{$l['purity']}</th>
-                            <th style='text-align:right;'>{$l['gross']}</th>
-                            <th style='text-align:right;'>{$l['stone']}</th>
-                            <th style='text-align:right;'>{$l['net']}</th>
-                            <th style='text-align:right;'>{$l['rate']}</th>
-                            <th style='text-align:right;'>{$l['making']}</th>
-                            <th style='text-align:right;'>{$l['total']}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {$itemsHtml}
-                    </tbody>
-                </table>
-
-                <div class='totals-box'>
-                    <table>
-                        <tr>
-                            <td>{$l['subtotal']}</td>
-                            <td style='text-align:right;'>₹".number_format($invoice->subtotal, 2)."</td>
-                        </tr>
-                        <tr>
-                            <td style='color:#059669;'>{$l['cgst']}</td>
-                            <td style='text-align:right; color:#059669;'>₹".number_format($invoice->cgst_amount, 2)."</td>
-                        </tr>
-                        <tr>
-                            <td style='color:#059669;'>{$l['sgst']}</td>
-                            <td style='text-align:right; color:#059669;'>₹".number_format($invoice->sgst_amount, 2)."</td>
-                        </tr>
-                        <tr>
-                            <td>Round Off:</td>
-                            <td style='text-align:right;'>₹".number_format($invoice->round_off, 2)."</td>
-                        </tr>
-                        <tr class='grand-total-row'>
-                            <td style='padding:8px 0;'>{$l['grand_total']}</td>
-                            <td style='padding:8px 0; text-align:right;'>₹".number_format($invoice->grand_total, 2)."</td>
+                            <td style='vertical-align:top; width:65%;'>
+                                <div style='display:flex; align-items:center;'>
+                                    <span class='brand-badge'>&#10022;</span>
+                                    <span class='brand-title'>{$tenant->name}</span>
+                                </div>
+                                <div style='font-size:10.5px; color:#4B5563; margin-top:4px; line-height:1.4;'>
+                                    {$branch->address}, {$branch->city}, {$branch->state} - {$branch->pincode}<br/>
+                                    Phone: {$branch->phone} | Email: {$tenant->email}<br/>
+                                    <strong>GSTIN:</strong> {$tenant->gstin} &bull; <strong>PAN:</strong> {$tenant->pan}
+                                </div>
+                            </td>
+                            <td style='text-align:right; vertical-align:top; width:35%;'>
+                                <div class='tax-title'>{$l['title']}</div>
+                                <div class='huid-pill'>{$l['huid_label']}</div>
+                                <div style='margin-top:6px; font-size:10.5px; line-height:1.4;'>
+                                    <strong>{$l['invoice_no']}</strong> <span style='color:#92400e; font-weight:bold;'>{$invoice->invoice_number}</span><br/>
+                                    <strong>{$l['date']}</strong> {$invoice->invoice_date}<br/>
+                                    <strong>Branch:</strong> {$branch->name}
+                                </div>
+                            </td>
                         </tr>
                     </table>
-                </div>
 
-                <div class='footer-box'>
-                    <div style='font-size:10px; color:#6B7280; max-width:400px;'>
-                        <strong>Terms & Conditions:</strong><br/>
-                        1. All gold articles are 100% BIS Hallmarked according to Govt. of India standards.<br/>
-                        2. Old gold buyback/exchange based on daily prevailing board rate subject to purity test.<br/>
-                        3. Subject to Surat jurisdiction. Computer generated invoice.
+                    <table class='meta-table'>
+                        <tr>
+                            <td style='width:60%;'>
+                                <span style='font-size:10px; font-weight:bold; color:#92400e; text-transform:uppercase; letter-spacing:0.5px;'>{$l['bill_to']}</span>
+                                <div style='font-size:12px; font-weight:bold; color:#111318; margin-top:2px;'>
+                                    " . ($customer ? htmlspecialchars($customer->name) : 'Walk-in Patron') . "
+                                </div>
+                                <div style='font-size:10.5px; color:#4B5563; margin-top:2px;'>
+                                    Phone: " . ($customer && $customer->phone ? htmlspecialchars($customer->phone) : 'N/A') . " &bull; 
+                                    PAN/Aadhaar: " . ($customer && $customer->pan ? htmlspecialchars($customer->pan) : 'Verified') . "
+                                </div>
+                            </td>
+                            <td style='width:40%; text-align:right; font-size:10.5px; color:#4B5563; line-height:1.4;'>
+                                <strong>Place of Supply:</strong> {$branch->state} (Code: 24)<br/>
+                                <strong>Reverse Charge:</strong> No<br/>
+                                <strong>Nature of Transaction:</strong> Retail Jewellery Sale
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class='items-table'>
+                        <thead>
+                            <tr>
+                                <th style='width:24px;'>#</th>
+                                <th>{$l['item_desc']}</th>
+                                <th style='text-align:center;'>{$l['purity']}</th>
+                                <th style='text-align:right;'>{$l['gross']}</th>
+                                <th style='text-align:right;'>{$l['stone']}</th>
+                                <th style='text-align:right;'>{$l['net']}</th>
+                                <th style='text-align:right;'>{$l['rate']}</th>
+                                <th style='text-align:right;'>{$l['making']}</th>
+                                <th style='text-align:right;'>{$l['total']}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$itemsHtml}
+                        </tbody>
+                    </table>
+
+                    <div class='totals-box'>
+                        <table>
+                            <tr>
+                                <td>{$l['subtotal']}</td>
+                                <td style='text-align:right; font-weight:600;'>₹" . number_format($invoice->subtotal, 2) . "</td>
+                            </tr>
+                            <tr>
+                                <td style='color:#15803d;'>{$l['cgst']}</td>
+                                <td style='text-align:right; color:#15803d; font-weight:600;'>₹" . number_format($invoice->cgst_amount, 2) . "</td>
+                            </tr>
+                            <tr>
+                                <td style='color:#15803d;'>{$l['sgst']}</td>
+                                <td style='text-align:right; color:#15803d; font-weight:600;'>₹" . number_format($invoice->sgst_amount, 2) . "</td>
+                            </tr>
+                            " . ($invoice->round_off != 0 ? "
+                            <tr>
+                                <td style='color:#6B7280;'>Round Off:</td>
+                                <td style='text-align:right; color:#6B7280;'>₹" . number_format($invoice->round_off, 2) . "</td>
+                            </tr>" : "") . "
+                            <tr class='grand-total-row'>
+                                <td style='padding:6px 8px;'>{$l['grand_total']}</td>
+                                <td style='padding:6px 8px; text-align:right; font-size:14px; font-weight:bold; color:#111318;'>₹" . number_format($invoice->grand_total, 2) . "</td>
+                            </tr>
+                        </table>
                     </div>
-                    <div style='text-align:center;'>
-                        <div style='height:40px;'></div>
-                        <div style='border-top:1px dashed #9CA3AF; padding-top:4px; font-weight:bold; font-size:11px;'>
-                            {$l['auth_sign']}<br/>
-                            <span style='font-size:9px; font-weight:normal; color:#6B7280;'>For {$tenant->name}</span>
-                        </div>
+
+                    <div class='footer-box'>
+                        <table style='width:100%;'>
+                            <tr>
+                                <td style='vertical-align:bottom; width:65%; font-size:9.5px; color:#6B7280; line-height:1.4;'>
+                                    <strong style='color:#111318;'>Statutory BIS Hallmarking Terms:</strong><br/>
+                                    1. All precious jewellery articles bear official BIS Hallmark logo and laser-inscribed 6-digit alphanumeric HUID.<br/>
+                                    2. Purity of bullion & ornaments certified under Bureau of Indian Standards Act, 2016.<br/>
+                                    3. Buyback / exchange calculated on prevailing daily board rate subject to automated caratometer test.<br/>
+                                    4. Subject to Surat jurisdiction. Computer generated tax invoice.
+                                </td>
+                                <td style='vertical-align:bottom; width:35%; text-align:center;'>
+                                    <div style='height:36px;'></div>
+                                    <div style='border-top:1px dashed #9CA3AF; padding-top:4px; font-weight:bold; font-size:10.5px;'>
+                                        {$l['auth_sign']}<br/>
+                                        <span style='font-size:9px; font-weight:normal; color:#6B7280;'>For {$tenant->name}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
