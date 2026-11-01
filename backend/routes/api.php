@@ -75,5 +75,18 @@ Route::prefix('v1')->group(function () {
 
         // AI Copilot
         Route::post('/ai/query', [AiController::class, 'query']);
+
+        // Module 18: Zero-Manual-Entry & Intelligent Data Capture
+        Route::post('/capture/upload', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'upload']);
+        Route::post('/capture/voice', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'voiceCommand']);
+        Route::post('/capture/scale', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'scaleReading']);
+        Route::post('/capture/barcode', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'barcodeScan']);
+        Route::get('/capture/queue', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'queue']);
+        Route::post('/capture/{id}/approve', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'approve']);
+        Route::post('/capture/{id}/reject', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'reject']);
+        Route::post('/capture/{id}/reverse', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'reverse']);
+
+        // Module 19: Printable Documents & Invoices
+        Route::get('/pos/invoices/{id}/print', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'printInvoice']);
     });
 });

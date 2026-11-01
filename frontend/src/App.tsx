@@ -13,6 +13,7 @@ import { CustomerListView } from './modules/Customers/CustomerListView';
 import { KarigarView } from './modules/Karigar/KarigarView';
 import { SavingSchemesView } from './modules/SavingSchemes/SavingSchemesView';
 import { AiCopilotView } from './modules/AiCopilot/AiCopilotView';
+import { ZeroManualEntryView } from './modules/ZeroCapture/ZeroManualEntryView';
 
 const ProtectedLayout: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -38,6 +39,7 @@ const ProtectedLayout: React.FC = () => {
           <Routes>
             <Route path="/" element={<DashboardView />} />
             <Route path="/pos" element={<PosBillingView />} />
+            <Route path="/zero-capture" element={<ZeroManualEntryView />} />
             <Route path="/inventory" element={<InventoryView />} />
             <Route path="/rates" element={<MetalRatesView />} />
             <Route path="/accounting" element={<AccountingView />} />

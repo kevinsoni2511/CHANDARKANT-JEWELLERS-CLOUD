@@ -189,4 +189,44 @@ class DecimalMathService
             'calculated_value' => $value,
         ];
     }
+
+    public function calculateNetWeight(string|float $grossWeight, string|float $stoneWeight = 0.0): string
+    {
+        return self::netWeight($grossWeight, $stoneWeight);
+    }
+
+    public function calculatePureWeight(string|float $netWeight, string $purityKarat): string
+    {
+        return self::pureFineWeight($netWeight, $purityKarat);
+    }
+
+    public function calculateMetalValue(string|float $netWeight, string|float $ratePerGram): string
+    {
+        return self::metalValue($netWeight, $ratePerGram);
+    }
+
+    public function calculateMakingCharges(string|float $grossWeight, string $strategy, string|float $rateOrAmount, string|float $metalValue = 0.0): string
+    {
+        return self::makingCharges($strategy, $rateOrAmount, $grossWeight, $metalValue);
+    }
+
+    public function calculateGst(string|float $taxableAmount, bool $isIntraState = true): array
+    {
+        $breakdown = self::gstBreakdown($taxableAmount, !$isIntraState);
+        return [
+            'cgst' => $breakdown['cgst_amount'],
+            'sgst' => $breakdown['sgst_amount'],
+            'igst' => $breakdown['igst_amount'],
+            'total_gst' => $breakdown['total_tax'],
+        ];
+    }
+
+    public function calculateRoundOff(string|float $amount): array
+    {
+        $res = self::roundOff($amount);
+        return [
+            'rounded_amount' => $res['rounded_total'],
+            'round_off' => $res['round_off'],
+        ];
+    }
 }

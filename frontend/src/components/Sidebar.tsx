@@ -22,13 +22,14 @@ export const Sidebar: React.FC = () => {
   const allNavigation = [
     { name: 'Dashboard', to: '/', icon: LayoutDashboard, roles: ['*'] },
     { name: 'Point of Sale (POS)', to: '/pos', icon: ShoppingCart, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
+    { name: 'Zero-Manual Capture', to: '/zero-capture', icon: Sparkles, roles: ['*'] },
     { name: 'Jewellery Inventory', to: '/inventory', icon: Boxes, roles: ['owner', 'manager', 'stock', 'super_admin'] },
     { name: 'Precious Metal Rates', to: '/rates', icon: TrendingUp, roles: ['owner', 'manager', 'sales', 'stock', 'accountant', 'karigar', 'super_admin'] },
     { name: 'Financial Accounting', to: '/accounting', icon: BookOpen, roles: ['owner', 'accountant', 'super_admin'] },
     { name: 'Customer CRM', to: '/customers', icon: Users, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
     { name: 'Karigar Management', to: '/karigar', icon: Hammer, roles: ['owner', 'manager', 'stock', 'karigar', 'super_admin'] },
     { name: 'Saving Schemes (Kitty)', to: '/saving-schemes', icon: PiggyBank, roles: ['owner', 'manager', 'sales', 'accountant', 'super_admin'] },
-    { name: 'AI Business Copilot', to: '/ai', icon: Sparkles, roles: ['*'] },
+    { name: 'AI Business Copilot', to: '/ai', icon: ShieldCheck, roles: ['*'] },
   ];
 
   const navigation = allNavigation.filter(
