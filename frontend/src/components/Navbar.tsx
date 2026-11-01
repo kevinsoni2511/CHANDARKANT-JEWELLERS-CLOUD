@@ -67,37 +67,37 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Live Metal Rate Ticker Bar (Desktop) */}
-        <div className="hidden xl:flex items-center gap-3 bg-[#111318]/5 dark:bg-white/5 px-3 py-1.5 rounded-full border border-[#C9A34A]/25 dark:border-white/10 text-xs">
+        {/* Live Metal Rate Ticker Bar (Desktop 2xl) */}
+        <div className="hidden 2xl:flex items-center gap-2.5 bg-[#111318]/5 dark:bg-white/5 px-3 py-1.5 rounded-full border border-[#C9A34A]/25 dark:border-white/10 text-xs shrink-0">
           <span className="flex items-center gap-1.5 text-[#C9A34A] font-medium">
             <span className="w-2 h-2 rounded-full bg-[#35BFA0] animate-pulse" />
             <TrendingUp className="w-3.5 h-3.5" /> Bullion:
           </span>
           <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">
-            Gold 24K: <strong className="text-[#C9A34A] font-mono">₹{rate24K}</strong>
+            24K: <strong className="text-[#C9A34A] font-mono">₹{rate24K}</strong>
           </span>
           <span className="text-[#E3DFD7] dark:text-zinc-700">|</span>
           <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">
-            Gold 22K (916): <strong className="text-[#C9A34A] font-mono">₹{rate22K}</strong>
+            22K (916): <strong className="text-[#C9A34A] font-mono">₹{rate22K}</strong>
           </span>
           <span className="text-[#E3DFD7] dark:text-zinc-700">|</span>
           <span className="text-[#5A5E6B] dark:text-[#A6AAB6]">
-            Silver 999: <strong className="text-[#111318] dark:text-[#F6F5F1] font-mono">₹{rateSilver}</strong>
+            Silver: <strong className="text-[#111318] dark:text-[#F6F5F1] font-mono">₹{rateSilver}</strong>
           </span>
         </div>
       </div>
 
       {/* Center Command Palette Search Trigger (Linear/Vercel Inspired) */}
-      <div className="flex-1 max-w-md mx-4 hidden md:block">
+      <div className="flex-1 max-w-md mx-2 sm:mx-4 min-w-0 hidden md:block">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between bg-[#111318]/5 dark:bg-white/5 hover:bg-[#111318]/10 dark:hover:bg-white/10 border border-[#C9A34A]/30 dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] px-3.5 py-1.5 rounded-xl text-xs transition-all duration-150 group shadow-inner"
+          className="w-full flex items-center justify-between bg-[#111318]/5 dark:bg-white/5 hover:bg-[#111318]/10 dark:hover:bg-white/10 border border-[#C9A34A]/30 dark:border-white/10 text-[#5A5E6B] dark:text-[#A6AAB6] px-3.5 py-1.5 rounded-xl text-xs transition-all duration-150 group shadow-inner min-w-0 cursor-pointer"
         >
-          <div className="flex items-center gap-2.5 text-[#5A5E6B] dark:text-[#A6AAB6] group-hover:text-[#C9A34A]">
-            <Search className="w-3.5 h-3.5 text-[#C9A34A]" />
-            <span className="text-xs">Quick search items, HUID, bills, patrons...</span>
+          <div className="flex items-center gap-2 text-[#5A5E6B] dark:text-[#A6AAB6] group-hover:text-[#C9A34A] min-w-0 truncate">
+            <Search className="w-3.5 h-3.5 text-[#C9A34A] shrink-0" />
+            <span className="text-xs truncate whitespace-nowrap">Search items, bills, HUID, patrons...</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0 ml-2">
             <span className="kbd-badge">Ctrl</span>
             <span className="kbd-badge">K</span>
           </div>

@@ -323,18 +323,18 @@ export const ZeroManualEntryView: React.FC = () => {
               {isListening ? <MicOff className="w-8 h-8 text-white" /> : <Mic className="w-8 h-8 text-white" />}
             </button>
 
-            <p className="text-xs font-semibold text-gray-800 mt-4">
+            <p className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1] mt-4">
               {isListening ? 'Listening live... speak your jewellery query' : 'Tap Microphone or Click Quick Test Prompts'}
             </p>
             {voiceTranscript && (
-              <p className="text-xs text-gray-600 italic mt-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200">
+              <p className="text-xs text-[#111318] dark:text-[#F6F5F1] italic mt-1 bg-[#C9A34A]/10 px-3 py-1.5 rounded-full border border-[#C9A34A]/25">
                 "{voiceTranscript}"
               </p>
             )}
 
             {/* Quick Test Voice Chips */}
             <div className="mt-6 w-full max-w-2xl">
-              <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
                 Simulate 1-Click Voice Commands:
               </p>
               <div className="flex flex-wrap gap-2 justify-center">
@@ -354,7 +354,7 @@ export const ZeroManualEntryView: React.FC = () => {
                       setVoiceTranscript(chip.text);
                       submitVoiceCommand(chip.text, chip.lang as any);
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-gray-50 hover:bg-amber-100 text-gray-700 text-xs border border-gray-200 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-[#181A22] hover:bg-[#C9A34A]/10 hover:text-[#C9A34A] text-slate-700 dark:text-slate-300 text-xs border border-slate-200 dark:border-white/10 transition-colors cursor-pointer"
                   >
                     "{chip.text}"
                   </button>
@@ -453,9 +453,9 @@ export const ZeroManualEntryView: React.FC = () => {
 
               {/* Warnings / Duplicate checks */}
               {scanResult.validation_warnings?.length > 0 && (
-                <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800 space-y-1">
-                  <p className="font-bold flex items-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-600" /> Smart Validation Alerts:
+                <div className="p-3 rounded-lg bg-[#C9A34A]/10 border border-[#C9A34A]/25 text-xs text-[#111318] dark:text-[#F6F5F1] space-y-1">
+                  <p className="font-bold flex items-center gap-1.5 text-[#C9A34A]">
+                    <AlertTriangle className="w-4 h-4 text-[#C9A34A]" /> Smart Validation Alerts:
                   </p>
                   {scanResult.validation_warnings.map((w: string, idx: number) => (
                     <p key={idx} className="text-[11px] pl-5">• {w}</p>
@@ -655,7 +655,7 @@ export const ZeroManualEntryView: React.FC = () => {
                     </div>
                     <div>
                       <span className="text-gray-500 text-[10px] uppercase font-semibold">Live Metal Rate</span>
-                      <p className="font-bold text-amber-800 font-mono">₹{barcodeResult.live_valuation.rate_per_gram.toFixed(2)}/g</p>
+                      <p className="font-bold text-[#C9A34A] font-mono">₹{barcodeResult.live_valuation.rate_per_gram.toFixed(2)}/g</p>
                       <p className="text-[10px] text-gray-600">Valuation: ₹{barcodeResult.live_valuation.metal_value.toLocaleString('en-IN')}</p>
                     </div>
                     <div>
@@ -726,17 +726,17 @@ export const ZeroManualEntryView: React.FC = () => {
                     </tr>
                   ) : (
                     queue.map((doc: any) => (
-                      <tr key={doc.id} className="hover:bg-amber-50/20">
+                      <tr key={doc.id} className="hover:bg-[#C9A34A]/5">
                         <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-gray-100 text-gray-700">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300">
                             {doc.source_type}
                           </span>
                         </td>
                         <td className="py-3 px-4">
-                          <p className="font-semibold text-gray-900">
+                          <p className="font-semibold text-slate-900 dark:text-slate-100">
                             {doc.extracted_data?.item_name || doc.extracted_data?.name || doc.extracted_data?.item_description || doc.document_type}
                           </p>
-                          <p className="text-[10px] text-gray-500">
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400">
                             Net: {doc.extracted_data?.net_weight || doc.extracted_data?.gross_weight || '—'}g | 
                             Amount: ₹{Number(doc.extracted_data?.grand_total || 0).toLocaleString('en-IN')}
                           </p>
@@ -745,8 +745,8 @@ export const ZeroManualEntryView: React.FC = () => {
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                               doc.confidence_score >= 90
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-amber-100 text-amber-800'
+                                ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
+                                : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
                             }`}
                           >
                             {doc.confidence_score}%
@@ -754,23 +754,23 @@ export const ZeroManualEntryView: React.FC = () => {
                         </td>
                         <td className="py-3 px-4">
                           {doc.validation_warnings?.length > 0 ? (
-                            <span className="text-[10px] text-amber-700 flex items-center gap-1 font-medium">
-                              <AlertTriangle className="w-3 h-3 text-amber-600" /> {doc.validation_warnings.length} alert(s)
+                            <span className="text-[10px] text-[#C9A34A] flex items-center gap-1 font-medium">
+                              <AlertTriangle className="w-3 h-3 text-[#C9A34A]" /> {doc.validation_warnings.length} alert(s)
                             </span>
                           ) : (
-                            <span className="text-[10px] text-emerald-600">Clean verification</span>
+                            <span className="text-[10px] text-[#35BFA0] font-medium">Clean verification</span>
                           )}
                         </td>
                         <td className="py-3 px-4 text-center">
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                               doc.status === 'approved'
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
                                 : doc.status === 'rejected'
-                                ? 'bg-rose-100 text-rose-800'
+                                ? 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
                                 : doc.status === 'reversed'
-                                ? 'bg-purple-100 text-purple-800'
-                                : 'bg-amber-100 text-amber-800'
+                                ? 'bg-[#8B7CF6]/15 text-[#8B7CF6] border border-[#8B7CF6]/30'
+                                : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
                             }`}
                           >
                             {doc.status}

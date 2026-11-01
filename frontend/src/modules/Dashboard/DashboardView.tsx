@@ -97,7 +97,7 @@ export const DashboardView: React.FC = () => {
   if (loading) {
     return (
       <div className="p-8 flex flex-col items-center justify-center min-h-[450px] space-y-3">
-        <div className="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-[#C9A34A] border-t-transparent rounded-full animate-spin"></div>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium font-mono uppercase tracking-wider">
           Syncing {displayRole} telemetry stream...
         </p>
@@ -107,19 +107,30 @@ export const DashboardView: React.FC = () => {
 
   const isPrivileged = ['owner', 'manager', 'super_admin'].includes(actualRole);
 
+  const formatDate = (val: string) => {
+    if (!val) return '—';
+    try {
+      const d = new Date(val);
+      if (isNaN(d.getTime())) return val;
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch {
+      return val;
+    }
+  };
+
   const quickActionItems = [
-    { title: 'New POS Bill', href: '/pos', icon: Receipt, badge: 'Fast' },
-    { title: 'Voice Command Studio', href: '/zero-capture', icon: Mic, badge: 'AI' },
-    { title: 'Scan Invoice / Document', href: '/zero-capture', icon: Sparkles, badge: 'OCR' },
+    { title: 'POS Billing', href: '/pos', icon: Receipt, badge: 'Fast' },
+    { title: 'Voice AI Studio', href: '/zero-capture', icon: Mic, badge: 'AI' },
+    { title: 'Smart OCR Scan', href: '/zero-capture', icon: Sparkles, badge: 'OCR' },
     { title: 'Tag Vault Piece', href: '/inventory', icon: Boxes },
-    { title: 'Daily Bullion Board', href: '/rates', icon: TrendingUp },
-    { title: 'Double-Entry Day Book', href: '/accounting', icon: FileSpreadsheet },
+    { title: 'Bullion Board', href: '/rates', icon: TrendingUp },
+    { title: 'Day Book Ledger', href: '/accounting', icon: FileSpreadsheet },
   ];
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
       {/* Top Banner & Optional Role Switcher for Management */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-zinc-200 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#E3DFD7] dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#111318] dark:text-[#F6F5F1]">
@@ -131,7 +142,7 @@ export const DashboardView: React.FC = () => {
               {displayRole === 'owner' && 'Showroom Executive Overview'}
               {displayRole === 'super_admin' && 'CJC Multi-Tenant SaaS Command'}
             </h2>
-            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/25">
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30">
               {displayRole.toUpperCase()}
             </span>
           </div>
@@ -151,9 +162,9 @@ export const DashboardView: React.FC = () => {
           <button
             onClick={() => setShowCustomizer(!showCustomizer)}
             title="Customize Dashboard Layout"
-            className="px-3 py-2 rounded-xl border border-zinc-200 dark:border-white/10 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 rounded-xl border border-zinc-200 dark:border-white/10 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Settings2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <Settings2 className="w-4 h-4 text-[#C9A34A]" />
             <span className="hidden sm:inline">Customize Widgets</span>
           </button>
 
@@ -242,29 +253,34 @@ export const DashboardView: React.FC = () => {
       {widgets.quickActions && (
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
               Quick Actions Bar
             </span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
             {quickActionItems.map((act) => {
               const Icon = act.icon;
+              const isAi = act.badge === 'AI' || act.badge === 'OCR';
               return (
                 <a
                   key={act.title}
                   href={act.href}
-                  className="bg-white dark:bg-[#111118] border border-zinc-200 dark:border-white/10 hover:border-amber-500/40 rounded-xl p-3 flex items-center justify-between group shadow-sm hover:shadow transition-all"
+                  className="bg-white dark:bg-[#181A22] border border-[#E3DFD7] dark:border-white/10 hover:border-[#C9A34A]/50 rounded-xl p-3 flex items-center justify-between group shadow-sm hover:shadow transition-all min-w-0"
                 >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                  <div className="flex items-center gap-2 min-w-0 truncate">
+                    <div className={`p-1.5 rounded-lg shrink-0 ${isAi ? 'bg-[#8B7CF6]/15 text-[#8B7CF6]' : 'bg-[#C9A34A]/10 text-[#C9A34A]'} group-hover:scale-110 transition-transform`}>
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+                    <span className="text-xs font-semibold text-[#111318] dark:text-[#F6F5F1] truncate">
                       {act.title}
                     </span>
                   </div>
                   {act.badge && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded font-mono font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-bold shrink-0 ml-1.5 ${
+                      isAi
+                        ? 'bg-[#8B7CF6]/15 text-[#8B7CF6] border border-[#8B7CF6]/30'
+                        : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
+                    }`}>
                       {act.badge}
                     </span>
                   )}
@@ -282,19 +298,20 @@ export const DashboardView: React.FC = () => {
         <div className="space-y-6">
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   My Sales Today
                 </span>
                 <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.my_today_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
-                <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
+                <p className="text-[11px] text-[#35BFA0] mt-1 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#35BFA0] inline-block" />
                   {data?.my_today_invoices_count || 0} customer bills generated
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   My Month Sales
                 </span>
@@ -303,7 +320,7 @@ export const DashboardView: React.FC = () => {
                 </p>
                 <div className="mt-2 w-full bg-zinc-100 dark:bg-white/10 rounded-full h-1.5 overflow-hidden">
                   <div
-                    className="bg-amber-500 h-1.5 rounded-full"
+                    className="gold-gradient h-1.5 rounded-full"
                     style={{
                       width: `${Math.min(100, ((data?.my_month_sales || 0) / (data?.sales_target_month || 1500000)) * 100)}%`,
                     }}
@@ -314,7 +331,7 @@ export const DashboardView: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Gold 22K Retail Rate
                 </span>
@@ -325,7 +342,7 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Live board rate + 3% GST</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Silver 99.9% Rate
                 </span>
@@ -341,19 +358,19 @@ export const DashboardView: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* CRM Birthday & Anniversary Alerts */}
             {widgets.crm && (
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5">
                   <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-amber-600 dark:text-amber-400" /> CRM Patron Events
+                    <Calendar className="w-4 h-4 text-[#C9A34A]" /> CRM Patron Events
                   </h3>
-                  <span className="text-[10px] text-amber-700 dark:text-amber-400 font-semibold uppercase">Follow Up</span>
+                  <span className="text-[10px] text-[#C9A34A] font-semibold uppercase">Follow Up</span>
                 </div>
                 <div className="mt-3 space-y-3">
                   {data?.crm_alerts?.length === 0 ? (
                     <p className="text-xs text-zinc-400 py-4 text-center">No upcoming birthdays or anniversaries today.</p>
                   ) : (
                     data?.crm_alerts?.map((cust: any) => (
-                      <div key={cust.id} className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                      <div key={cust.id} className="p-2.5 rounded-xl bg-[#C9A34A]/5 border border-[#C9A34A]/20 flex items-center justify-between">
                         <div>
                           <p className="font-semibold text-xs text-zinc-900 dark:text-zinc-100">{cust.name}</p>
                           <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">Phone: {cust.phone}</p>
@@ -362,7 +379,7 @@ export const DashboardView: React.FC = () => {
                           href={`https://wa.me/${cust.phone?.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-semibold hover:bg-emerald-700 flex items-center gap-1 shadow-sm"
+                          className="px-2.5 py-1 rounded-lg bg-[#25D366] text-white text-[10px] font-semibold hover:brightness-105 flex items-center gap-1 shadow-sm"
                         >
                           <PhoneCall className="w-3 h-3" /> Wish
                         </a>
@@ -374,35 +391,43 @@ export const DashboardView: React.FC = () => {
             )}
 
             {/* My Recent Invoices */}
-            <div className={`${widgets.crm ? 'lg:col-span-2' : 'lg:col-span-3'} bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm`}>
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5">
+            <div className={`${widgets.crm ? 'lg:col-span-2' : 'lg:col-span-3'} bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm`}>
+              <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5">
                 <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                   My Counter Sales (Recent)
                 </h3>
-                <a href="/pos" className="text-xs text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+                <a href="/pos" className="text-xs text-[#C9A34A] font-semibold hover:underline">
                   Open Billing →
                 </a>
               </div>
               <div className="overflow-x-auto mt-2">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-50/70 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-white/10">
+                <table className="w-full text-left text-xs min-w-[500px]">
+                  <thead className="bg-[#FAF8F5] dark:bg-[#111318] text-zinc-600 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-white/10">
                     <tr>
-                      <th className="py-2.5 px-3">Invoice #</th>
-                      <th className="py-2.5 px-3">Date</th>
-                      <th className="py-2.5 px-3">Customer</th>
-                      <th className="py-2.5 px-3 text-right">Amount</th>
-                      <th className="py-2.5 px-3 text-center">Status</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Invoice #</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Date</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Customer</th>
+                      <th className="py-2.5 px-3 text-right whitespace-nowrap">Amount</th>
+                      <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_invoices?.map((inv: any) => (
                       <tr key={inv.id} className="hover:bg-[#C9A34A]/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{inv.invoice_number}</td>
-                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{inv.invoice_date}</td>
-                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{inv.customer?.name || 'Walk-in'}</td>
-                        <td className="py-2.5 px-3 font-bold text-right font-serif">₹{Number(inv.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{inv.invoice_number}</td>
+                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400 whitespace-nowrap font-mono text-[11px]">{formatDate(inv.invoice_date)}</td>
+                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap truncate max-w-[130px]" title={inv.customer?.name || 'Walk-in'}>
+                          {inv.customer?.name || 'Walk-in'}
+                        </td>
+                        <td className="py-2.5 px-3 font-bold text-right font-serif whitespace-nowrap text-[#111318] dark:text-[#F6F5F1]">
+                          ₹{Number(inv.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </td>
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                            String(inv.status).toLowerCase().includes('paid') || String(inv.status).toLowerCase().includes('settled')
+                              ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
+                              : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
+                          }`}>
                             {inv.status}
                           </span>
                         </td>
@@ -423,7 +448,7 @@ export const DashboardView: React.FC = () => {
         <div className="space-y-6">
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Showroom Cash in Hand
                 </span>
@@ -433,7 +458,7 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 font-mono">GL A/c: 1001</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Bank & UPI Balance
                 </span>
@@ -443,19 +468,19 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Reconciled Current A/c</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Output GST (Current Month)
                 </span>
                 <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.month_output_gst || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
-                <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-1 font-mono">
+                <p className="text-[11px] text-[#C9A34A] mt-1 font-mono">
                   CGST: ₹{Number(data?.output_cgst || 0).toFixed(2)} | SGST: ₹{Number(data?.output_sgst || 0).toFixed(2)}
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Customer Debtors
                 </span>
@@ -468,7 +493,7 @@ export const DashboardView: React.FC = () => {
           )}
 
           {/* Double-Entry Vouchers Stream */}
-          <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+          <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
             <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5 mb-3">
               <div>
                 <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
@@ -476,22 +501,22 @@ export const DashboardView: React.FC = () => {
                 </h3>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Strictly balanced ledger entries for real-time audit</p>
               </div>
-              <a href="/accounting" className="text-xs text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+              <a href="/accounting" className="text-xs text-[#C9A34A] font-semibold hover:underline">
                 Open Full Chart of Accounts →
               </a>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-zinc-50/70 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-white/10">
+              <table className="w-full text-left text-xs min-w-[600px]">
+                <thead className="bg-[#FAF8F5] dark:bg-[#111318] text-zinc-600 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-white/10">
                   <tr>
-                    <th className="py-2.5 px-3">Voucher #</th>
-                    <th className="py-2.5 px-3">Date</th>
-                    <th className="py-2.5 px-3">Type</th>
-                    <th className="py-2.5 px-3">Narration</th>
-                    <th className="py-2.5 px-3 text-right">Debit</th>
-                    <th className="py-2.5 px-3 text-right">Credit</th>
-                    <th className="py-2.5 px-3 text-center">Status</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Voucher #</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Date</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Type</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Narration</th>
+                    <th className="py-2.5 px-3 text-right whitespace-nowrap">Debit</th>
+                    <th className="py-2.5 px-3 text-right whitespace-nowrap">Credit</th>
+                    <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
@@ -500,14 +525,14 @@ export const DashboardView: React.FC = () => {
                     const totalCredit = v.entries?.reduce((sum: number, e: any) => sum + Number(e.credit), 0);
                     return (
                       <tr key={v.id} className="hover:bg-[#C9A34A]/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{v.voucher_number}</td>
-                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{v.voucher_date}</td>
-                        <td className="py-2.5 px-3 uppercase text-[10px] font-bold text-zinc-700 dark:text-zinc-300">{v.voucher_type}</td>
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{v.voucher_number}</td>
+                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400 whitespace-nowrap font-mono text-[11px]">{formatDate(v.voucher_date)}</td>
+                        <td className="py-2.5 px-3 uppercase text-[10px] font-bold text-zinc-700 dark:text-zinc-300 whitespace-nowrap">{v.voucher_type}</td>
                         <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400 truncate max-w-xs">{v.narration}</td>
-                        <td className="py-2.5 px-3 text-right font-mono font-semibold text-zinc-900 dark:text-zinc-100">₹{Number(totalDebit).toFixed(2)}</td>
-                        <td className="py-2.5 px-3 text-right font-mono font-semibold text-zinc-900 dark:text-zinc-100">₹{Number(totalCredit).toFixed(2)}</td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                        <td className="py-2.5 px-3 text-right font-mono font-semibold text-zinc-900 dark:text-zinc-100 whitespace-nowrap">₹{Number(totalDebit).toFixed(2)}</td>
+                        <td className="py-2.5 px-3 text-right font-mono font-semibold text-zinc-900 dark:text-zinc-100 whitespace-nowrap">₹{Number(totalCredit).toFixed(2)}</td>
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30">
                             Balanced
                           </span>
                         </td>
@@ -528,7 +553,7 @@ export const DashboardView: React.FC = () => {
         <div className="space-y-6">
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Fine Gold Gross Stock
                 </span>
@@ -540,7 +565,7 @@ export const DashboardView: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Silver Bullion Stock
                 </span>
@@ -550,7 +575,7 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">Purity 92.5% - 99.9%</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Total Tagged Pieces
                 </span>
@@ -560,7 +585,7 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">In Showroom Trays</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   BIS HUID Compliance
                 </span>
@@ -576,7 +601,7 @@ export const DashboardView: React.FC = () => {
 
           {/* Category Breakdown & Recent Items */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+            <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
               <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm mb-3">
                 Vault Stock by Category
               </h3>
@@ -592,37 +617,37 @@ export const DashboardView: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2 bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5">
+            <div className="lg:col-span-2 bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5">
                 <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                   Recent Tagged Inventory
                 </h3>
-                <a href="/inventory" className="text-xs text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+                <a href="/inventory" className="text-xs text-[#C9A34A] font-semibold hover:underline">
                   Manage Vault →
                 </a>
               </div>
               <div className="overflow-x-auto mt-2">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-50/70 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-white/10">
+                <table className="w-full text-left text-xs min-w-[550px]">
+                  <thead className="bg-[#FAF8F5] dark:bg-[#111318] text-zinc-600 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-white/10">
                     <tr>
-                      <th className="py-2.5 px-3">SKU / Tag</th>
-                      <th className="py-2.5 px-3">Name</th>
-                      <th className="py-2.5 px-3">Purity</th>
-                      <th className="py-2.5 px-3">Gross Wt</th>
-                      <th className="py-2.5 px-3">HUID</th>
-                      <th className="py-2.5 px-3 text-center">Status</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">SKU / Tag</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Name</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Purity</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Gross Wt</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">HUID</th>
+                      <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_items?.map((it: any) => (
                       <tr key={it.id} className="hover:bg-[#C9A34A]/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{it.sku || it.item_code}</td>
-                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{it.name}</td>
-                        <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">{it.purity_karat}</td>
-                        <td className="py-2.5 px-3 font-mono">{Number(it.gross_weight).toFixed(3)}g</td>
-                        <td className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400 font-semibold">{it.huid || '—'}</td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{it.sku || it.item_code}</td>
+                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap truncate max-w-[150px]">{it.name}</td>
+                        <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">{it.purity_karat}</td>
+                        <td className="py-2.5 px-3 font-mono whitespace-nowrap">{Number(it.gross_weight).toFixed(3)}g</td>
+                        <td className="py-2.5 px-3 font-mono text-[#35BFA0] font-semibold whitespace-nowrap">{it.huid || '—'}</td>
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30">
                             {it.status}
                           </span>
                         </td>
@@ -643,17 +668,17 @@ export const DashboardView: React.FC = () => {
         <div className="space-y-6">
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Active Job Cards
                 </span>
                 <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   {data?.active_jobs_count || 0} <span className="text-xs font-sans text-zinc-500">jobs</span>
                 </p>
-                <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-1 font-medium">Currently in manufacturing</p>
+                <p className="text-[11px] text-[#C9A34A] mt-1 font-medium">Currently in manufacturing</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Pure Gold Issued
                 </span>
@@ -663,17 +688,17 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">24K fine metal with artisans</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Completed Jobs
                 </span>
-                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 mt-2 font-serif">
+                <p className="text-2xl font-bold text-[#35BFA0] mt-2 font-serif">
                   {data?.completed_jobs_count || 0} <span className="text-xs font-sans text-zinc-500">pieces</span>
                 </p>
-                <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">Quality hallmarked & returned</p>
+                <p className="text-[11px] text-[#35BFA0] mt-1 font-medium">Quality hallmarked & returned</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Master Artisans
                 </span>
@@ -685,36 +710,40 @@ export const DashboardView: React.FC = () => {
             </div>
           )}
 
-          <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5 mb-3">
+          <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5 mb-3">
               <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                 Active Workshop Job Work Cards
               </h3>
-              <a href="/karigar" className="text-xs text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+              <a href="/karigar" className="text-xs text-[#C9A34A] font-semibold hover:underline">
                 View Karigar Ledger →
               </a>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-zinc-50/70 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-white/10">
+              <table className="w-full text-left text-xs min-w-[500px]">
+                <thead className="bg-[#FAF8F5] dark:bg-[#111318] text-zinc-600 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-white/10">
                   <tr>
-                    <th className="py-2.5 px-3">Job Card #</th>
-                    <th className="py-2.5 px-3">Karigar</th>
-                    <th className="py-2.5 px-3">Description</th>
-                    <th className="py-2.5 px-3">Issued Pure Gold</th>
-                    <th className="py-2.5 px-3">Status</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Job Card #</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Karigar</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Description</th>
+                    <th className="py-2.5 px-3 whitespace-nowrap">Issued Pure Gold</th>
+                    <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                   {data?.active_jobs?.map((j: any) => (
                     <tr key={j.id} className="hover:bg-[#C9A34A]/5 transition-colors">
-                      <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{j.job_number}</td>
-                      <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{j.karigar?.name}</td>
-                      <td className="py-2.5 px-3 text-zinc-700 dark:text-zinc-300">{j.item_description}</td>
-                      <td className="py-2.5 px-3 font-mono font-semibold text-amber-700 dark:text-amber-400">{Number(j.gold_issued_pure).toFixed(3)}g</td>
-                      <td className="py-2.5 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
+                      <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{j.job_number}</td>
+                      <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{j.karigar?.name}</td>
+                      <td className="py-2.5 px-3 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">{j.item_description}</td>
+                      <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{Number(j.gold_issued_pure).toFixed(3)}g</td>
+                      <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                          j.status === 'completed'
+                            ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
+                            : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
+                        }`}>
                           {j.status}
                         </span>
                       </td>
@@ -734,7 +763,7 @@ export const DashboardView: React.FC = () => {
         <div className="space-y-6">
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Sales Today
                 </span>
@@ -746,7 +775,7 @@ export const DashboardView: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Month Revenue
                 </span>
@@ -756,7 +785,7 @@ export const DashboardView: React.FC = () => {
                 <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">Showroom target on track</p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Branch Stock In Trays
                 </span>
@@ -768,7 +797,7 @@ export const DashboardView: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
                 <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   Active Sales Team
                 </span>
@@ -782,7 +811,7 @@ export const DashboardView: React.FC = () => {
 
           {/* Staff Performance Leaderboard */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
+            <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
               <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm mb-3">
                 Staff Sales Leaderboard
               </h3>
@@ -801,8 +830,8 @@ export const DashboardView: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2 bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm">
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-white/5">
+            <div className="lg:col-span-2 bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E3DFD7] dark:border-white/5">
                 <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                   Recent Branch Invoices
                 </h3>
@@ -811,27 +840,33 @@ export const DashboardView: React.FC = () => {
                 </a>
               </div>
               <div className="overflow-x-auto mt-2">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-50/70 dark:bg-black/30 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-white/10">
+                <table className="w-full text-left text-xs min-w-[500px]">
+                  <thead className="bg-[#FAF8F5] dark:bg-[#111318] text-zinc-600 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-white/10">
                     <tr>
-                      <th className="py-2.5 px-3">Invoice #</th>
-                      <th className="py-2.5 px-3">Date</th>
-                      <th className="py-2.5 px-3">Customer</th>
-                      <th className="py-2.5 px-3 text-right">Grand Total</th>
-                      <th className="py-2.5 px-3 text-center">Status</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Invoice #</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Date</th>
+                      <th className="py-2.5 px-3 whitespace-nowrap">Customer</th>
+                      <th className="py-2.5 px-3 text-right whitespace-nowrap">Grand Total</th>
+                      <th className="py-2.5 px-3 text-center whitespace-nowrap">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {data?.recent_invoices?.map((inv: any) => (
                       <tr key={inv.id} className="hover:bg-[#C9A34A]/5 transition-colors">
-                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A]">{inv.invoice_number}</td>
-                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400">{inv.invoice_date}</td>
-                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100">{inv.customer?.name || 'Walk-in'}</td>
-                        <td className="py-2.5 px-3 font-bold text-right font-serif">
+                        <td className="py-2.5 px-3 font-mono font-semibold text-[#C9A34A] whitespace-nowrap">{inv.invoice_number}</td>
+                        <td className="py-2.5 px-3 text-zinc-500 dark:text-zinc-400 whitespace-nowrap font-mono text-[11px]">{formatDate(inv.invoice_date)}</td>
+                        <td className="py-2.5 px-3 font-medium text-zinc-900 dark:text-zinc-100 whitespace-nowrap truncate max-w-[130px]" title={inv.customer?.name || 'Walk-in'}>
+                          {inv.customer?.name || 'Walk-in'}
+                        </td>
+                        <td className="py-2.5 px-3 font-bold text-right font-serif whitespace-nowrap text-[#111318] dark:text-[#F6F5F1]">
                           ₹{Number(inv.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-[#35BFA0]/10 text-[#35BFA0] border border-[#35BFA0]/20">
+                        <td className="py-2.5 px-3 text-center whitespace-nowrap">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                            String(inv.status).toLowerCase().includes('paid') || String(inv.status).toLowerCase().includes('settled')
+                              ? 'bg-[#35BFA0]/15 text-[#35BFA0] border border-[#35BFA0]/30'
+                              : 'bg-[#C9A34A]/15 text-[#C9A34A] border border-[#C9A34A]/30'
+                          }`}>
                             {inv.status}
                           </span>
                         </td>
@@ -853,12 +888,12 @@ export const DashboardView: React.FC = () => {
           {/* KPI Metric Cards */}
           {widgets.kpis && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                     Today's Consolidated Sales
                   </span>
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A34A]/10 text-[#C9A34A] flex items-center justify-center">
                     <DollarSign className="w-4 h-4" />
                   </div>
                 </div>
@@ -866,33 +901,34 @@ export const DashboardView: React.FC = () => {
                   ₹{Number(data?.today_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 flex items-center gap-1">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{data?.today_invoices_count || 0}</span> invoices settled today
+                  <span className="text-[#35BFA0] font-semibold">{data?.today_invoices_count || 0}</span> invoices settled today
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                     This Month Revenue
                   </span>
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-[#35BFA0]/15 text-[#35BFA0] flex items-center justify-center">
                     <TrendingUp className="w-4 h-4" />
                   </div>
                 </div>
                 <p className="text-2xl font-bold text-[#111318] dark:text-[#F6F5F1] mt-2 font-serif">
                   ₹{Number(data?.month_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </p>
-                <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
+                <p className="text-[11px] text-[#35BFA0] mt-1 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#35BFA0] inline-block" />
                   Active GST Return Period
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                     Fine Gold Reserves
                   </span>
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-[#C9A34A]/10 text-[#C9A34A] flex items-center justify-center">
                     <Coins className="w-4 h-4" />
                   </div>
                 </div>
@@ -900,11 +936,11 @@ export const DashboardView: React.FC = () => {
                   {Number(data?.gold_gross_stock || 0).toFixed(3)} <span className="text-xs font-sans text-zinc-500">grams</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
-                  Net metal: <strong>{Number(data?.gold_net_stock || 0).toFixed(3)}g</strong> across {data?.total_items_in_stock || 0} items
+                  Net metal: <strong className="text-[#C9A34A]">{Number(data?.gold_net_stock || 0).toFixed(3)}g</strong> across {data?.total_items_in_stock || 0} items
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
+              <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-[#E3DFD7] dark:border-white/10 shadow-sm transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                     Customer Receivables
@@ -926,7 +962,7 @@ export const DashboardView: React.FC = () => {
           {/* Revenue Trajectory & Branch Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {widgets.charts && (
-              <div className={`${widgets.rates ? 'lg:col-span-2' : 'lg:col-span-3'} bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors`}>
+              <div className={`${widgets.rates ? 'lg:col-span-2' : 'lg:col-span-3'} bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors`}>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm">
@@ -1019,7 +1055,7 @@ export const DashboardView: React.FC = () => {
 
           {/* Multi-Branch Showroom Breakdown */}
           {widgets.branches && data?.branch_comparison && data.branch_comparison.length > 0 && (
-            <div className="bg-white dark:bg-[#111118] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
+            <div className="bg-white dark:bg-[#181A22] rounded-2xl p-5 border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
               <h3 className="font-serif font-bold text-zinc-900 dark:text-zinc-100 text-sm mb-3">
                 Multi-Branch Showroom Performance (Month to Date)
               </h3>
