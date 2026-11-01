@@ -192,22 +192,25 @@ class ZeroDataCaptureController extends Controller
      */
     public function printInvoice(Request $request, int $id): Response
     {
-        $token = $request->query('token');
-        if ($token && !$request->user()) {
-            $accessToken = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                $user = $accessToken->tokenable;
-                \Illuminate\Support\Facades\Auth::setUser($user);
+        $user = $request->user();
+        if (!$user) {
+            $token = $request->query('token') ?: $request->bearerToken();
+            if ($token) {
+                $accessToken = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
+                if ($accessToken) {
+                    $user = $accessToken->tokenable;
+                    \Illuminate\Support\Facades\Auth::setUser($user);
+                }
             }
         }
 
-        $user = $request->user();
         if (!$user) {
-            abort(401, 'Unauthenticated invoice access.');
+            abort(401, 'Unauthenticated invoice access. Please log in.');
         }
 
-        $tenantId = $user->tenant_id;
-        $invoice = Invoice::where('tenant_id', $tenantId)->with(['items', 'customer', 'branch', 'tenant'])->findOrFail($id);
+        \App\Services\TenantContext::setTenantId($user->tenant_id);
+
+        $invoice = Invoice::where('tenant_id', $user->tenant_id)->with(['items', 'customer', 'branch', 'tenant'])->findOrFail($id);
 
         $format = $request->input('format', 'a4');
         $lang = $request->input('lang', 'en');

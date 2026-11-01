@@ -150,8 +150,8 @@
 /* Dedicated Professional Print & PDF Stylesheet */
 @media print {
   @page {
-    size: auto;
-    margin: 10mm;
+    size: A4 portrait;
+    margin: 8mm;
   }
 
   /* Hide entire application navigation & chrome */
@@ -167,7 +167,7 @@
     display: none !important;
   }
 
-  /* Unlock layout heights and overflow for natural multi-page pagination */
+  /* Unlock layout heights and overflow for natural pagination */
   html,
   body,
   #root,
@@ -180,7 +180,7 @@
     overflow: visible !important;
     position: static !important;
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #111318 !important;
   }
 
   /* Clean print surface colors */
@@ -191,24 +191,70 @@
     box-shadow: none !important;
   }
 
-  /* Clean table borders and pagination avoidance */
-  table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    color: #000000 !important;
-    background: #ffffff !important;
+  /* When printing an invoice sheet, isolate #printable-invoice completely */
+  body:has(#printable-invoice) > #root > *:not(:has(#printable-invoice)) {
+    display: none !important;
   }
 
-  th, td {
-    border: 1px solid #d1d5db !important;
-    color: #000000 !important;
+  body:has(#printable-invoice) .fixed.inset-0 {
+    position: static !important;
     background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    display: block !important;
+  }
+
+  body:has(#printable-invoice) .fixed.inset-0 > div {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide all modal UI chrome around #printable-invoice */
+  body:has(#printable-invoice) .fixed.inset-0 > div > *:not(#printable-invoice) {
+    display: none !important;
+  }
+
+  /* Exact A4 Print Frame for #printable-invoice */
+  body:has(#printable-invoice) #printable-invoice {
+    width: 100% !important;
+    max-width: 194mm !important;
+    border: 2px solid #C9A34A !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    padding: 4px !important;
+    margin: 0 auto !important;
+    background: #ffffff !important;
+    color: #111318 !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  th {
-    background-color: #f3f4f6 !important;
+  /* Avoid unwanted generic table borders on letterhead and meta layouts */
+  table.items-table, table.data-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  table.items-table th, table.items-table td,
+  table.data-table th, table.data-table td {
+    border: 1px solid #e5e7eb !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  table.items-table th, table.data-table th {
+    background-color: #faf9f5 !important;
+    color: #111318 !important;
     font-weight: 700 !important;
   }
 }

@@ -218,66 +218,20 @@ export const PosBillingView: React.FC = () => {
     }
   };
 
-  const handlePrintInvoice = async (format: 'a4' | 'thermal') => {
+  const handlePrintInvoice = (format: 'a4' | 'thermal', lang = 'en') => {
     if (!completedInvoice) return;
-    try {
-      const res = await api.get(`/pos/invoices/${completedInvoice.id}/print?format=${format}`);
-      const printWindow = window.open(
-        '',
-        '_blank',
-        format === 'thermal' ? 'width=450,height=750' : 'width=950,height=1000'
-      );
-      if (printWindow) {
-        printWindow.document.write(res.data);
-        printWindow.document.write(`
-          <script>
-            window.onload = function() {
-              window.focus();
-              window.print();
-            };
-          </script>
-        `);
-        printWindow.document.close();
-      }
-    } catch (e) {
-      // Fallback: isolate #printable-invoice into a clean print window
-      const el = document.getElementById('printable-invoice');
-      if (!el) return;
-      const printWindow = window.open('', '_blank', 'width=950,height=1000');
-      if (printWindow) {
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8"/>
-              <title>Tax Invoice - ${completedInvoice.invoice_number}</title>
-              <style>
-                @page { size: A4 portrait; margin: 10mm; }
-                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111; margin: 0; padding: 20px; font-size: 12px; }
-                * { box-sizing: border-box; }
-                table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; }
-                th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; }
-                th { background: #f9fafb; font-weight: 600; }
-                .text-right { text-align: right; }
-                .text-center { text-align: center; }
-                .font-bold { font-weight: 700; }
-                @media print { body { padding: 0; } }
-              </style>
-            </head>
-            <body>
-              ${el.innerHTML}
-              <script>
-                window.onload = function() {
-                  window.focus();
-                  window.print();
-                  setTimeout(function() { window.close(); }, 500);
-                };
-              </script>
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-      }
+    const token = localStorage.getItem('cjc_token') || '';
+    const printUrl = `/api/v1/pos/invoices/${completedInvoice.id}/print?format=${format}&lang=${lang}&token=${encodeURIComponent(token)}&autoprint=1`;
+    const printWindow = window.open(
+      printUrl,
+      '_blank',
+      format === 'thermal' ? 'width=450,height=750' : 'width=980,height=1000'
+    );
+    if (printWindow) {
+      printWindow.focus();
+    } else {
+      // Direct print fallback if popups are restricted
+      window.print();
     }
   };
 
@@ -933,15 +887,24 @@ export const PosBillingView: React.FC = () => {
                 type="button"
                 onClick={() => handlePrintInvoice('a4')}
                 className="px-4 py-2 gold-gradient text-[#111318] font-bold text-xs rounded-xl shadow flex items-center gap-2 hover:brightness-105 cursor-pointer"
+                title="Open dedicated A4 Tax Invoice frame with Multilingual options"
               >
                 <Printer className="w-4 h-4 text-[#111318]" /> Print A4 Tax Invoice / PDF
               </button>
               <button
                 type="button"
-                onClick={() => handlePrintInvoice('thermal')}
-                className="px-4 py-2 border border-[#E3DFD7] dark:border-white/20 text-[#111318] dark:text-[#F6F5F1] hover:bg-[#111318]/5 dark:hover:bg-white/5 font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer"
+                onClick={() => window.print()}
+                className="px-3.5 py-2 border border-[#C9A34A] text-[#C9A34A] hover:bg-[#C9A34A]/10 font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
+                title="Direct Print sheet using browser dialog"
               >
-                <Printer className="w-4 h-4" /> Print 80mm Thermal Slip
+                <Printer className="w-3.5 h-3.5" /> Direct Print (Ctrl+P)
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePrintInvoice('thermal')}
+                className="px-3.5 py-2 border border-[#E3DFD7] dark:border-white/20 text-[#111318] dark:text-[#F6F5F1] hover:bg-[#111318]/5 dark:hover:bg-white/5 font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer"
+              >
+                <Printer className="w-4 h-4" /> 80mm Thermal
               </button>
               <button
                 type="button"

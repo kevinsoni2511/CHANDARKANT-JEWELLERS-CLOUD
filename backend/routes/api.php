@@ -85,8 +85,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/capture/{id}/approve', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'approve']);
         Route::post('/capture/{id}/reject', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'reject']);
         Route::post('/capture/{id}/reverse', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'reverse']);
-
-        // Module 19: Printable Documents & Invoices
-        Route::get('/pos/invoices/{id}/print', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'printInvoice']);
     });
+
+    // Module 19: Printable Documents & Invoices (Supports Bearer token or ?token= for direct window printing)
+    Route::get('/pos/invoices/{id}/print', [\App\Http\Controllers\Api\ZeroDataCaptureController::class, 'printInvoice']);
 });
