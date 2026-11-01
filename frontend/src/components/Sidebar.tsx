@@ -113,13 +113,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </>
         ) : (
-          <button
-            onClick={toggleCollapse}
-            title="Expand sidebar (Ctrl + B)"
-            className="w-10 h-10 mx-auto flex items-center justify-center rounded-xl text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-colors cursor-pointer"
-          >
-            <PanelLeftOpen className="w-4 h-4 text-[#C9A34A]" />
-          </button>
+          <div className="relative group w-full flex justify-center">
+            <button
+              onClick={toggleCollapse}
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-[#5A5E6B] dark:text-[#A6AAB6] hover:text-[#C9A34A] hover:bg-[#C9A34A]/10 transition-colors cursor-pointer"
+            >
+              <PanelLeftOpen className="w-4 h-4 text-[#C9A34A]" />
+            </button>
+            <div className="absolute left-full ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 flex items-center gap-2">
+              <span>Expand sidebar</span>
+              <span className="kbd-badge text-[9px]">Ctrl+B</span>
+            </div>
+          </div>
         )}
       </div>
 
@@ -227,8 +232,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </p>
           </div>
         ) : (
-          <div className="flex justify-center" title="BIS HUID & GST System Ready">
-            <ShieldCheck className="w-4 h-4 text-[#35BFA0]" />
+          <div className="relative group flex justify-center py-1">
+            <ShieldCheck className="w-4 h-4 text-[#35BFA0] cursor-pointer" />
+            <div className="absolute left-full bottom-0 ml-3 px-3 py-1.5 bg-[#181A22] text-[#F6F5F1] text-xs font-semibold rounded-xl shadow-2xl border border-white/10 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+              <span className="text-[#35BFA0] font-bold">BIS HUID & GST Ready</span>
+              <p className="text-[10px] text-[#8E929E]">Store: {user?.branch?.name || 'Surat Flagship'}</p>
+            </div>
           </div>
         )}
       </div>
